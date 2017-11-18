@@ -24,7 +24,7 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = main
+SRC_CORE = main mlx
 
 SRC_LIST = $(SRC_CORE)
 VPATH = $(MAIN_DIRECTORY)/srcs

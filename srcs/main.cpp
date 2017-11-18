@@ -13,6 +13,9 @@
 #include <iostream>
 #include <unistd.h>
 
+#include "mlx.hpp"
+
+/*
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -55,15 +58,17 @@ namespace mod1
 	};
 
 }
-
+*/
 using namespace mod1;
 
 int main(void)
 {
-	Mlx mlx;
-
-	mlx.init(std::string("mod1"), 1920, 1080);
+	MlxWrapper *mlx = new MlxWrapper();
+	mlx->init("ma fenetre", 100, 100);
 	sleep(5);
-	mlx.exit();
+	delete mlx;
+//	mlx.init(std::string("mod1"), 1920, 1080);
+//	sleep(5);
+//	mlx.exit();
 	return 0;
 }
