@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: saubenne <saubenne@student.42.fr>          +#+  +:+       +#+         #
+#    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2017/04/23 15:41:46 by saubenne          #+#    #+#              #
-#    Updated: 2017/11/17 04:35:33 by bmickael         ###   ########.fr        #
+#    Created: 2017/11/18 22:40:01 by bmickael          #+#    #+#              #
+#    Updated: 2017/11/18 22:40:09 by bmickael         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,13 +43,14 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 MLX = minilibx_sierra
 
 IFLAGS = -I$(MAIN_DIRECTORY)/includes -I$(MLX)
-LDFLAGS =  -framework openGL -framework AppKit -L ./$(MLX) -lmlx
+LDFLAGS =  -framework openGL -framework AppKit $(MLX)/libmlx.a
 
 .PHONY: all clean fclean re help
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
+	make -C $(MLX)/ all
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: %.cpp $(HEADERS)
