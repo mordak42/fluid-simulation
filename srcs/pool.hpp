@@ -13,8 +13,8 @@ public:
 	~Pool();
 
 	bool Init(int size);
-	bool GetRawImage(ref ImgData image);
-	bool GetRenderedImage(ref ImgData image);
+	bool GetRawImage(ImgData& image);
+	bool GetRenderedImage(ImgData& image);
 
 private:
 	std::queue<ImgData> m_actives;

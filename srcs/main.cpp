@@ -13,7 +13,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "SDL.h"
+#include "SDL2/SDL.h"
 #ifdef __cplusplus
 }
 #endif
