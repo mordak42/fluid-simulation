@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/18 22:40:01 by bmickael          #+#    #+#              #
-#    Updated: 2017/11/19 08:06:04 by bmickael         ###   ########.fr        #
+#    Updated: 2017/11/18 22:40:09 by bmickael         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,14 +42,15 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 
 MLX = minilibx_sierra
 
-IFLAGS = -I$(MAIN_DIRECTORY)/includes -I$(MLX) -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/SDL2
-LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lsdl2
+IFLAGS = -I$(MAIN_DIRECTORY)/includes -I$(MLX)
+LDFLAGS =  -framework openGL -framework AppKit $(MLX)/libmlx.a
 
 .PHONY: all clean fclean re help
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
+	make -C $(MLX)/ all
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: %.cpp $(HEADERS)
@@ -59,6 +60,7 @@ clean:
 	rm -f $(OBJ)
 
 fclean: clean
+	make -C $(MLX)/ clean
 	rm -f $(NAME)
 
 re: fclean all
