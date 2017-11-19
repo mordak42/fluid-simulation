@@ -20,6 +20,7 @@ extern "C" {
 
 #include <iostream>
 #include <unistd.h>
+#include "pool.hpp"
 
 namespace mod1
 {
@@ -54,8 +55,58 @@ Uint32 my_callbackfunc(Uint32 interval, void *param)
     return(interval);
 }
 
+class Banane {
+public:
+	Banane();
+	~Banane();
+	void run();
+	bool makeCoffee(ImgData &img);
+
+private:
+	void printI(void);
+	int m_i = 5;
+	Pool *pool;
+};
+
+/*
+std::bind(&FlirdImplementation::sendInnerMsg,
+			this,
+			InnerMsg::RECORDING_STARTED),
+*/
+
+Banane::Banane() {};
+Banane::~Banane() {};
+void Banane::run(void) {
+	Pool *pool = new Pool(std::bind(&Banane::makeCoffee, this));
+	std::cout << pool->Init(250) << std::endl;
+
+//	pool->DrawOnRawImage(std::bind(&Banane::makeCoffee, this));
+//	pool->GetRenderedImage();
+
+};
+
+bool Banane::makeCoffee(ImgData &img) {
+	(void)img;
+	printI();
+	delete(pool);
+	return false;
+};
+
+void Banane::printI(void) {
+	std::cout << m_i << std::endl;
+}
+
+
 int main(void)
 {
+
+
+	Banane *banane = new Banane();
+
+
+	delete banane;
+
+
 	SDL_Window* pWindow;
 	SDL_Event	e;
 

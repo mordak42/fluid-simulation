@@ -24,7 +24,7 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = main pool
+SRC_CORE = main pool imgData
 
 SRC_LIST = $(SRC_CORE)
 VPATH = $(MAIN_DIRECTORY)/srcs
@@ -42,7 +42,7 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 
 MLX = minilibx_sierra
 
-IFLAGS = -I$(MAIN_DIRECTORY)/includes -I$(MLX) -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/SDL2
+IFLAGS = -I$(MAIN_DIRECTORY)/includes -I$(MLX) -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/
 LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lsdl2
 
 .PHONY: all clean fclean re help
