@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/18 22:40:01 by bmickael          #+#    #+#              #
-#    Updated: 2017/11/19 08:06:04 by bmickael         ###   ########.fr        #
+#    Updated: 2017/11/19 15:41:25 by bmickael         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,14 +24,14 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = main
+SRC_CORE = main pool
 
 SRC_LIST = $(SRC_CORE)
 VPATH = $(MAIN_DIRECTORY)/srcs
 
 ## HEADERS
 
-HEADERS = ./includes/mod1.hpp
+HEADERS = ./includes/mod1.hpp ./srcs/pool.hpp ./srcs/imgData.hpp
 
 ### ~~~~~~~~~~ ###
 
