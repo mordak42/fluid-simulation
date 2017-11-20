@@ -24,14 +24,14 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = main pool imgData Bmickael Vcombey
+SRC_CORE = main pool imgData renderer physician
 
 SRC_LIST = $(SRC_CORE)
 VPATH = $(MAIN_DIRECTORY)/srcs
 
 ## HEADERS
 
-HEADERS = ./includes/mod1.hpp ./srcs/pool.hpp ./srcs/imgData.hpp ./srcs/Bmickael.hpp ./srcs/Vcombey.hpp
+HEADERS = ./includes/mod1.hpp ./srcs/pool.hpp ./srcs/imgData.hpp ./srcs/renderer.hpp ./srcs/physician.hpp
 
 ### ~~~~~~~~~~ ###
 
@@ -43,7 +43,7 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 MLX = minilibx_sierra
 
 IFLAGS = -I$(MAIN_DIRECTORY)/includes -I$(MLX) -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/
-LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lsdl2
+LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lSDL2
 
 .PHONY: all clean fclean re help
 

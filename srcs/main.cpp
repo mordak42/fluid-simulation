@@ -21,8 +21,8 @@ extern "C" {
 #include <unistd.h>
 #include <iostream>
 #include "mod1.hpp"
-#include "Bmickael.hpp"
-#include "Vcombey.hpp"
+#include "renderer.hpp"
+#include "physician.hpp"
 #include "pool.hpp"
 
 namespace mod1
@@ -37,8 +37,8 @@ public:
 protected:
 
 private:
-	std::unique_ptr<Bmickael> m_bmickael = nullptr;
-	std::unique_ptr<Vcombey> m_vcombey = nullptr;
+	std::unique_ptr<Renderer> m_renderer = nullptr;
+	std::unique_ptr<Physician> m_physician = nullptr;
 	std::shared_ptr<Pool> m_pool;
 };
 }
@@ -54,8 +54,8 @@ Mod1::~Mod1() {
 bool Mod1::start(void) {
 	m_pool = std::make_shared<Pool>();
 	m_pool->Init(250);
-	m_bmickael.reset(new Bmickael(m_pool));
-	m_vcombey.reset(new Vcombey(m_pool));
+	m_renderer.reset(new Renderer(m_pool));
+	m_physician.reset(new Physician(m_pool));
 
 	return true;
 }
