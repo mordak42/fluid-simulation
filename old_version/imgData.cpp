@@ -1,5 +1,4 @@
 
-#include <iostream>
 #include "imgData.hpp"
 
 using namespace mod1;

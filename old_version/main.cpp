@@ -18,69 +18,30 @@ extern "C" {
 }
 #endif
 
-#include <unistd.h>
 #include <iostream>
-#include "mod1.hpp"
-#include "Bmickael.hpp"
-#include "Vcombey.hpp"
+#include <unistd.h>
 #include "pool.hpp"
 
 namespace mod1
 {
-class Mod1 {
+class Draw
+{
 public:
-	Mod1();
-	~Mod1();
-	bool start(void);
-	bool stop(void);
-
-protected:
-
-private:
-	std::unique_ptr<Bmickael> m_bmickael = nullptr;
-	std::unique_ptr<Vcombey> m_vcombey = nullptr;
-	std::shared_ptr<Pool> m_pool;
+	Draw ();
+	~Draw ();
 };
 }
 
 using namespace mod1;
 
-Mod1::Mod1() {
-}
-
-Mod1::~Mod1() {
-}
-
-bool Mod1::start(void) {
-	m_pool = std::make_shared<Pool>();
-	m_pool->Init(250);
-	m_bmickael.reset(new Bmickael(m_pool));
-	m_vcombey.reset(new Vcombey(m_pool));
-
-	return true;
-}
-
-bool Mod1::stop(void) {
-	return true;
-}
-
-int main(void) {
-	Mod1 *base = new Mod1();
-	base->start();
-	base->stop();
-	delete base;
-	return 0;
-}
-
-/*
 Uint32 my_callbackfunc(Uint32 interval, void *param)
 {
     SDL_Event event;
     SDL_UserEvent userevent;
 
-    // In this example, our callback pushes a function
-    // into the queue, and causes our callback to be called again at the
-    // same interval:
+    /* In this example, our callback pushes a function
+    into the queue, and causes our callback to be called again at the
+    same interval: */
 
     userevent.type = SDL_USEREVENT;
     userevent.code = 0;
@@ -93,8 +54,19 @@ Uint32 my_callbackfunc(Uint32 interval, void *param)
     SDL_PushEvent(&event);
     return(interval);
 }
-*/
 
+class Banane {
+public:
+	Banane();
+	~Banane();
+	void run();
+	bool makeCoffee(ImgData &img);
+
+private:
+	void printI(void);
+	int m_i = 5;
+	std::shared_ptr<Pool> m_pool;
+};
 
 /*
 std::bind(&FlirdImplementation::sendInnerMsg,
@@ -102,7 +74,6 @@ std::bind(&FlirdImplementation::sendInnerMsg,
 			InnerMsg::RECORDING_STARTED),
 */
 
-/*
 Banane::Banane() {};
 Banane::~Banane() {};
 void Banane::run(void) {
@@ -126,13 +97,11 @@ bool Banane::makeCoffee(ImgData &img) {
 void Banane::printI(void) {
 	std::cout << m_i << std::endl;
 }
-*/
 
-/*
 int main(void)
 {
-//	Banane *banane = new Banane();
-//	delete banane;
+	Banane *banane = new Banane();
+	delete banane;
 
 
 	SDL_Window* pWindow;
@@ -145,9 +114,9 @@ int main(void)
     }
 
     {
-        // Création de la fenêtre
+        /* Création de la fenêtre */
 
-		Uint32 delay = 1000 / 25;  // To round it down to the nearest 10 ms
+		Uint32 delay = 1000 / 25;  /* To round it down to the nearest 10 ms */
 		SDL_TimerID my_timer_id = SDL_AddTimer(delay, my_callbackfunc, NULL);
         if((pWindow = SDL_CreateWindow("Ma première application SDL2",SDL_WINDOWPOS_CENTERED,
                                                                   SDL_WINDOWPOS_CENTERED,
@@ -175,7 +144,7 @@ int main(void)
 					break;
 				}
 			}
-            //SDL_Delay(3000);  Attendre trois secondes, que l'utilisateur voie la fenêtre
+            //SDL_Delay(3000); /* Attendre trois secondes, que l'utilisateur voie la fenêtre */
 
             SDL_DestroyWindow(pWindow);
 			SDL_RemoveTimer(my_timer_id);
@@ -190,4 +159,3 @@ int main(void)
 
     return 0;
 }
-*/

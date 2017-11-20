@@ -24,14 +24,14 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = main pool imgData
+SRC_CORE = main pool imgData Bmickael Vcombey
 
 SRC_LIST = $(SRC_CORE)
 VPATH = $(MAIN_DIRECTORY)/srcs
 
 ## HEADERS
 
-HEADERS = ./includes/mod1.hpp ./srcs/pool.hpp ./srcs/imgData.hpp
+HEADERS = ./includes/mod1.hpp ./srcs/pool.hpp ./srcs/imgData.hpp ./srcs/Bmickael.hpp ./srcs/Vcombey.hpp
 
 ### ~~~~~~~~~~ ###
 
