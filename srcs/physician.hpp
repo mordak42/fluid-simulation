@@ -11,11 +11,11 @@ namespace mod1
 class Physician
 {
 public:
-	Physician(const std::shared_ptr<mod1::Pool> &pool);
-	~Physician();
+    Physician(const std::shared_ptr<mod1::Pool> &pool);
+    ~Physician();
 
 private:
-	const std::shared_ptr<Pool> m_pool;
+    const std::shared_ptr<Pool> m_pool;
 };
 }
 

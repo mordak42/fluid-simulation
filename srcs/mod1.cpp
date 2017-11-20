@@ -18,17 +18,17 @@ namespace mod1
 {
 class Mod1 {
 public:
-	Mod1();
-	~Mod1();
-	bool start(void);
-	bool stop(void);
+    Mod1();
+    ~Mod1();
+    bool start(void);
+    bool stop(void);
 
 protected:
 
 private:
-	std::unique_ptr<Renderer> m_renderer = nullptr;
-	std::unique_ptr<Physician> m_physician = nullptr;
-	std::shared_ptr<Pool> m_pool;
+    std::unique_ptr<Renderer> m_renderer = nullptr;
+    std::unique_ptr<Physician> m_physician = nullptr;
+    std::shared_ptr<Pool> m_pool;
 };
 }
 
@@ -41,24 +41,24 @@ Mod1::~Mod1() {
 }
 
 bool Mod1::start(void) {
-	m_pool = std::make_shared<Pool>();
-	m_pool->init(250);
-	m_renderer.reset(new Renderer(m_pool));
-	m_physician.reset(new Physician(m_pool));
+    m_pool = std::make_shared<Pool>();
+    m_pool->init(250);
+    m_renderer.reset(new Renderer(m_pool));
+    m_physician.reset(new Physician(m_pool));
 
-	return true;
+    return true;
 }
 
 bool Mod1::stop(void) {
-	return true;
+    return true;
 }
 
 int main(void) {
-	Mod1 *base = new Mod1();
-	base->start();
-	base->stop();
-	delete base;
-	return 0;
+    Mod1 *base = new Mod1();
+    base->start();
+    base->stop();
+    delete base;
+    return 0;
 }
 
 /*
@@ -87,47 +87,47 @@ Uint32 my_callbackfunc(Uint32 interval, void *param)
 
 /*
 std::bind(&FlirdImplementation::sendInnerMsg,
-			this,
-			InnerMsg::RECORDING_STARTED),
+            this,
+            InnerMsg::RECORDING_STARTED),
 */
 
 /*
 Banane::Banane() {};
 Banane::~Banane() {};
 void Banane::run(void) {
-	m_pool = std::make_shared<Pool>(
+    m_pool = std::make_shared<Pool>(
         std::bind(&Banane::makeCoffee,
         this,
-		new ImgData());
-	std::cout << m_pool->Init(250) << std::endl;
+        new ImgData());
+    std::cout << m_pool->Init(250) << std::endl;
 
-//	pool->DrawOnRawImage(std::bind(&Banane::makeCoffee, this));
-//	pool->GetRenderedImage();
+//    pool->DrawOnRawImage(std::bind(&Banane::makeCoffee, this));
+//    pool->GetRenderedImage();
 
 };
 
 bool Banane::makeCoffee(ImgData &img) {
-	(void)img;
-	printI();
-	return false;
+    (void)img;
+    printI();
+    return false;
 };
 
 void Banane::printI(void) {
-	std::cout << m_i << std::endl;
+    std::cout << m_i << std::endl;
 }
 */
 
 /*
 int main(void)
 {
-//	Banane *banane = new Banane();
-//	delete banane;
+//    Banane *banane = new Banane();
+//    delete banane;
 
 
-	SDL_Window* pWindow;
-	SDL_Event	e;
+    SDL_Window* pWindow;
+    SDL_Event    e;
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER))
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER))
     {
         fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
         return -1;
@@ -136,38 +136,38 @@ int main(void)
     {
         // Création de la fenêtre
 
-		Uint32 delay = 1000 / 25;  // To round it down to the nearest 10 ms
-		SDL_TimerID my_timer_id = SDL_AddTimer(delay, my_callbackfunc, NULL);
+        Uint32 delay = 1000 / 25;  // To round it down to the nearest 10 ms
+        SDL_TimerID my_timer_id = SDL_AddTimer(delay, my_callbackfunc, NULL);
         if((pWindow = SDL_CreateWindow("Ma première application SDL2",SDL_WINDOWPOS_CENTERED,
                                                                   SDL_WINDOWPOS_CENTERED,
                                                                   640,
                                                                   480,
-																  SDL_WINDOW_SHOWN)))
+                                                                  SDL_WINDOW_SHOWN)))
 
         {
-			bool continueLoopHook = true;
+            bool continueLoopHook = true;
 
-			while (continueLoopHook && SDL_WaitEvent(&e)) {
-				switch (e.type) {
-				case SDL_KEYDOWN:
-					std::cout << "SDL_KEYDOWN: scancode -> " << e.key.keysym.scancode << std::endl;
-					if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
-						continueLoopHook = false;
-					break;
-				case SDL_QUIT:
-					continueLoopHook = false;
-					break;
-				case SDL_USEREVENT:
-					std::cout << "tick at " << SDL_GetTicks() << std::endl;
-					break;
-				default:
-					break;
-				}
-			}
+            while (continueLoopHook && SDL_WaitEvent(&e)) {
+                switch (e.type) {
+                case SDL_KEYDOWN:
+                    std::cout << "SDL_KEYDOWN: scancode -> " << e.key.keysym.scancode << std::endl;
+                    if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+                        continueLoopHook = false;
+                    break;
+                case SDL_QUIT:
+                    continueLoopHook = false;
+                    break;
+                case SDL_USEREVENT:
+                    std::cout << "tick at " << SDL_GetTicks() << std::endl;
+                    break;
+                default:
+                    break;
+                }
+            }
             //SDL_Delay(3000);  Attendre trois secondes, que l'utilisateur voie la fenêtre
 
             SDL_DestroyWindow(pWindow);
-			SDL_RemoveTimer(my_timer_id);
+            SDL_RemoveTimer(my_timer_id);
         }
         else
         {

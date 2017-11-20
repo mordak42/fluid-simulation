@@ -7,8 +7,8 @@ namespace mod1
 class Productor
 {
 public:
-	Productor();
-	~Productor();
+    Productor();
+    ~Productor();
 
 private:
 };

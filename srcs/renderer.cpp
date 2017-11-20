@@ -9,6 +9,6 @@ Renderer::Renderer(const std::shared_ptr<mod1::Pool> &pool) : m_pool(pool) {
 Renderer::~Renderer() {}
 
 void Renderer::pushImage() {
-		ImgData *frame;
-		m_pool->drawOnRawImage(&frame);
+        ImgData *frame;
+        m_pool->drawOnRawImage(&frame);
 }
