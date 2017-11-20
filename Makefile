@@ -24,7 +24,7 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = main pool imgData renderer physician
+SRC_CORE = mod1 pool imgData renderer physician
 
 SRC_LIST = $(SRC_CORE)
 VPATH = $(MAIN_DIRECTORY)/srcs
@@ -40,9 +40,7 @@ OBJ_DIR = $(MAIN_DIRECTORY)/objs
 TMP = $(basename $(notdir $(SRC)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 
-MLX = minilibx_sierra
-
-IFLAGS = -I$(MAIN_DIRECTORY)/includes -I$(MLX) -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/
+IFLAGS = -I$(MAIN_DIRECTORY)/includes -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/
 LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lSDL2
 
 .PHONY: all clean fclean re help
