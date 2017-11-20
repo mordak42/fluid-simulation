@@ -1,3 +1,4 @@
+
 #include "renderer.hpp"
 
 using namespace mod1;
@@ -9,5 +10,5 @@ Renderer::~Renderer() {}
 
 void Renderer::pushImage() {
 		ImgData *frame;
-		m_pool->DrawOnRawImage(&frame);
+		m_pool->drawOnRawImage(&frame);
 }

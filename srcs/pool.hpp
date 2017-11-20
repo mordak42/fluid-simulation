@@ -1,5 +1,6 @@
-#ifndef __POOL__
-# define __POOL__
+
+#ifndef __POOL_HPP__
+# define __POOL_HPP__
 
 #include <iostream>
 #include <queue>
@@ -13,9 +14,9 @@ public:
 	Pool();
 	~Pool();
 
-	bool Init(int size);
-	bool DrawOnRawImage(ImgData **output);
-	bool GetRenderedImage(ImgData **output);
+	bool init(int size);
+	bool drawOnRawImage(ImgData **output);
+	bool getRenderedImage(ImgData **output);
 
 private:
 	std::queue<ImgData> m_actives;

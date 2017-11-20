@@ -1,6 +1,6 @@
 
-#ifndef __IMG_DATA__
-# define __IMG_DATA__
+#ifndef __IMG_DATA_HPP__
+# define __IMG_DATA_HPP__
 # define SIZE 1920 * 1080 * 3
 
 namespace mod1

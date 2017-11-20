@@ -25,14 +25,14 @@ Pool::~Pool() {
 	std::cout << "Pool terminated" << std::endl;
 }
 
-bool Pool::Init(int size) {
+bool Pool::init(int size) {
 	for (int i = 0; i < size; i++)
 		m_inactives.emplace();													// TODO FAIL ALLOC
 	m_ready = true;
 	return true;
 }
 
-bool Pool::DrawOnRawImage(ImgData **output) {
+bool Pool::drawOnRawImage(ImgData **output) {
 	if (m_ready == false)
 		return false;
 
@@ -46,7 +46,7 @@ bool Pool::DrawOnRawImage(ImgData **output) {
 	return false;
 }
 
-bool Pool::GetRenderedImage(ImgData **output) {
+bool Pool::getRenderedImage(ImgData **output) {
 	if (m_ready == false)
 		return false;
 

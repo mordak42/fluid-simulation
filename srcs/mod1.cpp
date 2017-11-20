@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/18 13:46:19 by bmickael          #+#    #+#             */
-/*   Updated: 2017/11/18 13:46:24 by bmickael         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,7 +42,7 @@ Mod1::~Mod1() {
 
 bool Mod1::start(void) {
 	m_pool = std::make_shared<Pool>();
-	m_pool->Init(250);
+	m_pool->init(250);
 	m_renderer.reset(new Renderer(m_pool));
 	m_physician.reset(new Physician(m_pool));
 

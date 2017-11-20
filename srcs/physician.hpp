@@ -1,5 +1,6 @@
-#ifndef __PHYSICIAN__
-# define __PHYSICIAN__
+
+#ifndef __PHYSICIAN_HPP__
+# define __PHYSICIAN_HPP__
 
 #include <iostream>
 #include <memory>
