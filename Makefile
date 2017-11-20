@@ -24,7 +24,7 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = mod1 pool imgData productor renderer physician
+SRC_CORE = main mod1 pool imgData productor renderer physician
 
 SRC_LIST = $(SRC_CORE)
 VPATH = $(MAIN_DIRECTORY)/srcs

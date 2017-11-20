@@ -9,6 +9,7 @@ extern "C" {
 
 #include <unistd.h>
 #include <iostream>
+#include <memory>
 #include "mod1.hpp"
 #include "renderer.hpp"
 #include "physician.hpp"
@@ -16,11 +17,11 @@ extern "C" {
 
 namespace mod1
 {
-class Mod1 {
+class Mod1Implementation {
 public:
-    Mod1();
-    ~Mod1();
-    bool start(void);
+    Mod1Implementation();
+    ~Mod1Implementation();
+    bool run(void);
     bool stop(void);
 
 protected:
@@ -34,13 +35,30 @@ private:
 
 using namespace mod1;
 
-Mod1::Mod1() {
+/* ***** Mod1's methods implementation ***** */
+Mod1::Mod1()
+  : m_implementation(new Mod1Implementation()) {}
+
+Mod1::~Mod1() {}
+
+void Mod1::run()
+{
+    m_implementation->run();
 }
 
-Mod1::~Mod1() {
+void Mod1::stop()
+{
+    m_implementation->stop();
 }
 
-bool Mod1::start(void) {
+
+Mod1Implementation::Mod1Implementation() {
+}
+
+Mod1Implementation::~Mod1Implementation() {
+}
+
+bool Mod1Implementation::run(void) {
     m_pool = std::make_shared<Pool>();
     m_pool->init(250);
     m_renderer.reset(new Renderer(m_pool));
@@ -49,16 +67,8 @@ bool Mod1::start(void) {
     return true;
 }
 
-bool Mod1::stop(void) {
+bool Mod1Implementation::stop(void) {
     return true;
-}
-
-int main(void) {
-    Mod1 *base = new Mod1();
-    base->start();
-    base->stop();
-    delete base;
-    return 0;
 }
 
 /*
