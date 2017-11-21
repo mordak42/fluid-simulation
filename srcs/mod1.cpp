@@ -21,8 +21,8 @@ class Mod1Implementation {
 public:
     Mod1Implementation();
     ~Mod1Implementation();
-    bool run(void);
-    bool stop(void);
+    void run(void);
+    void stop(void);
 
 protected:
 
@@ -58,17 +58,17 @@ Mod1Implementation::Mod1Implementation() {
 Mod1Implementation::~Mod1Implementation() {
 }
 
-bool Mod1Implementation::run(void) {
+void Mod1Implementation::run(void) {
     m_pool = std::make_shared<Pool>();
     m_pool->init(250);
     m_renderer.reset(new Renderer(m_pool));
     m_physician.reset(new Physician(m_pool));
 
-    return true;
+    // main loop conditionned by value
 }
 
-bool Mod1Implementation::stop(void) {
-    return true;
+void Mod1Implementation::stop(void) {
+    // exit sequence
 }
 
 /*
