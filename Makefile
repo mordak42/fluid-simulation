@@ -31,7 +31,7 @@ VPATH = $(MAIN_DIRECTORY)/srcs
 
 ## HEADERS
 
-HEADERS = ../includes/mod1.hpp pool.hpp imgData.hpp productor.hpp renderer.hpp physician.hpp
+HEADERS_LIST = ../includes/mod1 pool imgData productor renderer physician
 
 ### ~~~~~~~~~~ ###
 
@@ -39,6 +39,7 @@ SRC = $(addsuffix .cpp, $(SRC_LIST))
 OBJ_DIR = $(MAIN_DIRECTORY)/objs
 TMP = $(basename $(notdir $(SRC)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
+HEADERS = $(addsuffix .hpp, $(HEADERS_LIST))
 
 IFLAGS = -I$(MAIN_DIRECTORY)/includes -I./srcs -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/
 LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lSDL2
