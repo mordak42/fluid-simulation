@@ -1,8 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/22 00:21:23 by bmickael          #+#    #+#             */
+/*   Updated: 2017/11/22 00:23:56 by bmickael         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef AUTOMATON_H
 # define AUTOMATON_H
 #include "libft.h"
-#include "t_token.h"
-#include "t_ast.h"
 
 # ifndef PARSER_ERROR
 #  define PARSER_REOPEN 2
