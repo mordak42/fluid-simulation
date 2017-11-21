@@ -5,23 +5,35 @@
 
 #include "mod1.hpp"
 
+namespace std {
+
 /* Global context: */
 static mod1::Mod1 *s_context = nullptr;
 
-static void signalsHandler(int sigNum) {
+static void defaultSignalsHandler(int sigNum) {
     (void)sigNum;
     s_context->stop();
 }
 
+static void segvSignalsHandler(int sigNum) {
+    (void)sigNum;
+    cout << "Segmentation fault, you are Vcombey i think..." << endl;
+}
+
 /* clean exit on SIGINT & SIGTERM */
 static void signalSetup(void) {
-    std::signal(SIGINT, &signalsHandler);
-    std::signal(SIGTERM, &signalsHandler);
-    std::signal(SIGQUIT, &signalsHandler);
+    signal(SIGINT, &defaultSignalsHandler);
+    signal(SIGTERM, &defaultSignalsHandler);
+    signal(SIGQUIT, &defaultSignalsHandler);
+
+    signal(SIGSEGV, &segvSignalsHandler);
+}
 }
 
 int main(int argc, char **argv)
 {
+    using namespace std;
+
     (void)argc;
     (void)argv;
 
