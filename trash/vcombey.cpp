@@ -81,3 +81,8 @@ using namespace toto;
 
 	return 0;
 }
+
+
+// Calibration(const Calibration&) {std::cout << "constructeur de copie" << std::endl;}
+// ConnectionAgent(const ConnectionAgent&) = delete;
+// const ConnectionAgent& operator=(const ConnectionAgent&) = delete;
