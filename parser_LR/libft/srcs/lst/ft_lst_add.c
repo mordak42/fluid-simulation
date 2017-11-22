@@ -11,9 +11,9 @@ void	ft_simple_lst_add(t_list **first, t_list *new_node)
 	}
 }
 
-void	ft_genlst_add(void *first, void *new)
+void	ft_genlst_add(void **first, void *new)
 {
-	t_gen_lst **first_cast = first;
+	t_gen_lst **first_cast = (t_gen_lst **)first;
 	t_gen_lst *new_cast = new;
 
 	if (new)

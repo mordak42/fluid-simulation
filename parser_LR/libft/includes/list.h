@@ -50,7 +50,7 @@ void				ft_lstint_add(t_listint **stack, int state);
 **	In file ft_lst_add.c
 */
 
-void				ft_genlst_add(void *first, void *new);
+void				ft_genlst_add(void **first, void *new);
 void				ft_simple_lst_add(t_list **first, t_list *new_node);
 void				ft_double_lst_add(t_lst_head **head, t_list_d *new_node);
 
@@ -121,7 +121,10 @@ t_list				*ft_previous_last_simple_lst(t_list *lst);
 **	In file ft_lst_pushback.c
 */
 
-void	ft_genlst_pushback(void *first, void *new_node);
+//void	ft_genlst_pushback(void *first, void *new_node);
+
+void				*ft_genlst_pushback(void **first, void *new_node);
+
 void				ft_simple_lst_pushback(t_list **first, t_list *new_node);
 void				ft_double_lst_pushback(t_lst_head **head, \
 		t_list_d *new_node);
