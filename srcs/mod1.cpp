@@ -11,8 +11,8 @@ extern "C" {
 #include <iostream>
 #include <memory>
 #include "mod1.hpp"
-#include "renderer.hpp"
-#include "physician.hpp"
+#include "frameProductor/frameProductor.hpp"
+#include "graphicInterface/graphicInterface.hpp"
 #include "pool.hpp"
 
 namespace mod1
@@ -27,8 +27,8 @@ public:
 protected:
 
 private:
-    std::unique_ptr<Renderer> m_renderer = nullptr;
-    std::unique_ptr<Physician> m_physician = nullptr;
+    std::unique_ptr<FrameProductor> m_frameProductor = nullptr;
+    std::unique_ptr<GraphicInterface> m_graphicInterface = nullptr;
     std::shared_ptr<Pool> m_pool;
 };
 }
@@ -59,10 +59,10 @@ Mod1Implementation::~Mod1Implementation() {
 }
 
 void Mod1Implementation::run(void) {
-    m_pool = std::make_shared<Pool>();
-    m_pool->init(250);
-    m_renderer.reset(new Renderer(m_pool));
-    m_physician.reset(new Physician(m_pool));
+    m_pool = std::make_shared<Pool>(50);
+    m_pool->init();
+    m_frameProductor.reset(new FrameProductor(m_pool));
+    m_graphicInterface.reset(new GraphicInterface(m_pool));
 
     // main loop conditionned by value
 }
@@ -70,6 +70,13 @@ void Mod1Implementation::run(void) {
 void Mod1Implementation::stop(void) {
     // exit sequence
 }
+
+
+
+
+
+/*
+*/
 
 /*
 Uint32 my_callbackfunc(Uint32 interval, void *param)

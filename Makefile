@@ -12,7 +12,6 @@
 
 NAME = mod1
 CC = g++
-MAIN_DIRECTORY = .
 
 ### MAIN FLAGS ###
 
@@ -24,24 +23,37 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = main mod1 pool imgData productor renderer physician
+SRC_CORE = main mod1 pool frameProductor renderer physician graphicInterface semaphore imgData
 
 SRC_LIST = $(SRC_CORE)
-VPATH = $(MAIN_DIRECTORY)/srcs
+
+VPATH = srcs \
+srcs/utils \
+srcs/frameProductor \
+srcs/graphicInterface \
+srcs/frameProductor/physician \
+srcs/frameProductor/renderer \
 
 ## HEADERS
 
-HEADERS_LIST = ../includes/mod1 pool imgData productor renderer physician
+HEADERS_LIST = includes/mod1 \
+srcs/pool \
+srcs/utils/imgData \
+srcs/utils/semaphore \
+srcs/frameProductor/physician/physician \
+srcs/frameProductor/renderer/renderer \
+srcs/frameProductor/frameProductor \
+srcs/graphicInterface/graphicInterface
 
 ### ~~~~~~~~~~ ###
 
 SRC = $(addsuffix .cpp, $(SRC_LIST))
-OBJ_DIR = $(MAIN_DIRECTORY)/objs
+OBJ_DIR = objs
 TMP = $(basename $(notdir $(SRC)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 HEADERS = $(addsuffix .hpp, $(HEADERS_LIST))
 
-IFLAGS = -I$(MAIN_DIRECTORY)/includes -I./srcs -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/
+IFLAGS = -I./includes -I./srcs -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/
 LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lSDL2
 
 .PHONY: all clean fclean re help
