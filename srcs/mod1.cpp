@@ -64,11 +64,18 @@ void Mod1Implementation::run(void) {
     m_frameProductor.reset(new FrameProductor(m_pool));
     m_graphicInterface.reset(new GraphicInterface(m_pool));
 
+//	m_frameProductor.start();
+//	m_graphicInterface.init();
+
+//	m_graphicInterface.loop();
+
+
+
     // main loop conditionned by value
 }
 
 void Mod1Implementation::stop(void) {
-    // exit sequence
+//    m_graphicInterface.exit();
 }
 
 

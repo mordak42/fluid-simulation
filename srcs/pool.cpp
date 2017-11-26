@@ -51,15 +51,6 @@ ImgData *Pool::popOutdatedFrame(void) {
         std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return nullptr;
     }
-    m_availabilitySem.wait();
-    return (&m_inactives.front());
-}
-
-ImgData *Pool::popRenderedFrame(void) {
-    if (m_ready == false) {
-        std::cerr << __func__ << " : Pool not initialized" << std::endl;
-        return nullptr;
-    }
     if (m_actives.size() == 0)
         return nullptr;
     return (&m_actives.front());
