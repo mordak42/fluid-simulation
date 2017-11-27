@@ -23,17 +23,16 @@ public:
     ~UserInterface();
     bool init();
     void start();
+    void stop();
 
 private:
-//    Uint32 customEventCb(Uint32 interval, void *param);
-
     const std::shared_ptr<Pool> m_pool;
     SDL_Window *m_win = nullptr;
-//    SDL_Surface *m_surface = nullptr;
     SDL_Renderer *m_renderer = nullptr;
+    bool m_ready = false;
+    bool m_continueLoopHook = true;
     int m_width;
     int m_height;
-    bool m_ready = false;
 };
 }
 

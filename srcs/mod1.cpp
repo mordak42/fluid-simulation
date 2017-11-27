@@ -58,29 +58,6 @@ Mod1Implementation::Mod1Implementation() {
 Mod1Implementation::~Mod1Implementation() {
 }
 
-Uint32 my_callbackfunc(Uint32 interval, void *param)
-{
-    SDL_Event event;
-    SDL_UserEvent userevent;
-
-    // In this example, our callback pushes a function
-    // into the queue, and causes our callback to be called again at the
-    // same interval:
-
-    userevent.type = SDL_USEREVENT;
-    userevent.code = 0;
-    userevent.data1 = NULL;
-    userevent.data2 = param;
-
-    event.type = SDL_USEREVENT;
-    event.user = userevent;
-
-    SDL_PushEvent(&event);
-    return(interval);
-}
-
-#include <unistd.h>
-
 void Mod1Implementation::run(void) {
     m_pool = std::make_shared<Pool>(250);
     m_pool->init();
@@ -89,25 +66,12 @@ void Mod1Implementation::run(void) {
     m_userInterface.reset(new UserInterface(m_pool, 1920, 1080));
 
     m_frameProductor->start();
-
-/*
-    while (1) {
-        usleep(1000000 / 25);
-        ImgData *img = m_pool->popRenderedFrame();
-        if (img == nullptr)
-            continue;
-        m_pool->pushOutdatedFrame(img);
-        (void)img;
-    }
-*/
-
     m_userInterface->init();
-    m_userInterface->start();
 
-    // m_userInterface.loop();
-    // main loop conditionned by value
+    /* main loop */
+    m_userInterface->start();
 }
 
 void Mod1Implementation::stop(void) {
-//    m_userInterface.exit();
+    m_userInterface->stop();
 }

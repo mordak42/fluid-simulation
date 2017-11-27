@@ -34,7 +34,6 @@ bool UserInterface::init() {
         std::cerr << __func__ << " : Cannot create window" << std::endl;
         return false;
     }
-    //m_surface = SDL_GetWindowSurface(m_win);
     m_renderer = SDL_CreateRenderer(m_win, -1, SDL_RENDERER_ACCELERATED);
     m_ready = true;
     return true;
@@ -68,20 +67,19 @@ void UserInterface::start() {
         return ;
     }
 
-    bool continueLoopHook = true;
     SDL_Event e;
-    ImgData *img = nullptr;
+    ImgData *img;
     Uint32 delay = 1000 / 50;
     SDL_TimerID timerId = 0;
 
-    while (continueLoopHook && SDL_WaitEvent(&e))
+    while (m_continueLoopHook && SDL_WaitEvent(&e))
     {
         switch (e.type) {
             case SDL_KEYDOWN:
                 std::cout << "SDL_KEYDOWN: scancode -> " << e.key.keysym.scancode << std::endl;
                 switch (e.key.keysym.scancode) {
                     case SDL_SCANCODE_ESCAPE:
-                        continueLoopHook = false;
+                        m_continueLoopHook = false;
                         break;
                     case SDL_SCANCODE_S:
                         std::cout << "touch start" << std::endl;
@@ -100,14 +98,13 @@ void UserInterface::start() {
                 }
                 break;
             case SDL_QUIT:
-                continueLoopHook = false;
+                stop();
                 break;
             case SDL_USEREVENT:
                 std::cout << "tick at " << SDL_GetTicks() << std::endl;
                 img = m_pool->popRenderedFrame();
                 if (img == nullptr)
                     break;
-                //SDL_UpdateWindowSurface(m_win);
                 SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
                 SDL_RenderClear(m_renderer);
                 SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
@@ -116,7 +113,7 @@ void UserInterface::start() {
                         int x = i % 1920;
                         int y = i / 1920;
                         std::cout << "founded at ! " << i << " x=" << x << " y=" << y << std::endl;
-                        SDL_RenderDrawPoint(m_renderer, x, y); //Renders on middle of screen.
+                        SDL_RenderDrawPoint(m_renderer, x, y);
                         SDL_RenderDrawPoint(m_renderer, x + 1, y);
                         SDL_RenderDrawPoint(m_renderer, x, y + 1);
                         SDL_RenderDrawPoint(m_renderer, x + 1, y + 1);
@@ -132,4 +129,10 @@ void UserInterface::start() {
     SDL_DestroyWindow(m_win);
     SDL_RemoveTimer(timerId);
     SDL_Quit();
+    m_ready = false;
+}
+
+void UserInterface::stop() {
+    m_continueLoopHook = false;
+    customEventCb(0, NULL);                                                     // TODO Param ther userEvent than frame !
 }

@@ -13,7 +13,7 @@ namespace mod1
 {
 class Pool {
 public:
-    Pool(unsigned long);
+    Pool(uint32_t nbFrames);
     ~Pool();
 
     bool init();
@@ -28,7 +28,7 @@ private:
     std::queue<ImgData> m_inactives;
     std::semaphore m_availabilitySem;
     std::mutex m_mutex;
-    unsigned long m_nbFrames;
+    uint32_t m_nbFrames;
     bool m_ready = false;
 };
 }

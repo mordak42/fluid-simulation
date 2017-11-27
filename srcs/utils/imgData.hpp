@@ -19,7 +19,7 @@ public:
     ~ImgData();
 
     void fillRGBPixel(uint8_t red, uint8_t green, uint8_t blue, int location);
-    void cleanImage(void);
+    void cleanImage();
     void cleanImage(uint8_t red, uint8_t green, uint8_t blue);
 
     enum e_ImgData_state {

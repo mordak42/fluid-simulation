@@ -7,7 +7,7 @@ namespace std
 class semaphore
 {
 public:
-    semaphore(unsigned long initialCount);
+    semaphore(uint32_t initialCount);
     ~semaphore();
 
     void notify();
@@ -17,6 +17,6 @@ public:
 private:
     std::mutex m_mutex;
     std::condition_variable m_condition;
-    unsigned long m_count = 0;                                                  // Default Initialized as locked.
+    uint32_t m_count;
 };
 }

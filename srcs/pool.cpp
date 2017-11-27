@@ -3,7 +3,7 @@
 
 using namespace mod1;
 
-Pool::Pool(unsigned long nbFrames) :
+Pool::Pool(uint32_t nbFrames) :
         m_availabilitySem(nbFrames),
         m_nbFrames(nbFrames) {
     std::cout << "Pool initialisation" << std::endl;
