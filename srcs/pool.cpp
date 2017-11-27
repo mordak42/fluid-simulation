@@ -53,15 +53,53 @@ ImgData *Pool::popOutdatedFrame(void) {
         return nullptr;
     }
 	m_availabilitySem.wait();
-    return (&m_inactives.front());
+//    return (&m_inactives.front());
+
+
+	while (1) {
+	ImgData *img = new ImgData();
+	ImgData *a2 = img;
+	printf("%p %p\n", img, a2);
+	a2->img[10] = 123;
+
+	img->img[10] = 21;
+	m_inactives.push(*img);
+	img = &m_inactives.back();
+	printf("%i\n", img->img[10]);
+	img->img[10] = 42;
+	img = &m_inactives.back();
+	printf("%i\n", img->img[10]);
+	m_inactives.pop();
+	printf("%i\n", img->img[10]);
+	m_actives.push(*img);
+	printf("%i\n", (&m_actives.back())->img[10]);
+	m_actives.push(*a2);
+	m_actives.push(*a2);
+	m_actives.push(*a2);
+	printf("%i\n", (&m_actives.back())->img[10]);
+
+	while (1);
+
+
+	printf("ref = %p %p\n", img, &m_inactives.front());
+
+	printf("ref = %p %p\n", img, &m_inactives.front());
+	std::cout << "inactive size -> "<< m_inactives.size() << std::endl;
+	img->img[0] = 0;
+	m_actives.push(*img);
+	printf("ref = %p %p\n", img, &m_actives.back());
+	std::cout << "active size -> "<< m_actives.size() << std::endl;
+	}
+	return nullptr;
 }
 
-void Pool::pushRenderedFrame(ImgData &frame) {
+void Pool::pushRenderedFrame(ImgData *frame) {
     if (m_ready == false) {
         std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return;
     }
-    m_actives.push(frame);
+    m_actives.push(*frame);
+	(void)frame;
 }
 
 /* Consumer side */
@@ -70,16 +108,17 @@ ImgData *Pool::popRenderedFrame(void) {
         std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return nullptr;
     }
-    if (m_actives.size() == 0)
+    //if (m_actives.size() == 0)
         return nullptr;
-	return (&m_actives.front());
+	//return (&m_actives.front());
 }
 
-void Pool::pushOutdatedFrame(ImgData &frame) {
+void Pool::pushOutdatedFrame(ImgData *frame) {
     if (m_ready == false) {
         std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return;
     }
-    m_inactives.push(frame);
-    m_availabilitySem.notify();
+    //m_inactives.push(*frame);
+	(void)frame;
+    //m_availabilitySem.notify();
 }

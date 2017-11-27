@@ -20,8 +20,8 @@ public:
 
     ImgData *popOutdatedFrame(void);
     ImgData *popRenderedFrame(void);
-    void pushOutdatedFrame(ImgData &frame);
-    void pushRenderedFrame(ImgData &frame);
+    void pushOutdatedFrame(ImgData *frame);
+    void pushRenderedFrame(ImgData *frame);
 
 private:
     std::queue<ImgData> m_actives;
