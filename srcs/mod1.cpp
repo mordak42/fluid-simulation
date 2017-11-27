@@ -87,27 +87,21 @@ void Mod1Implementation::run(void) {
     m_frameProductor.reset(new FrameProductor(m_pool));
     m_userInterface.reset(new UserInterface(m_pool));
 
-	m_frameProductor->start();
+    m_frameProductor->start();
 
-	while (1) {
-		usleep(1000000 / 25);
-		std::cout << "consumer try to take a frame" << std::endl;
-		ImgData *img = m_pool->popRenderedFrame();
-		if (img == nullptr) {
-		    std::cout << "there are not rendered frames" << std::endl;
-			continue;
-        }
-        std::cout << "consumer take a frame" << std::endl;
-        std::cout << "displaying frame " << (int)img->img[10] << std::endl;
-		m_pool->pushOutdatedFrame(img);
-		(void)img;
-	}
-//	m_frameProductor.start();
-	m_userInterface->start();
+    while (1) {
+        usleep(1000000 / 25);
+        ImgData *img = m_pool->popRenderedFrame();
+        if (img == nullptr)
+            continue;
+        m_pool->pushOutdatedFrame(img);
+        (void)img;
+    }
+//    m_frameProductor.start();
+    m_userInterface->start();
+//    m_userInterface.init();
 
-//	m_userInterface.init();
-
-//	m_userInterface.loop();
+//    m_userInterface.loop();
 
 
 

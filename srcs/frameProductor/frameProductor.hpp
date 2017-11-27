@@ -13,10 +13,10 @@ class FrameProductor
 public:
     FrameProductor(const std::shared_ptr<mod1::Pool> &pool);
     ~FrameProductor();
-	void start();
+    void start();
 
 private:
-	void threadHandler();
+    void threadHandler();
 
     const std::shared_ptr<Pool> m_pool;
     std::unique_ptr<Renderer> m_renderer = nullptr;

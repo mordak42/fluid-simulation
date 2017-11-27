@@ -38,6 +38,7 @@ bool Pool::init() {
         for (unsigned long i = 0; i < m_nbFrames; i++)
             m_inactives.emplace();
         m_ready = true;
+        std::cout << "Pool is ready" << std::endl;
         return true;
     }
     catch (const std::bad_alloc &) {
@@ -52,7 +53,7 @@ ImgData *Pool::popOutdatedFrame(void) {
         std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return nullptr;
     }
-	m_availabilitySem.wait();
+    m_availabilitySem.wait();
     ImgData *output = &m_inactives.front();
     m_inactives.pop();
     return output;
@@ -64,19 +65,17 @@ void Pool::pushRenderedFrame(ImgData *frame) {
         return;
     }
     m_actives.push(*frame);
-	(void)frame;
+    (void)frame;
 }
 
 /* Consumer side */
 ImgData *Pool::popRenderedFrame(void) {
-	if (m_ready == false) {
+    if (m_ready == false) {
         std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return nullptr;
     }
-    std::cout << "disp frame for consumer = " << m_actives.size() << std::endl;
-    if (m_actives.size() == 0) {
+    if (m_actives.size() == 0)
         return nullptr;
-    }
     ImgData *output = &m_actives.front();
     m_actives.pop();
     return output;

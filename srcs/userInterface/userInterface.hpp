@@ -17,14 +17,14 @@ namespace mod1
 class UserInterface
 {
 public:
-	UserInterface(const std::shared_ptr<mod1::Pool> &pool);
-	~UserInterface();
-	void start();
+    UserInterface(const std::shared_ptr<mod1::Pool> &pool);
+    ~UserInterface();
+    void start();
 
 private:
-	const std::shared_ptr<Pool> m_pool;
-	SDL_Window					*win;
-	SDL_Surface					*surface;
+    const std::shared_ptr<Pool> m_pool;
+    SDL_Window *win;
+    SDL_Surface *surface;
 };
 }
 

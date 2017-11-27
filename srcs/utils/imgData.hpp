@@ -17,14 +17,14 @@ class ImgData {
 public:
     ImgData();
     ~ImgData();
-	enum t_ImgData_state {
-		IMG_DATA_CLEAN,
-		IMG_DATA_CLEANNING,
-		IMG_DATA_DIRTY
-	};
+    enum t_ImgData_state {
+        IMG_DATA_CLEAN,
+        IMG_DATA_CLEANNING,
+        IMG_DATA_DIRTY
+    };
 
-    bool			isReady = IMG_DATA_DIRTY;
-	char			img[SIZE];
+    bool            isReady = IMG_DATA_DIRTY;
+    char            img[SIZE];
 };
 }
 
