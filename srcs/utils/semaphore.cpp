@@ -14,12 +14,9 @@ void semaphore::notify() {
 
 void semaphore::wait() {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
-    if (!m_count) {
-		cout << "meuh" << endl;
+    if (!m_count)
         m_condition.wait(lock);													// TODO voir pour if !
-	}
     --m_count;
-	std::cout << "avalability " << m_count << std::endl;
 }
 
 bool semaphore::try_wait() {

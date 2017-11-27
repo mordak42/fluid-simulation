@@ -82,7 +82,7 @@ Uint32 my_callbackfunc(Uint32 interval, void *param)
 #include <unistd.h>
 
 void Mod1Implementation::run(void) {
-    m_pool = std::make_shared<Pool>(10);
+    m_pool = std::make_shared<Pool>(50);
     m_pool->init();
     m_frameProductor.reset(new FrameProductor(m_pool));
     m_userInterface.reset(new UserInterface(m_pool));
@@ -90,11 +90,15 @@ void Mod1Implementation::run(void) {
 	m_frameProductor->start();
 
 	while (1) {
-		usleep(250000);
-		std::cout << "push" << std::endl;
+		usleep(1000000 / 25);
+		std::cout << "consumer try to take a frame" << std::endl;
 		ImgData *img = m_pool->popRenderedFrame();
-		if (img == NULL)
+		if (img == nullptr) {
+		    std::cout << "there are not rendered frames" << std::endl;
 			continue;
+        }
+        std::cout << "consumer take a frame" << std::endl;
+        std::cout << "displaying frame " << (int)img->img[10] << std::endl;
 		m_pool->pushOutdatedFrame(img);
 		(void)img;
 	}

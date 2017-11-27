@@ -15,12 +15,17 @@ void FrameProductor::start() {
 }
 
 void FrameProductor::threadHandler() {
+    int i = 0;
 	while (true) {
-		usleep(200000);
-		std::cout << "pop" << std::endl;
+		usleep(1000000 / 30);
+		std::cout << "productor try to make new frame" << std::endl;
 		ImgData *img = m_pool->popOutdatedFrame();
-		if (img == NULL)
+		if (img == NULL) {
+            std::cout << "productor cannot" << std::endl;
 			continue;
+        }
+        img->img[10] = i++;
+        std::cout << "making frame " << (i - 1) << std::endl;
 		m_pool->pushRenderedFrame(img);
 		(void)img;
 	}
