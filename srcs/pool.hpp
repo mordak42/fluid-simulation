@@ -27,6 +27,7 @@ private:
     std::queue<ImgData> m_actives;
     std::queue<ImgData> m_inactives;
     std::semaphore m_availabilitySem;
+    std::mutex m_mutex;
     unsigned long m_nbFrames;
     bool m_ready = false;
 };

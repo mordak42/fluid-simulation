@@ -14,12 +14,42 @@ void FrameProductor::start() {
      instance.detach();
 }
 
+#define OX 960;
+#define OY 540;
+#define RADIUS 200;
+
+
 void FrameProductor::threadHandler() {
+    const int ox = 960;
+    const int oy = 540;
+    const int radius = 200;
+    int x = -100;
+    int direction;
+    int y;
+
     while (true) {
-        usleep(1000000 / 30);
+        usleep(1000000 / 20);
         ImgData *img = m_pool->popOutdatedFrame();
         if (img == NULL)
             continue;
+        img->cleanImage();
+
+        if (1) {
+            if (x == -(radius / 2))
+                direction = 1;
+            if (x == (radius / 2))
+                direction = -1;
+            y = sqrt((radius * radius) - (x * x));
+            std::cout << x << " : " << y << std::endl;
+            if (direction > 0) {
+                img->fillRGBPixel(255, 255, 255, ((oy + y) * 1920) + (ox + x));
+                x += 2;
+            }
+            else {
+                img->fillRGBPixel(255, 255, 255, ((oy - y) * 1920) + (ox + x));
+                x -= 2;
+            }
+        }
         m_pool->pushRenderedFrame(img);
         (void)img;
     }

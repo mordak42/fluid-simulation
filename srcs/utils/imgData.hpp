@@ -2,7 +2,7 @@
 #ifndef __IMG_DATA_HPP__
 # define __IMG_DATA_HPP__
 
-# define SIZE 1920 * 1080 * 3
+# define SIZE 1920 * 1080
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -17,14 +17,24 @@ class ImgData {
 public:
     ImgData();
     ~ImgData();
-    enum t_ImgData_state {
+
+    void fillRGBPixel(uint8_t red, uint8_t green, uint8_t blue, int location);
+    void cleanImage(void);
+    void cleanImage(uint8_t red, uint8_t green, uint8_t blue);
+
+    enum e_ImgData_state {
         IMG_DATA_CLEAN,
         IMG_DATA_CLEANNING,
         IMG_DATA_DIRTY
     };
+    e_ImgData_state m_state = IMG_DATA_DIRTY;
 
-    bool            isReady = IMG_DATA_DIRTY;
-    char            img[SIZE];
+    struct t_pix {
+        uint8_t r;
+        uint8_t g;
+        uint8_t b;
+    };
+    t_pix m_map[SIZE];
 };
 }
 

@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
     signalSetup();
     s_context = new mod1::Mod1();
-    s_context->run();                                                            // loop
+    s_context->run();                                                           // loop
     delete s_context;
 
     return 0;

@@ -35,8 +35,10 @@ bool Pool::init() {
         return false;
     }
     try {
-        for (unsigned long i = 0; i < m_nbFrames; i++)
+        for (unsigned long i = 0; i < m_nbFrames; i++) {
+            std::cout << "loop" << std::endl;
             m_inactives.emplace();
+        }
         m_ready = true;
         std::cout << "Pool is ready" << std::endl;
         return true;
@@ -54,6 +56,7 @@ ImgData *Pool::popOutdatedFrame(void) {
         return nullptr;
     }
     m_availabilitySem.wait();
+    std::lock_guard<std::mutex>lock(m_mutex);
     ImgData *output = &m_inactives.front();
     m_inactives.pop();
     return output;
@@ -64,6 +67,7 @@ void Pool::pushRenderedFrame(ImgData *frame) {
         std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return;
     }
+    std::lock_guard<std::mutex>lock(m_mutex);
     m_actives.push(*frame);
     (void)frame;
 }
@@ -74,6 +78,7 @@ ImgData *Pool::popRenderedFrame(void) {
         std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return nullptr;
     }
+    std::lock_guard<std::mutex>lock(m_mutex);
     if (m_actives.size() == 0)
         return nullptr;
     ImgData *output = &m_actives.front();
@@ -86,6 +91,7 @@ void Pool::pushOutdatedFrame(ImgData *frame) {
         std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return;
     }
+    std::lock_guard<std::mutex>lock(m_mutex);
     m_inactives.push(*frame);
     m_availabilitySem.notify();
 }
