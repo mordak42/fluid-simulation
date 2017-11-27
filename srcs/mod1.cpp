@@ -12,7 +12,7 @@ extern "C" {
 #include <memory>
 #include "mod1.hpp"
 #include "frameProductor/frameProductor.hpp"
-#include "graphicInterface/graphicInterface.hpp"
+#include "userInterface/userInterface.hpp"
 #include "pool.hpp"
 
 namespace mod1
@@ -28,7 +28,7 @@ protected:
 
 private:
     std::unique_ptr<FrameProductor> m_frameProductor = nullptr;
-    std::unique_ptr<GraphicInterface> m_graphicInterface = nullptr;
+    std::unique_ptr<UserInterface> m_userInterface = nullptr;
     std::shared_ptr<Pool> m_pool;
 };
 }
@@ -58,34 +58,6 @@ Mod1Implementation::Mod1Implementation() {
 Mod1Implementation::~Mod1Implementation() {
 }
 
-void Mod1Implementation::run(void) {
-    m_pool = std::make_shared<Pool>(50);
-    m_pool->init();
-    m_frameProductor.reset(new FrameProductor(m_pool));
-    m_graphicInterface.reset(new GraphicInterface(m_pool));
-
-//	m_frameProductor.start();
-//	m_graphicInterface.init();
-
-//	m_graphicInterface.loop();
-
-
-
-    // main loop conditionned by value
-}
-
-void Mod1Implementation::stop(void) {
-//    m_graphicInterface.exit();
-}
-
-
-
-
-
-/*
-*/
-
-/*
 Uint32 my_callbackfunc(Uint32 interval, void *param)
 {
     SDL_Event event;
@@ -106,6 +78,89 @@ Uint32 my_callbackfunc(Uint32 interval, void *param)
     SDL_PushEvent(&event);
     return(interval);
 }
+
+void Mod1Implementation::run(void) {
+    m_pool = std::make_shared<Pool>(10);
+    m_pool->init();
+    m_frameProductor.reset(new FrameProductor(m_pool));
+    m_userInterface.reset(new UserInterface(m_pool));
+
+//	m_frameProductor.start();
+//	m_userInterface.init();
+
+//	m_userInterface.loop();
+
+	SDL_Window* pWindow;
+	SDL_Event    e;
+
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER))
+	{
+		fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
+		return ;
+	}
+
+	{
+		// Création de la fenêtre
+
+		Uint32 delay = 1000 / 25;  // To round it down to the nearest 10 ms
+		SDL_TimerID my_timer_id = SDL_AddTimer(delay, my_callbackfunc, NULL);
+		if((pWindow = SDL_CreateWindow("Ma première application SDL2",SDL_WINDOWPOS_CENTERED,
+																  SDL_WINDOWPOS_CENTERED,
+																  640,
+																  480,
+																  SDL_WINDOW_SHOWN)))
+
+		{
+			bool continueLoopHook = true;
+
+			while (continueLoopHook && SDL_WaitEvent(&e)) {
+				switch (e.type) {
+				case SDL_KEYDOWN:
+					std::cout << "SDL_KEYDOWN: scancode -> " << e.key.keysym.scancode << std::endl;
+					if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+						continueLoopHook = false;
+					break;
+				case SDL_QUIT:
+					continueLoopHook = false;
+					break;
+				case SDL_USEREVENT:
+					std::cout << "tick at " << SDL_GetTicks() << std::endl;
+					break;
+				default:
+					break;
+				}
+			}
+			//SDL_Delay(3000);  Attendre trois secondes, que l'utilisateur voie la fenêtre
+
+			SDL_DestroyWindow(pWindow);
+			SDL_RemoveTimer(my_timer_id);
+		}
+		else
+		{
+			fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());
+		}
+	}
+
+	SDL_Quit();
+
+
+
+    // main loop conditionned by value
+}
+
+void Mod1Implementation::stop(void) {
+//    m_userInterface.exit();
+}
+
+
+
+
+
+/*
+*/
+
+/*
+
 */
 
 

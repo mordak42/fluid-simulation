@@ -18,6 +18,7 @@ static void defaultSignalsHandler(int sigNum) {
 static void segvSignalsHandler(int sigNum) {
     (void)sigNum;
     cout << "Segmentation fault, you are Vcombey i think..." << endl;
+	exit(EXIT_FAILURE);
 }
 
 /* clean exit on SIGINT & SIGTERM */
@@ -39,7 +40,7 @@ int main(int argc, char **argv)
 
     signalSetup();
     s_context = new mod1::Mod1();
-    s_context->run();
+    s_context->run();															// loop
     delete s_context;
 
     return 0;

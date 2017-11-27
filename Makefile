@@ -23,14 +23,14 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = main mod1 pool frameProductor renderer physician graphicInterface semaphore imgData
+SRC_CORE = main mod1 pool frameProductor renderer physician userInterface semaphore imgData
 
 SRC_LIST = $(SRC_CORE)
 
 VPATH = srcs \
 srcs/utils \
 srcs/frameProductor \
-srcs/graphicInterface \
+srcs/userInterface \
 srcs/frameProductor/physician \
 srcs/frameProductor/renderer \
 
@@ -43,7 +43,7 @@ srcs/utils/semaphore \
 srcs/frameProductor/physician/physician \
 srcs/frameProductor/renderer/renderer \
 srcs/frameProductor/frameProductor \
-srcs/graphicInterface/graphicInterface
+srcs/userInterface/userInterface
 
 ### ~~~~~~~~~~ ###
 

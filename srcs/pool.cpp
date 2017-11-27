@@ -46,14 +46,33 @@ bool Pool::init() {
     }
 }
 
+/* Productor side */
 ImgData *Pool::popOutdatedFrame(void) {
     if (m_ready == false) {
         std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return nullptr;
     }
+	m_availabilitySem.wait();
+    return (&m_inactives.front());
+}
+
+void Pool::pushRenderedFrame(ImgData &frame) {
+    if (m_ready == false) {
+        std::cerr << __func__ << " : Pool not initialized" << std::endl;
+        return;
+    }
+    m_actives.push(frame);
+}
+
+/* Consumer side */
+ImgData *Pool::popRenderedFrame(void) {
+	if (m_ready == false) {
+        std::cerr << __func__ << " : Pool not initialized" << std::endl;
+        return nullptr;
+    }
     if (m_actives.size() == 0)
         return nullptr;
-    return (&m_actives.front());
+	return (&m_actives.front());
 }
 
 void Pool::pushOutdatedFrame(ImgData &frame) {
@@ -63,12 +82,4 @@ void Pool::pushOutdatedFrame(ImgData &frame) {
     }
     m_inactives.push(frame);
     m_availabilitySem.notify();
-}
-
-void Pool::pushRenderedFrame(ImgData &frame) {
-    if (m_ready == false) {
-        std::cerr << __func__ << " : Pool not initialized" << std::endl;
-        return;
-    }
-    m_actives.push(frame);
 }
