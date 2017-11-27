@@ -23,8 +23,8 @@ public:
 		IMG_DATA_DIRTY
 	};
 
-    SDL_Surface		*surface;
     bool			isReady = IMG_DATA_DIRTY;
+	char			img[SIZE];
 };
 }
 
