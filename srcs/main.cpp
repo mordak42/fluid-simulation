@@ -43,5 +43,6 @@ int main(int argc, char **argv)
     s_context->run();
     delete s_context;
 
+    while (1);
     return 0;
 }

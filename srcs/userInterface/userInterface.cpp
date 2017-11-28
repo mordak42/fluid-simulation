@@ -119,8 +119,8 @@ void UserInterface::start() {
                         SDL_RenderDrawPoint(m_renderer, x + 1, y + 1);
                     }
                 }
-                m_pool->pushOutdatedFrame(img);
                 SDL_RenderPresent(m_renderer);
+                m_pool->pushOutdatedFrame(img);
                 break;
             default:
                 break;

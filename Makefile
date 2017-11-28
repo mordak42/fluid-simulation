@@ -40,6 +40,7 @@ HEADERS_LIST = includes/mod1 \
 srcs/pool \
 srcs/utils/imgData \
 srcs/utils/semaphore \
+srcs/utils/fifo \
 srcs/frameProductor/physician/physician \
 srcs/frameProductor/renderer/renderer \
 srcs/frameProductor/frameProductor \

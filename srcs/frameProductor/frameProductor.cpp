@@ -1,6 +1,5 @@
 #include "frameProductor.hpp"
 #include <unistd.h>
-#include <thread>
 
 using namespace mod1;
 
@@ -10,14 +9,18 @@ FrameProductor::FrameProductor(const std::shared_ptr<mod1::Pool> &pool) : m_pool
 FrameProductor::~FrameProductor() {}
 
 void FrameProductor::start() {
+     m_keepGoing = true;
      std::thread instance(&FrameProductor::threadHandler, this);
      instance.detach();
+}
+
+void FrameProductor::stop() {
+    m_keepGoing = false;
 }
 
 #define OX 960;
 #define OY 540;
 #define RADIUS 200;
-
 
 void FrameProductor::threadHandler() {
     const int ox = 960;
@@ -27,8 +30,8 @@ void FrameProductor::threadHandler() {
     int y;
     int direction;
 
-    while (true) {
-        usleep(1000000 / 100);
+    while (m_keepGoing) {
+        usleep(1000000 / 1000);
         ImgData *img = m_pool->popOutdatedFrame();
         if (img == NULL)
             continue;
@@ -51,4 +54,5 @@ void FrameProductor::threadHandler() {
 
         m_pool->pushRenderedFrame(img);
     }
+    std::terminate();
 }

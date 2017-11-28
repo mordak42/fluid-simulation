@@ -8,6 +8,7 @@
 
 #include "utils/semaphore.hpp"
 #include "utils/imgData.hpp"
+#include "utils/fifo.hpp"
 
 namespace mod1
 {
@@ -24,13 +25,12 @@ public:
     void pushRenderedFrame(ImgData *frame);
 
 private:
-    std::queue<ImgData> m_actives;
-    std::queue<ImgData> m_inactives;
+    std::fifo<ImgData *> m_actives;
+    std::fifo<ImgData *> m_inactives;
+
     std::semaphore m_availabilitySem;
-    std::mutex m_mutex;
     uint32_t m_nbFrames;
     bool m_ready = false;
 };
 }
-
 #endif

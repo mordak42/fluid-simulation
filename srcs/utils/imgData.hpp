@@ -17,6 +17,8 @@ class ImgData {
 public:
     ImgData();
     ~ImgData();
+    ImgData(const ImgData &m) = delete;
+    ImgData& operator=(const ImgData &m) = delete;
 
     void fillRGBPixel(uint8_t red, uint8_t green, uint8_t blue, int location);
     void cleanImage();
