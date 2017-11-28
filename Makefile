@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/18 22:40:01 by bmickael          #+#    #+#              #
-#    Updated: 2017/11/19 15:41:25 by bmickael         ###   ########.fr        #
+#    Updated: 2017/11/27 23:47:28 by vcombey          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ SRC_LIST = $(SRC_CORE)
 VPATH = srcs \
 srcs/utils \
 srcs/frameProductor \
+srcs/utils/polynom \
 srcs/userInterface \
 srcs/frameProductor/physician \
 srcs/frameProductor/renderer \
@@ -40,6 +41,7 @@ HEADERS_LIST = includes/mod1 \
 srcs/pool \
 srcs/utils/imgData \
 srcs/utils/semaphore \
+srcs/utils/polynom \
 srcs/frameProductor/physician/physician \
 srcs/frameProductor/renderer/renderer \
 srcs/frameProductor/frameProductor \
