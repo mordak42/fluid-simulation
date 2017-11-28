@@ -21,6 +21,7 @@ Pool::~Pool() {
     tmp = m_inactives.size();
     for (size_t i = 0; i < tmp; i++)
         free(m_inactives.pop());
+
     std::cout << "Pool terminated" << std::endl;
 }
 
@@ -65,7 +66,6 @@ void Pool::pushRenderedFrame(ImgData *frame) {
         return;
     }
     m_actives.push(frame);
-    (void)frame;
 }
 
 /* Consumer side */
@@ -87,5 +87,4 @@ void Pool::pushOutdatedFrame(ImgData *frame) {
     }
     m_inactives.push(frame);
     m_availabilitySem.notify();
-    (void)frame;
 }

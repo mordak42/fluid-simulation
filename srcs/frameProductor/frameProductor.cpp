@@ -31,7 +31,7 @@ void FrameProductor::threadHandler() {
     int direction;
 
     while (m_keepGoing) {
-        usleep(1000000 / 1000);
+        usleep(1000000 / 20);
         ImgData *img = m_pool->popOutdatedFrame();
         if (img == NULL)
             continue;
@@ -42,7 +42,6 @@ void FrameProductor::threadHandler() {
         if (x == (radius / 2))
             direction = -1;
         y = sqrt((radius * radius) - (x * x));
-        std::cout << x << " : " << y << std::endl;
         if (direction > 0) {
             img->fillRGBPixel(255, 255, 255, ((oy + y) * 1920) + (ox + x));
             x += 2;
@@ -54,5 +53,5 @@ void FrameProductor::threadHandler() {
 
         m_pool->pushRenderedFrame(img);
     }
-    std::terminate();
+//    std::terminate();
 }

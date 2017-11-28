@@ -35,8 +35,6 @@ template <class T> fifo<T>::~fifo() {
 
     while (m_firstElem) {
         tmp = m_firstElem->next;
-        // TODO penser a appler le destructeur de la class T ?
-        delete tmp->content;
         free(m_firstElem);
         m_firstElem = tmp;
     }

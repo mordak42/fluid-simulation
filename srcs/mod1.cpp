@@ -61,23 +61,6 @@ Mod1Implementation::~Mod1Implementation() {
 #include "utils/fifo.hpp"
 #include <array>
 
-/*
-static void fn(int arr[], size_t size) {
-    (void)arr;
-    std::cout << "sizeof array = " << size << std::endl;
-}
-
-static void fn2(int *arr, size_t size) {
-    (void)arr;
-    std::cout << "sizeof array = " << size << std::endl;
-}
-
-static ifn3(int arr[], int arr[], size_t size) {
-    (void)arr;
-    std::cout << "sizeof array = " << size << std::endl;
-}
-*/
-
 void Mod1Implementation::run(void) {
     m_pool = std::make_shared<Pool>(250);
     m_pool->init();
@@ -90,6 +73,7 @@ void Mod1Implementation::run(void) {
 
     /* main loop */
     m_userInterface->start();
+    m_frameProductor->stop();
 }
 
 void Mod1Implementation::stop(void) {

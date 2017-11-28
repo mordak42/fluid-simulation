@@ -28,7 +28,7 @@ public:
 private:
     const std::shared_ptr<Pool> m_pool;
     SDL_Window *m_win = nullptr;
-    SDL_Renderer *m_renderer = nullptr;
+    SDL_Surface *m_surface = nullptr;
     bool m_ready = false;
     bool m_continueLoopHook = true;
     int m_width;

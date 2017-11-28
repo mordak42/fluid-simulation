@@ -12,7 +12,7 @@ static mod1::Mod1 *s_context = nullptr;
 
 static void defaultSignalsHandler(int sigNum) {
     (void)sigNum;
-    s_context->stop();
+    exit(EXIT_FAILURE);
 }
 
 static void segvSignalsHandler(int sigNum) {
@@ -42,7 +42,5 @@ int main(int argc, char **argv)
     s_context = new mod1::Mod1();
     s_context->run();
     delete s_context;
-
-    while (1);
     return 0;
 }

@@ -34,11 +34,10 @@ bool UserInterface::init() {
         std::cerr << __func__ << " : Cannot create window" << std::endl;
         return false;
     }
-    m_renderer = SDL_CreateRenderer(m_win, -1, SDL_RENDERER_ACCELERATED);
+    m_surface = SDL_GetWindowSurface(m_win);
     m_ready = true;
     return true;
 }
-
 static Uint32 customEventCb(Uint32 interval, void *param)
 {
     SDL_Event event;
@@ -69,7 +68,7 @@ void UserInterface::start() {
 
     SDL_Event e;
     ImgData *img;
-    Uint32 delay = 1000 / 50;
+    Uint32 delay = 1000 / 40;
     SDL_TimerID timerId = 0;
 
     while (m_continueLoopHook && SDL_WaitEvent(&e))
@@ -101,25 +100,18 @@ void UserInterface::start() {
                 stop();
                 break;
             case SDL_USEREVENT:
-                std::cout << "tick at " << SDL_GetTicks() << std::endl;
                 img = m_pool->popRenderedFrame();
                 if (img == nullptr)
                     break;
-                SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
-                SDL_RenderClear(m_renderer);
-                SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
                 for (int i = 0; i < SIZE; i++) {
                     if (img->m_map[i].r != 0) {
                         int x = i % 1920;
                         int y = i / 1920;
-                        std::cout << "founded at ! " << i << " x=" << x << " y=" << y << std::endl;
-                        SDL_RenderDrawPoint(m_renderer, x, y);
-                        SDL_RenderDrawPoint(m_renderer, x + 1, y);
-                        SDL_RenderDrawPoint(m_renderer, x, y + 1);
-                        SDL_RenderDrawPoint(m_renderer, x + 1, y + 1);
+                        bzero(m_surface->pixels, m_surface->h * m_surface->pitch);
+                        ((int *)m_surface->pixels)[y * m_surface->w + x] = 0x00FFFFFF;
                     }
                 }
-                SDL_RenderPresent(m_renderer);
+                SDL_UpdateWindowSurface(m_win);
                 m_pool->pushOutdatedFrame(img);
                 break;
             default:
@@ -134,5 +126,5 @@ void UserInterface::start() {
 
 void UserInterface::stop() {
     m_continueLoopHook = false;
-    customEventCb(0, NULL);                                                     // TODO Param ther userEvent than frame !
+//    customEventCb(0, NULL);                                                     // TODO Param ther userEvent than frame !
 }
