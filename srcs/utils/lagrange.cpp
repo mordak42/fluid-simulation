@@ -1,61 +1,6 @@
 
 //#include "polynom.hpp"
 
-#include <iostream>
-#include <vector>
-
-namespace mod1
-{
-class Polynom {
-	public:
-		Polynom(double *coefs, int size);
-		Polynom();
-		~Polynom();
-		double eval(double x);
-		Polynom operator+(Polynom b);
-	private:
-		/*
-		** les coeficiant sont stockes dans l ordre 
-		** P(X) = coefs[0] + coefs[1]X + coef[2]X^2 ...
-		*/
-};
-}
-
-using namespace mod1;
-
-Polynom::Polynom(double *coefs, int nb_coefs)
-{
-	if (nb_coefs > NB_COEFS_MAX)
-		printf("nb coefs > NB_COEFS_MAX\n");
-	memcpy(m_coefs, coefs, size * sizeof(double));
-	degre = nb_coefs - 1;
-}
-
-Polynom::Polynom() {
-	bzero(m_coefs, NB_COEFS_MAX * sizeof(double));
-}
-
-Polynom::~Polynom() {
-}
-
-Polynom operator+(Polynom b)
-{
-	Polynom	res;
-
-	
-	return b;
-}
-
-double Polynom::eval(double x)
-{
-	double	res = 0;
-
-	while (42)
-	{
-		 res = res * x + 1;
-	}
-	return res;
-} 
 struct point {
 	double x;
 	double y;
