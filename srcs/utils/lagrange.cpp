@@ -1,33 +1,46 @@
 
-//#include "polynom.hpp"
+#include "polynom.hpp"
 
-struct point {
-	double x;
-	double y;
-};
+using namespace mod1;
 
-static Polynom	pi_lagrange(double xj, struct point points[], int nb_point)
+void    debug_poly(Polynom poly);
+
+static Polynom  pi_lagrange(double xj, struct point points[], int nb_point)
 {
-	Polynom	res;
-	for (int i = 0; i < nb_point; i++)
-	{
-		if (points[i].x != xj)
-		{
-			Polynom tmp((double []){-points[i].x, 1.0}, 2);
-			res = res * tmp;
-			res = res / (xj - points[i].x);
-		}
-	}
-	return (res);
+    Polynom res((double[]){1}, 1);
+    double divisor = 1;
+
+    for (int i = 0; i < nb_point; i++)
+    {
+        if (points[i].x != xj)
+        {
+            Polynom tmp((double []){-points[i].x, 1.0}, 2);
+            debug_poly(tmp);
+            res = res * tmp;
+            printf("/ %f - %f", xj, points[i].x);
+            divisor *= (xj - points[i].x);
+            printf("\n*\n");
+        }
+    }
+    printf("res: ");
+    debug_poly(res);
+    printf("\n");
+    res = res / divisor;
+    printf("res: ");
+    debug_poly(res);
+    printf("\n");
+    return (res);
 }
 
-Polynom	Lagrange(struct point points[], int nb_point)
+Polynom lagrange(struct point points[], int nb_point)
 {
-	Polynom	res;
+    Polynom res((double[]){0}, 1);
 
-	for (int j = 0; j < nb_point; j++)
-	{
-		res = points[j].y * pi_lagrange(points[j].x, points, nb_point);
-	}
-	return res;
+    for (int j = 0; j < nb_point; j++)
+    {
+        Polynom tmp = pi_lagrange(points[j].x, points, nb_point);
+        tmp = tmp * points[j].y;
+        res = res + tmp;
+    }
+    return res;
 } 
