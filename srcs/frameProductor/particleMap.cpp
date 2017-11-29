@@ -6,7 +6,7 @@
 /*   By: mbeilles <mbeilles@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/28 20:53:55 by mbeilles          #+#    #+#             */
-/*   Updated: 2017/11/29 03:47:21 by mbeilles         ###   ########.fr       */
+/*   Updated: 2017/11/29 04:11:59 by mbeilles         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,12 @@ ParticleMap::ParticleMap(uint32_t height, uint32_t width, uint32_t depth) :
     i = 0;
     while (i < m_height)
     {
-        m_map[i] = (particleMapValue_t**)((m_map + m_height + i * m_width));
+        m_map[i] = (particleMapValue_t**)((uint8_t*)(m_map + m_height + i * m_width));
         j = 0;
         while (j < m_width)
         {
-            m_map[i][j] = (particleMapValue_t*)((m_map + m_height + m_width * m_height
+            m_map[i][j] = (particleMapValue_t*)((uint8_t*)((m_map + m_height + m_width * m_height
                 + i * m_width * m_depth + j * m_depth));
-            printf("%i %i = %li\n", i, j, m_map[i][j]);
             j++;
         }
         i++;
