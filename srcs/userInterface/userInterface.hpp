@@ -1,6 +1,10 @@
 #ifndef __USER_INTERFACE_HPP
 # define __USER_INTERFACE_HPP
 
+# define WINDOW_WIDTH 320
+# define WINDOW_HEIGHT 200
+# define WINDOW_SIZE (WINDOW_WIDTH * WINDOW_HEIGHT)
+
 #ifdef __cplusplus
 extern "C" {
 #endif

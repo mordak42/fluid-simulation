@@ -18,15 +18,11 @@ void FrameProductor::stop() {
     m_keepGoing = false;
 }
 
-#define OX 960;
-#define OY 540;
-#define RADIUS 200;
-
 void FrameProductor::threadHandler() {
-    const int ox = 960;
-    const int oy = 540;
-    const int radius = 200;
-    int x = -100;
+    const int ox = MATH_WIDTH / 2;
+    const int oy = MATH_HEIGHT / 2;
+    const int radius = MATH_HEIGHT / 4;
+    int x = -radius / 2;
     int y;
     int direction;
 
@@ -43,14 +39,20 @@ void FrameProductor::threadHandler() {
             direction = -1;
         y = sqrt((radius * radius) - (x * x));
         if (direction > 0) {
-            img->fillRGBPixel(255, 255, 255, ((oy + y) * 1920) + (ox + x));
+            img->fillRGBPixel(255, 255, 255, ((oy + y) * MATH_WIDTH) + (ox + x));
             x += 2;
         }
         else {
-            img->fillRGBPixel(255, 255, 255, ((oy - y) * 1920) + (ox + x));
+            img->fillRGBPixel(255, 255, 255, ((oy - y) * MATH_WIDTH) + (ox + x));
             x -= 2;
         }
 
+        (void)ox;
+        (void)oy;
+        (void)radius;
+        (void)x;
+        (void)y;
+        (void)direction;
         m_pool->pushRenderedFrame(img);
     }
 //    std::terminate();

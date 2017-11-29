@@ -2,7 +2,10 @@
 #ifndef __IMG_DATA_HPP__
 # define __IMG_DATA_HPP__
 
-# define SIZE 1920 * 1080
+# define MATH_WIDTH 320
+# define MATH_HEIGHT 200
+# define MATH_SIZE (MATH_WIDTH) * (MATH_HEIGHT)
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -36,7 +39,7 @@ public:
         uint8_t g;
         uint8_t b;
     };
-    t_pix m_map[SIZE];
+    t_pix m_map[MATH_SIZE];
 };
 }
 

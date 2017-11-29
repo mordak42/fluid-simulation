@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/18 22:40:01 by bmickael          #+#    #+#              #
-#    Updated: 2017/11/27 23:47:28 by vcombey          ###   ########.fr        #
+#    Updated: 2017/11/29 01:05:55 by bmickael         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CC = g++
 ifeq ($(DEBUG),yes)
 	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address
 else
-	CFLAGS = -Wall -Wextra -Werror -std=c++11
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -Ofast
 endif
 
 ### SOURCES ###
