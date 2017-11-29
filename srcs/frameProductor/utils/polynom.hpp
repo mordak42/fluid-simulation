@@ -5,22 +5,23 @@
 #include <iostream>
 #define NB_COEFS_MAX 100
 
-struct point {
-    double x;
-    double y;
-};
-
 namespace mod1
 {
+    struct point {
+        double x;
+        double y;
+    };
+
     class Polynom {
         public:
             Polynom(double *coefs, int size);
+            Polynom();
             ~Polynom();
             double  eval(double x);
             double  m_coefs[NB_COEFS_MAX] = {0};
             int     m_nb_coefs;
             /*
-             ** les coeficiant sont stockes dans l ordre 
+             ** les coeficiant sont stockes dans l ordre
              ** P(X) = coefs[0] + coefs[1]X + coef[2]X^2 ...
              */
 
@@ -75,7 +76,6 @@ namespace mod1
                 return res;
             }
     };
-
 }
-
+mod1::Polynom lagrange(struct mod1::point points[], int nb_point);
 #endif

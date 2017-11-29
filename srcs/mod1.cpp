@@ -68,6 +68,7 @@ void Mod1Implementation::run(void) {
     m_frameProductor.reset(new FrameProductor(m_pool));
     m_userInterface.reset(new UserInterface(m_pool, WINDOW_WIDTH, WINDOW_HEIGHT));
 
+    m_frameProductor->parseFile();
     m_frameProductor->start();
     m_userInterface->init();
 

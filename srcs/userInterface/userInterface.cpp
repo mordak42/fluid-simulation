@@ -14,7 +14,7 @@ UserInterface::UserInterface(const std::shared_ptr<mod1::Pool> &pool,
 
 UserInterface::~UserInterface() {}
 
-#define FINAL
+#define CURRENT_METHODE
 
 bool UserInterface::init() {
     if (m_ready == true) {
@@ -73,7 +73,7 @@ void UserInterface::start() {
     Uint32 delay = 1000 / 40;
     SDL_TimerID timerId = 0;
 
-#ifdef FINAL
+#ifdef CURRENT_METHODE
     float math_width = MATH_WIDTH;
     float math_height = MATH_HEIGHT;
     int math_x;
@@ -81,6 +81,8 @@ void UserInterface::start() {
     float deltaWidth = math_width / m_width;
     float deltaHeight = math_height / m_height;
 #endif
+
+    timerId = SDL_AddTimer(delay, customEventCb, NULL);
     while (m_continueLoopHook && SDL_WaitEvent(&e))
     {
         switch (e.type) {
@@ -142,7 +144,7 @@ Formule optimisee de Vcombey
                     j = math_y * math_width + math_x;
 */
 
-#ifdef FINAL
+#ifdef CURRENT_METHODE
                     math_x = (i % m_width) * deltaWidth;
                     math_y = (i / m_width) * deltaHeight;
                     j = math_y * math_width + math_x;
@@ -160,7 +162,7 @@ Formule optimisee de Vcombey
                     m_height = e.window.data2;
                     m_surface = SDL_GetWindowSurface(m_win);
                     std::cout << "new size = " << m_width << " - " << m_height << std::endl;
-#ifdef FINAL
+#ifdef CURRENT_METHODE
                     deltaWidth = math_width / m_width;
                     deltaHeight = math_height / m_height;
 #endif

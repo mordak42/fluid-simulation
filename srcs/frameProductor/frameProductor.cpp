@@ -18,42 +18,67 @@ void FrameProductor::stop() {
     m_keepGoing = false;
 }
 
-void FrameProductor::threadHandler() {
-    const int ox = MATH_WIDTH / 2;
-    const int oy = MATH_HEIGHT / 2;
-    const int radius = MATH_HEIGHT / 4;
-    int x = -radius / 2;
-    int y;
-    int direction;
+#define SIZE_EXEMPLE 5
 
+static void    debug_poly(Polynom poly)
+{
+    for (int i = poly.m_nb_coefs - 1; i >= 0; i--) {
+        std::cout << ' ' << poly.m_coefs[i];
+        std::cout << "*x^" << i << " + ";
+    }
+    std::cout << '\n';
+}
+
+/*
+ * google exemple:
+ * 3.77604e-08*x^4 +  -6.61458e-05*x^3 +  0.0316146*x^2 +  -3.22917*x^1 +  0
+*/
+
+//bool FrameProductor::parseFile(const char &buff) {
+bool FrameProductor::parseFile() {
+    struct point p[SIZE_EXEMPLE];
+    p[0].x = 0;
+    p[0].y = 0;
+    p[1].x = 200;
+    p[1].y = 150;
+    p[2].x = 400;
+    p[2].y = 500;
+    p[3].x = 600;
+    p[3].y = 50;
+    p[4].x = 1000;
+    p[4].y = 0;
+    m_groundLevel = lagrange(p, SIZE_EXEMPLE);
+    debug_poly(m_groundLevel);
+    for (int y = -1000 ; y < 1000; y++)
+        for (int x = 0 ; x < 1000; x++) {
+            m_grid[y + 1000][x] = ((m_groundLevel.eval((double)x) - y)) > 0 ? 1 : 0;
+        }
+    return true;
+}
+
+void FrameProductor::raytrace(ImgData *img) {
+    int index;
+
+    for (int y = 0; y < 2000; y++) {
+        for (int x = 0 ; x < 1000; x++) {
+            index = y * 1000 + x;
+            if (m_grid[1999 - y][x] == 1) {
+                img->m_map[index].r = 0xFF;
+                img->m_map[index].g = 0xFF;
+                img->m_map[index].b = 0xFF;
+            }
+        }
+    }
+}
+
+void FrameProductor::threadHandler() {
     while (m_keepGoing) {
         usleep(1000000 / 20);
         ImgData *img = m_pool->popOutdatedFrame();
         if (img == NULL)
             continue;
         img->cleanImage();
-
-        if (x == -(radius / 2))
-            direction = 1;
-        if (x == (radius / 2))
-            direction = -1;
-        y = sqrt((radius * radius) - (x * x));
-        if (direction > 0) {
-            img->fillRGBPixel(255, 255, 255, ((oy + y) * MATH_WIDTH) + (ox + x));
-            x += 2;
-        }
-        else {
-            img->fillRGBPixel(255, 255, 255, ((oy - y) * MATH_WIDTH) + (ox + x));
-            x -= 2;
-        }
-
-        (void)ox;
-        (void)oy;
-        (void)radius;
-        (void)x;
-        (void)y;
-        (void)direction;
+        raytrace(img);
         m_pool->pushRenderedFrame(img);
     }
-//    std::terminate();
 }

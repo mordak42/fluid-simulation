@@ -2,8 +2,8 @@
 #ifndef __IMG_DATA_HPP__
 # define __IMG_DATA_HPP__
 
-# define MATH_WIDTH 80
-# define MATH_HEIGHT 50
+# define MATH_WIDTH 1000
+# define MATH_HEIGHT 2000
 # define MATH_SIZE (MATH_WIDTH) * (MATH_HEIGHT)
 
 #ifdef __cplusplus
