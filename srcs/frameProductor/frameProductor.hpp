@@ -8,6 +8,9 @@
 #include "physician/physician.hpp"
 #include "utils/polynom.hpp"
 
+#define NB_PARTICLE 1000
+#define MATH_DENSITY 10
+
 /*
  * Some explications about auo amd new int[x][y][z] on the heap,
  * https://stackoverflow.com/questions/17258749/is-there-a-way-of-casting-a-pointer-to-an-array-type
@@ -37,7 +40,11 @@ private:
     std::unique_ptr<Renderer> m_renderer = nullptr;
     std::unique_ptr<Physician> m_physician = nullptr;
     bool m_keepGoing = false;
-    auto_init(m_grid, new int[2000][1000]);
+    auto_init(m_grid, new int[MATH_HEIGHT][MATH_WIDTH]);
+    auto_init(m_grid_vx, new int[MATH_HEIGHT][MATH_WIDTH + 1]);
+    auto_init(m_grid_vy, new int[MATH_HEIGHT + 1][MATH_WIDTH]);
+    auto_init(m_grid_particle, new int[MATH_HEIGHT][MATH_WIDTH][MATH_DENSITY]);
+    auto_init(m_particles, new int[NB_PARTICLE]);
     Polynom m_groundLevel;
 };
 }
