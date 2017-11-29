@@ -1,6 +1,7 @@
 
 #include "polynom.hpp"
 #include <iostream>
+#include <string.h>
 
 using namespace mod1;
 
@@ -15,6 +16,11 @@ Polynom::Polynom(double *coefs, int nb_coefs)
 Polynom::Polynom() {}
 
 Polynom::~Polynom() {}
+
+void Polynom::push(double val) {
+        m_coefs[m_nb_coefs] = val;
+        m_nb_coefs++;
+}
 
 double Polynom::eval(double x)
 {

@@ -16,10 +16,11 @@ namespace mod1
         public:
             Polynom(double *coefs, int size);
             Polynom();
+            void push(double val);
             ~Polynom();
             double  eval(double x);
             double  m_coefs[NB_COEFS_MAX] = {0};
-            int     m_nb_coefs;
+            int     m_nb_coefs = 0;
             /*
              ** les coeficiant sont stockes dans l ordre
              ** P(X) = coefs[0] + coefs[1]X + coef[2]X^2 ...
@@ -27,7 +28,9 @@ namespace mod1
 
             friend Polynom operator+ (Polynom &p, Polynom &q)
             {
-                Polynom res((double[]){0}, 1);
+                //Polynom res((double*){0}, 1);
+                Polynom res;
+                res.push(0);
                 int i = 0;
 
                 res.m_nb_coefs = p.m_nb_coefs > q.m_nb_coefs ? p.m_nb_coefs : q.m_nb_coefs;
@@ -64,7 +67,9 @@ namespace mod1
 
             friend Polynom operator* (Polynom &p, Polynom &q)
             {
-                Polynom res((double[]){0}, 1);
+                //Polynom res((double*){0}, 1);
+                Polynom res;
+                res.push(0);
 
                 res.m_nb_coefs = p.m_nb_coefs + q.m_nb_coefs - 1;
 
