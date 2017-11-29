@@ -3,8 +3,6 @@
 
 using namespace mod1;
 
-void    debug_poly(Polynom poly);
-
 static Polynom  pi_lagrange(double xj, struct point points[], int nb_point)
 {
     Polynom res((double[]){1}, 1);
@@ -15,20 +13,12 @@ static Polynom  pi_lagrange(double xj, struct point points[], int nb_point)
         if (points[i].x != xj)
         {
             Polynom tmp((double []){-points[i].x, 1.0}, 2);
-            debug_poly(tmp);
             res = res * tmp;
-            printf("/ %f - %f", xj, points[i].x);
+            printf("/ %f - %f\n", xj, points[i].x);
             divisor *= (xj - points[i].x);
-            printf("\n*\n");
         }
     }
-    printf("res: ");
-    debug_poly(res);
-    printf("\n");
     res = res / divisor;
-    printf("res: ");
-    debug_poly(res);
-    printf("\n");
     return (res);
 }
 
@@ -43,4 +33,4 @@ Polynom lagrange(struct point points[], int nb_point)
         res = res + tmp;
     }
     return res;
-} 
+}

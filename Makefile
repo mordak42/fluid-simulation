@@ -23,7 +23,7 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = main mod1 pool frameProductor renderer physician userInterface semaphore imgData
+SRC_CORE = main mod1 pool frameProductor renderer physician userInterface semaphore imgData lagrange polynom
 
 SRC_LIST = $(SRC_CORE)
 
@@ -34,6 +34,7 @@ srcs/utils/polynom \
 srcs/userInterface \
 srcs/frameProductor/physician \
 srcs/frameProductor/renderer \
+srcs/frameProductor/utils \
 
 ## HEADERS
 
@@ -42,7 +43,7 @@ srcs/pool \
 srcs/utils/imgData \
 srcs/utils/semaphore \
 srcs/utils/fifo \
-srcs/utils/polynom \
+srcs/frameProductor/utils/polynom \
 srcs/frameProductor/physician/physician \
 srcs/frameProductor/renderer/renderer \
 srcs/frameProductor/frameProductor \
