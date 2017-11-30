@@ -57,7 +57,7 @@ TMP = $(basename $(notdir $(SRC)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 HEADERS = $(addsuffix .hpp, $(HEADERS_LIST))
 
-IFLAGS = -I./includes -I./srcs -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/
+IFLAGS = -I./includes -I./srcs/frameProductor -I./srcs -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/
 LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lSDL2
 
 .PHONY: all clean fclean re help

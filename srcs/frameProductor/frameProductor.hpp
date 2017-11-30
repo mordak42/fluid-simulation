@@ -8,14 +8,47 @@
 #include "physician/physician.hpp"
 #include "utils/polynom.hpp"
 
-#define NB_PARTICLE 1000
-#define MATH_DENSITY 10
-
 /*
  * Some explications about auo amd new int[x][y][z] on the heap,
  * https://stackoverflow.com/questions/17258749/is-there-a-way-of-casting-a-pointer-to-an-array-type
  * https://www.reddit.com/r/cpp/comments/6ge86r/auto_for_in_class_initialization_of_nonstatic/
  * http://en.cppreference.com/w/cpp/types/decay
+*/
+
+/*          
+ *      the MAC grid
+ *
+ *          y, j, v
+ *          |
+ *          |
+ *          |
+ *          |
+ *          |---------------- x, i, u
+ *          /
+ *         /
+ *        /
+ *       /
+ *      z, k, w
+ *
+ *      p(i,j,k) = pi,j,k, 
+ *      u(i,j,k) = ui−1/2,j,k 
+ *      v(i,j,k) = vi,j−1/2,k
+ *      w(i,j,k) = wi,j,k−1/2
+ *
+ * in 2 dimensions:
+ *                                
+ *                         v(i, j + 1/2) <=> v(i, j + 1)
+ *                           ^
+ *                    _______|_______
+ *                    |             |
+ *                    |             |
+ *  u(i - 1/2, j)   <-|  p(i,j)     |-> u(i + 1/2, j) <=> v(i + 1, j)
+ *  <=> u(i - 1/2, j) |             |
+ *                    |             |
+ *                    ---------------
+ *                           |
+ *                         v(i, j - 1/2) <=> v(i, j)
+ *              
 */
 
 #define auto_init(variable, value) std::decay<decltype(value)>::type variable = value
@@ -41,10 +74,7 @@ private:
     std::unique_ptr<Physician> m_physician = nullptr;
     bool m_keepGoing = false;
     auto_init(m_grid, new int[MATH_HEIGHT][MATH_WIDTH]);
-    auto_init(m_grid_vx, new int[MATH_HEIGHT][MATH_WIDTH + 1]);
-    auto_init(m_grid_vy, new int[MATH_HEIGHT + 1][MATH_WIDTH]);
-    auto_init(m_grid_particle, new int[MATH_HEIGHT][MATH_WIDTH][MATH_DENSITY]);
-    auto_init(m_particles, new int[NB_PARTICLE]);
+    auto_init(m_particles, new struct particle[NB_PARTICLES]);
     Polynom m_groundLevel;
 };
 }

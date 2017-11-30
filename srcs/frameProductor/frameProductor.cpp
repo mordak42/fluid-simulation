@@ -1,6 +1,42 @@
 #include "frameProductor.hpp"
 #include <unistd.h>
 
+/*          
+ *      the MAC grid
+ *
+ *          j, v
+ *          |
+ *          |
+ *          |
+ *          |
+ *          |---------------- i, u
+ *          /
+ *         /
+ *        /
+ *       /
+ *      k, w
+ *
+ *      p(i,j,k) = pi,j,k, 
+ *      u(i,j,k) = ui−1/2,j,k 
+ *      v(i,j,k) = vi,j−1/2,k
+ *      w(i,j,k) = wi,j,k−1/2
+ *
+ * in 2 dimensions:
+ *                                
+ *                         v(i, j + 1/2) <=> v(i, j + 1)
+ *                           ^
+ *                    _______|_______
+ *                    |             |
+ *                    |             |
+ *  u(i - 1/2, j)   <-|  p(i,j)     |-> u(i + 1/2, j) <=> v(i + 1, j)
+ *  <=> u(i - 1/2, j) |             |
+ *                    |             |
+ *                    ---------------
+ *                           |
+ *                         v(i, j - 1/2) <=> v(i, j)
+ *              
+ */
+
 using namespace mod1;
 
 FrameProductor::FrameProductor(const std::shared_ptr<mod1::Pool> &pool) : m_pool(pool) {
