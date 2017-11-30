@@ -70,12 +70,12 @@ private:
     void raytrace(ImgData *img);
 
     const std::shared_ptr<Pool> m_pool;
-    std::unique_ptr<Renderer> m_renderer = nullptr;
-    std::unique_ptr<Physician> m_physician = nullptr;
     bool m_keepGoing = false;
     auto_init(m_grid, new int[MATH_HEIGHT][MATH_WIDTH]);
     auto_init(m_particles, new struct particle[NB_PARTICLES]);
     Polynom m_groundLevel;
+    std::unique_ptr<Renderer> m_renderer = nullptr;
+    std::unique_ptr<Physician> m_physician = nullptr;
 };
 }
 
