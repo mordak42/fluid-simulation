@@ -4,4 +4,4 @@ mod1
 .cproject
 .project
 .settings/*
-*.swap
+*.swp

@@ -57,6 +57,8 @@ double Physician::kernel(double x, double y) {
 }
 
 void Physician::put_particle_on_grid() {
+    double x = m_particles[0].x;
+    x = x + 1;
     for (int p = 0; p < NB_PARTICLES; p++) {
 
         /*
@@ -106,9 +108,9 @@ void Physician::put_particle_on_grid() {
     }
     for (int i = 0; i < MATH_WIDTH + 1; i++) {
         for (int j = 0; j < MATH_HEIGHT + 1; j++) {
-            if (j < MATH_HEIGHT)
+            if (m_grid_u[i][j].weight && j < MATH_HEIGHT)
                 m_grid_u[i][j].val = m_grid_u[i][j].sum / m_grid_u[i][j].weight;
-            if (i < MATH_WIDTH)
+            if (m_grid_v[i][j].weight && i < MATH_WIDTH)
                 m_grid_v[i][j].val = m_grid_v[i][j].sum / m_grid_v[i][j].weight;
         }
     }

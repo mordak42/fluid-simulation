@@ -39,7 +39,9 @@
 
 using namespace mod1;
 
-FrameProductor::FrameProductor(const std::shared_ptr<mod1::Pool> &pool) : m_pool(pool) {
+FrameProductor::FrameProductor(const std::shared_ptr<mod1::Pool> &pool) : m_pool(pool)
+{
+    m_physician.reset(new Physician(m_particles));
 }
 
 FrameProductor::~FrameProductor() {}
@@ -109,7 +111,6 @@ void FrameProductor::raytrace(ImgData *img) {
 
 void FrameProductor::threadHandler() {
     while (m_keepGoing) {
-        usleep(1000000 / 20);
         ImgData *img = m_pool->popOutdatedFrame();
         if (img == NULL)
             continue;

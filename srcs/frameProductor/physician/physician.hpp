@@ -38,12 +38,12 @@ class Physician
 {
 public:
 	Physician(struct particle *particles);
+    ~Physician();
 	double kernel(double x, double y);
 	double hat(double r);
 	double b_spline(double r);
 	void advect();
 	void put_particle_on_grid();
-    ~Physician();
     auto_init(m_grid_u, new struct velocity_field[MATH_HEIGHT][MATH_WIDTH + 1]);
     auto_init(m_grid_v, new struct velocity_field[MATH_HEIGHT + 1][MATH_WIDTH]);
 private:
