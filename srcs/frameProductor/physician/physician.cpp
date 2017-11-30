@@ -97,14 +97,14 @@ void Physician::put_particle_on_grid() {
         m_grid_u[i][j].sum            += kernel(x - i * DX, y - (j + 0.5) * DY) * up;
         m_grid_u[i + 1][j].sum        += kernel(x - i * DX, y - (j + 0.5) * DY) * up;
 
-        m_grid_u[i][j].sum            += kernel(x - (i + 0.5) * DX, y - j * DY) * vp;
-        m_grid_u[i][j + 1].sum        += kernel(x - (i + 0.5) * DX, y - j * DY) * vp;
+        m_grid_v[i][j].sum            += kernel(x - (i + 0.5) * DX, y - j * DY) * vp;
+        m_grid_v[i][j + 1].sum        += kernel(x - (i + 0.5) * DX, y - j * DY) * vp;
 
         m_grid_u[i][j].weight         += kernel(x - i * DX, y - (j + 0.5) * DY);
         m_grid_u[i + 1][j].weight     += kernel(x - i * DX, y - (j + 0.5) * DY);
 
-        m_grid_u[i][j].weight         += kernel(x - (i + 0.5) * DX, y - j * DY);
-        m_grid_u[i][j + 1].weight     += kernel(x - (i + 0.5) * DX, y - j * DY);
+        m_grid_v[i][j].weight         += kernel(x - (i + 0.5) * DX, y - j * DY);
+        m_grid_v[i][j + 1].weight     += kernel(x - (i + 0.5) * DX, y - j * DY);
     }
     for (int i = 0; i < MATH_WIDTH + 1; i++) {
         for (int j = 0; j < MATH_HEIGHT + 1; j++) {

@@ -5,10 +5,10 @@
 # define MATH_HEIGHT 2000
 # define MATH_SIZE (MATH_WIDTH) * (MATH_HEIGHT)
 
-#define REAL_SIZE 10 // 10m
+/* Correspond au nombre de metres */
+#define REAL_SIZE 10
 
-#define DX REAL_SIZE / MATH_WIDTH
+#define DX REAL_SIZE / MATH_WIDTH           // TODO ne fonctionnerait pas, une macro ne peut etre flotamte.
 #define DY DX
-
 
 #endif

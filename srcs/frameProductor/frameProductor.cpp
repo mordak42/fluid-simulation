@@ -1,7 +1,7 @@
 #include "frameProductor.hpp"
 #include <unistd.h>
 
-/*          
+/*
  *      the MAC grid
  *
  *          j, v
@@ -16,13 +16,13 @@
  *       /
  *      k, w
  *
- *      p(i,j,k) = pi,j,k, 
- *      u(i,j,k) = ui−1/2,j,k 
+ *      p(i,j,k) = pi,j,k
+ *      u(i,j,k) = ui−1/2,j,k
  *      v(i,j,k) = vi,j−1/2,k
  *      w(i,j,k) = wi,j,k−1/2
  *
  * in 2 dimensions:
- *                                
+ *
  *                         v(i, j + 1/2) <=> v(i, j + 1)
  *                           ^
  *                    _______|_______
@@ -34,7 +34,7 @@
  *                    ---------------
  *                           |
  *                         v(i, j - 1/2) <=> v(i, j)
- *              
+ *
  */
 
 using namespace mod1;
