@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stdio.h>
 #include "common.hpp"
+#include "pressurer.hpp"
 
 #define auto_init(variable, value) std::decay<decltype(value)>::type variable = value
 
@@ -12,17 +13,9 @@
 #define FLIP 1 - PIC
 
 #define NB_PARTICLES 1000
-#define DT 0.04
 /*
  * up = PIC * interp(ugrid, xp) + FLIP * (up + interp(∆u_grid)
  */
-
-struct velocity_field
-{
-    double  weight;
-    double  sum;
-    double  val;
-};
 
 struct particle
 {
@@ -37,7 +30,7 @@ namespace mod1
 class Physician
 {
 public:
-	Physician(struct particle *particles);
+    Physician(struct particle *particles, struct cell *grid[MATH_HEIGHT]);
     ~Physician();
 	double kernel(double x, double y);
 	double hat(double r);
@@ -47,8 +40,10 @@ public:
 	void put_particle_on_grid();
     auto_init(m_grid_u, new struct velocity_field[MATH_WIDTH + 1][MATH_HEIGHT]);
     auto_init(m_grid_v, new struct velocity_field[MATH_WIDTH][MATH_HEIGHT + 1]);
-private:
+    std::unique_ptr<Pressurer> m_pressurer = nullptr;
+	struct cell **m_grid;
     struct particle *m_particles;
+private:
 };
 }
 

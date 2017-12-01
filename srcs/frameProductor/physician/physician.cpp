@@ -3,7 +3,14 @@
 namespace mod1
 {
 
-Physician::Physician(struct particle *particles) : m_particles(particles) {}
+Physician::Physician(struct particle *particles, struct cell **grid)
+                    : m_grid(grid),
+					  m_particles(particles)
+{
+    m_pressurer.reset(new Pressurer((struct velocity_field **)m_grid_u,
+									(struct velocity_field **)m_grid_v,
+									grid));
+}
 
 Physician::~Physician() {}
 
@@ -35,12 +42,12 @@ double Physician::hat(double r) {
  */
 
 double Physician::b_spline(double r) {
-    if (-3/2 <= r && r <= -1/2)
-        return (1/2 * (r + 3/2) * (r + 3/2));
-    else if (-1/2 <= r && r <= 1/2)
-        return (3/4 - r * r);
-    else if (1/2 <= r && r <= 3/2)
-        return (1/2 * (3 / 2 - r) * (3 / 2 - r));
+    if (-1.5 <= r && r <= -0.5)
+        return (0.5 * (r + 1.5) * (r + 1.5));
+    else if (-0.5 <= r && r <= 0.5)
+        return (0.75 - r * r);
+    else if (0.5 <= r && r <= 1.5)
+        return (0.5 * (1.5 - r) * (1.5 - r));
     else
     {
         printf("bad input for function b_spline ?\n");
@@ -118,10 +125,10 @@ void Physician::put_particle_on_grid() {
 
 void Physician::init_particules() {
     for (int i = 0; i < 1000; i++) {
-            m_particles[i].x = i / 100 * DX + DX / 2;
-            m_particles[i].y = (MATH_HEIGHT - (i % 100) - 0.5) * DY;
-            m_particles[i].u = 0;
-            m_particles[i].v = -1;
+        m_particles[i].x = i / 333 * DX + DX / 2;
+        m_particles[i].y = (MATH_HEIGHT - (i % 333) - 0.5) * DY;
+        m_particles[i].u = 0;
+        m_particles[i].v = -1;
     }
 }
 

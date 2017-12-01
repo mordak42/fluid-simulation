@@ -23,7 +23,7 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = main mod1 pool frameProductor renderer physician userInterface semaphore imgData lagrange polynom
+SRC_CORE = main mod1 pool frameProductor renderer physician userInterface semaphore imgData lagrange polynom pressurer
 
 SRC_LIST = $(SRC_CORE)
 

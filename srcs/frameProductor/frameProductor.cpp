@@ -41,7 +41,7 @@ using namespace mod1;
 
 FrameProductor::FrameProductor(const std::shared_ptr<mod1::Pool> &pool) : m_pool(pool)
 {
-    m_physician.reset(new Physician(m_particles));
+    m_physician.reset(new Physician(m_particles, (struct cell **)m_grid));
 }
 
 FrameProductor::~FrameProductor() {}
@@ -89,7 +89,7 @@ bool FrameProductor::parseFile() {
     debug_poly(m_groundLevel);
     for (int i = 0 ; i < MATH_WIDTH; i++) {
         for (int j = -MATH_HEIGHT / 2 ; j < MATH_HEIGHT / 2; j++)
-            m_grid[i][j + MATH_HEIGHT / 2] = ((m_groundLevel.eval((double)i) - j)) > 0 ? 1 : 0;
+            m_grid[i][j + MATH_HEIGHT / 2].type = ((m_groundLevel.eval((double)i) - j)) > 0 ? SOLID : AIR;
         }
     m_physician->init_particules();
     return true;
@@ -111,7 +111,7 @@ void FrameProductor::raytrace(ImgData *img) {
              */
 
             index = i + MATH_WIDTH * j;
-            if (m_grid[i][MATH_HEIGHT - 1 - j] == 1) {
+            if (m_grid[i][MATH_HEIGHT - 1 - j].type == SOLID) {
                 img->m_map[index].r = 0xFF;
                 img->m_map[index].g = 0xFF;
                 img->m_map[index].b = 0xFF;
@@ -137,7 +137,7 @@ void FrameProductor::raytrace(ImgData *img) {
 
 void FrameProductor::threadHandler() {
     while (m_keepGoing) {
-   //     m_physician->put_particle_on_grid();
+        m_physician->put_particle_on_grid();
           m_physician->advect();
         ImgData *img = m_pool->popOutdatedFrame();
         if (img == NULL)
