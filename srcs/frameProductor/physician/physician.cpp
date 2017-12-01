@@ -117,14 +117,11 @@ void Physician::put_particle_on_grid() {
 }
 
 void Physician::init_particules() {
-    //TODO: error essay de faire un carre
-    for (int i = 0; i < 100; i++) {
-        for (int j = 0; j < 100; j++) {
-            m_particles[i + j].x = i * DX;
-            m_particles[i + j].y = MATH_HEIGHT - j * DY;
-            m_particles[i + j].u = 1;
-            m_particles[i + j].v = 1;
-        }
+    for (int i = 0; i < 1000; i++) {
+            m_particles[i].x = i / 100 * DX + DX / 2;
+            m_particles[i].y = (MATH_HEIGHT - (i % 100) - 0.5) * DY;
+            m_particles[i].u = 0;
+            m_particles[i].v = -1;
     }
 }
 

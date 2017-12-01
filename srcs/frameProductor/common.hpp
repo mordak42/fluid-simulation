@@ -6,9 +6,13 @@
 # define MATH_SIZE (MATH_WIDTH) * (MATH_HEIGHT)
 
 /* Correspond au nombre de metres */
-#define REAL_SIZE 10
 
-#define DX REAL_SIZE / MATH_WIDTH           // TODO ne fonctionnerait pas, une macro ne peut etre flotamte.
-#define DY DX
+const double REAL_SIZE = 10.0;
+
+const double DX = REAL_SIZE / MATH_WIDTH;
+
+const double DY = DX;
+
+#define REAL_SIZE_TO_GRID(x) x / REAL_SIZE * MATH_WIDTH
 
 #endif

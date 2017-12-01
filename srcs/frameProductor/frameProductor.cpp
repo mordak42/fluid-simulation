@@ -91,6 +91,7 @@ bool FrameProductor::parseFile() {
         for (int j = -MATH_HEIGHT / 2 ; j < MATH_HEIGHT / 2; j++)
             m_grid[i][j + MATH_HEIGHT / 2] = ((m_groundLevel.eval((double)i) - j)) > 0 ? 1 : 0;
         }
+    m_physician->init_particules();
     return true;
 }
 
@@ -119,9 +120,15 @@ void FrameProductor::raytrace(ImgData *img) {
     }
     for (int p = 0; p < NB_PARTICLES; p++)
     {
+        std::cout << "DX" << DX << std::endl;
+        std::cout << "DY" << DY << std::endl;
         double i = m_particles[p].x / DX;
         double j = m_particles[p].y / DY;
-        index = j * 1000 + i;
+        std::cout << "m_particles x " << m_particles[p].x << std::endl;
+        std::cout << "m_particles y " << m_particles[p].y << std::endl;
+        std::cout << "i " << i << std::endl;
+        std::cout << "j " << j << std::endl;
+        index = i + MATH_WIDTH * (MATH_HEIGHT - j);
         img->m_map[index].r = 0xFF;
         img->m_map[index].g = 0xFF;
         img->m_map[index].b = 0xFF;
@@ -130,7 +137,8 @@ void FrameProductor::raytrace(ImgData *img) {
 
 void FrameProductor::threadHandler() {
     while (m_keepGoing) {
-        m_physician->put_particle_on_grid();
+   //     m_physician->put_particle_on_grid();
+          m_physician->advect();
         ImgData *img = m_pool->popOutdatedFrame();
         if (img == NULL)
             continue;
