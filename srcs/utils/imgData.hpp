@@ -2,9 +2,7 @@
 #ifndef __IMG_DATA_HPP__
 # define __IMG_DATA_HPP__
 
-# define MATH_WIDTH 1000
-# define MATH_HEIGHT 2000
-# define MATH_SIZE (MATH_WIDTH) * (MATH_HEIGHT)
+#include "common.hpp"
 
 #ifdef __cplusplus
 extern "C" {

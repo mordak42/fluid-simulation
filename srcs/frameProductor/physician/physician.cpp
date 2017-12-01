@@ -108,14 +108,25 @@ void Physician::put_particle_on_grid() {
     }
     for (int i = 0; i < MATH_WIDTH + 1; i++) {
         for (int j = 0; j < MATH_HEIGHT + 1; j++) {
-            if (m_grid_u[i][j].weight && j < MATH_HEIGHT)
+            if (j < MATH_HEIGHT && m_grid_u[i][j].weight)
                 m_grid_u[i][j].val = m_grid_u[i][j].sum / m_grid_u[i][j].weight;
-            if (m_grid_v[i][j].weight && i < MATH_WIDTH)
+            if (i < MATH_WIDTH && m_grid_v[i][j].weight)
                 m_grid_v[i][j].val = m_grid_v[i][j].sum / m_grid_v[i][j].weight;
         }
     }
 }
 
+void Physician::init_particules() {
+    //TODO: error essay de faire un carre
+    for (int i = 0; i < 100; i++) {
+        for (int j = 0; j < 100; j++) {
+            m_particles[i + j].x = i * DX;
+            m_particles[i + j].y = MATH_HEIGHT - j * DY;
+            m_particles[i + j].u = 1;
+            m_particles[i + j].v = 1;
+        }
+    }
+}
 
 void Physician::advect() {
     for (int p = 0; p < NB_PARTICLES; p++) {

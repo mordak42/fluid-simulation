@@ -87,9 +87,9 @@ bool FrameProductor::parseFile() {
     p[4].y = 0;
     m_groundLevel = lagrange(p, SIZE_EXEMPLE);
     debug_poly(m_groundLevel);
-    for (int y = -1000 ; y < 1000; y++)
-        for (int x = 0 ; x < 1000; x++) {
-            m_grid[y + 1000][x] = ((m_groundLevel.eval((double)x) - y)) > 0 ? 1 : 0;
+    for (int i = 0 ; i < MATH_WIDTH; i++) {
+        for (int j = -MATH_HEIGHT / 2 ; j < MATH_HEIGHT / 2; j++)
+            m_grid[i][j + MATH_HEIGHT / 2] = ((m_groundLevel.eval((double)i) - j)) > 0 ? 1 : 0;
         }
     return true;
 }
@@ -97,15 +97,34 @@ bool FrameProductor::parseFile() {
 void FrameProductor::raytrace(ImgData *img) {
     int index;
 
-    for (int y = 0; y < 2000; y++) {
-        for (int x = 0 ; x < 1000; x++) {
-            index = y * 1000 + x;
-            if (m_grid[1999 - y][x] == 1) {
+    for (int i = 0 ; i < MATH_WIDTH; i++)
+    {
+        for (int j = 0 ; j < MATH_HEIGHT; j++)
+        {
+            /*
+             *  ---------
+             *  |
+             *  |
+             *  |
+             *  |--------
+             */
+
+            index = i + MATH_WIDTH * j;
+            if (m_grid[i][MATH_HEIGHT - 1 - j] == 1) {
                 img->m_map[index].r = 0xFF;
                 img->m_map[index].g = 0xFF;
                 img->m_map[index].b = 0xFF;
             }
         }
+    }
+    for (int p = 0; p < NB_PARTICLES; p++)
+    {
+        double i = m_particles[p].x / DX;
+        double j = m_particles[p].y / DY;
+        index = j * 1000 + i;
+        img->m_map[index].r = 0xFF;
+        img->m_map[index].g = 0xFF;
+        img->m_map[index].b = 0xFF;
     }
 }
 

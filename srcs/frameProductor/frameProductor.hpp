@@ -71,7 +71,7 @@ private:
 
     const std::shared_ptr<Pool> m_pool;
     bool m_keepGoing = false;
-    auto_init(m_grid, new int[MATH_HEIGHT][MATH_WIDTH]);
+    auto_init(m_grid, new int[MATH_WIDTH][MATH_HEIGHT]);
     auto_init(m_particles, new struct particle[NB_PARTICLES]);
     Polynom m_groundLevel;
     std::unique_ptr<Renderer> m_renderer = nullptr;

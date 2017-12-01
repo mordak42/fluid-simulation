@@ -42,10 +42,11 @@ public:
 	double kernel(double x, double y);
 	double hat(double r);
 	double b_spline(double r);
+    void init_particules();
 	void advect();
 	void put_particle_on_grid();
-    auto_init(m_grid_u, new struct velocity_field[MATH_HEIGHT][MATH_WIDTH + 1]);
-    auto_init(m_grid_v, new struct velocity_field[MATH_HEIGHT + 1][MATH_WIDTH]);
+    auto_init(m_grid_u, new struct velocity_field[MATH_WIDTH + 1][MATH_HEIGHT]);
+    auto_init(m_grid_v, new struct velocity_field[MATH_WIDTH][MATH_HEIGHT + 1]);
 private:
     struct particle *m_particles;
 };
