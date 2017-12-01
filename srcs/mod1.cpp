@@ -1,12 +1,4 @@
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include "SDL2/SDL.h"
-#ifdef __cplusplus
-}
-#endif
-
 #include <unistd.h>
 #include <iostream>
 #include <memory>

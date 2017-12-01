@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/18 22:40:01 by bmickael          #+#    #+#              #
-#    Updated: 2017/12/02 20:25:52 by bmickael         ###   ########.fr        #
+#    Updated: 2017/12/02 20:32:49 by bmickael         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,44 +23,17 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = main mod1 pool frameProductor renderer physician userInterface semaphore imgData lagrange polynom pressurer graviter physicLaw
-
-SRC_LIST = $(SRC_CORE)
-
 LIMIT=20
 
-VPATH = srcs \
-srcs/utils \
-srcs/frameProductor \
-srcs/utils/polynom \
-srcs/userInterface \
-srcs/frameProductor/physician \
-srcs/frameProductor/renderer \
-srcs/frameProductor/utils \
+SRC_CORE = main mod1 pool frameProductor renderer physician userInterface semaphore imgData lagrange polynom graviter physicLaw pressurer
+VPATH = srcs
 
-## HEADERS
-
-HEADERS_LIST = includes/mod1 \
-srcs/pool \
-srcs/utils/imgData \
-srcs/utils/semaphore \
-srcs/utils/fifo \
-srcs/frameProductor/utils/polynom \
-srcs/frameProductor/physician/physician \
-srcs/frameProductor/renderer/renderer \
-srcs/frameProductor/frameProductor \
-srcs/userInterface/userInterface
-
-### ~~~~~~~~~~ ###
-
-SRC = $(addsuffix .cpp, $(SRC_LIST))
 OBJ_DIR = objs
-TMP = $(basename $(notdir $(SRC)))
+TMP = $(basename $(notdir $(SRC_CORE)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
-HEADERS = $(addsuffix .hpp, $(HEADERS_LIST))
 
-IFLAGS = -I./includes -I./srcs/frameProductor -I./srcs -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/ -ferror-limit=$(LIMIT)
-LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lSDL2 -lpthread2
+IFLAGS = -I./srcs -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/ -ferror-limit=$(LIMIT)
+LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lSDL2 -lpthread
 
 .PHONY: all clean fclean re help
 
@@ -69,7 +42,35 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
 
-$(OBJ_DIR)/%.o: %.cpp $(HEADERS)
+$(OBJ_DIR)/main.o: main.cpp mod1.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/mod1.o: mod1.cpp \
+	mod1.hpp \
+	frameProductor/frameProductor.hpp \
+	userInterface/userInterface.hpp \
+	utils/fifo.hpp \
+	utils/semaphore.hpp \
+	pool.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/pool.o: pool.cpp \
+	pool.hpp \
+	utils/fifo.hpp \
+	utils/semaphore.hpp \
+	common.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/userInterface.o: userInterface.cpp \
+	pool.hpp \
+	utils/fifo.hpp \
+	utils/semaphore.hpp \
+	common.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/renderedFrame.o: renderedFrame.cpp \
+	utils/renderedFrame.hpp \
+	common.h
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 clean:
