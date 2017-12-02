@@ -36,8 +36,11 @@ public:
 	double hat(double r);
 	double b_spline(double r);
     void init_particules();
+    void get_velocity_from_the_grid();
+    void put_velocity_on_grid();
+    void pic(int i, int j);
+    void flip(int i, int j);
 	void advect();
-	void put_particle_on_grid();
     auto_init(m_grid_u, new struct velocity_field[MATH_WIDTH + 1][MATH_HEIGHT]);
     auto_init(m_grid_v, new struct velocity_field[MATH_WIDTH][MATH_HEIGHT + 1]);
     std::unique_ptr<Pressurer> m_pressurer = nullptr;

@@ -137,7 +137,7 @@ void FrameProductor::raytrace(ImgData *img) {
 
 void FrameProductor::threadHandler() {
     while (m_keepGoing) {
-        m_physician->put_particle_on_grid();
+        m_physician->put_velocity_on_grid();
           m_physician->advect();
         ImgData *img = m_pool->popOutdatedFrame();
         if (img == NULL)

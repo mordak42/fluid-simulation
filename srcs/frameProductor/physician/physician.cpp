@@ -121,19 +121,20 @@ void Physician::put_velocity_on_grid() {
     }
 }
 void Physician::pic(int i, int j) {
-
+    (void)i;
+    (void)j;
 }
 
 void Physician::flip(int i, int j) {
 
+    (void)i;
+    (void)j;
 }
 
 void Physician::get_velocity_from_the_grid() {
     for (int p = 0; p < NB_PARTICLES; p++) {
         double x = m_particles[p].x;
         double y = m_particles[p].y;
-        double up = ;
-        double vp = ;
 
         int i = x / DX;
         int j = y / DY;
