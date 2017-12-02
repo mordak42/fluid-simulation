@@ -63,9 +63,7 @@ double Physician::kernel(double x, double y) {
     return (hat(x / DX) * hat(y / DY));
 }
 
-void Physician::put_particle_on_grid() {
-    double x = m_particles[0].x;
-    x = x + 1;
+void Physician::put_velocity_on_grid() {
     for (int p = 0; p < NB_PARTICLES; p++) {
 
         /*
@@ -101,17 +99,17 @@ void Physician::put_particle_on_grid() {
 
         //TODO: update also m_grid_u[i - 1]
 
-        m_grid_u[i][j].sum            += kernel(x - i * DX, y - (j + 0.5) * DY) * up;
-        m_grid_u[i + 1][j].sum        += kernel(x - i * DX, y - (j + 0.5) * DY) * up;
+        m_grid_u[i][j].sum        += kernel(x - i * DX, y - (j + 0.5) * DY) * up;
+        m_grid_u[i + 1][j].sum    += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY) * up;
 
-        m_grid_v[i][j].sum            += kernel(x - (i + 0.5) * DX, y - j * DY) * vp;
-        m_grid_v[i][j + 1].sum        += kernel(x - (i + 0.5) * DX, y - j * DY) * vp;
+        m_grid_v[i][j].sum        += kernel(x - (i + 0.5) * DX, y - j * DY) * vp;
+        m_grid_v[i][j + 1].sum    += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY) * vp;
 
-        m_grid_u[i][j].weight         += kernel(x - i * DX, y - (j + 0.5) * DY);
-        m_grid_u[i + 1][j].weight     += kernel(x - i * DX, y - (j + 0.5) * DY);
+        m_grid_u[i][j].weight     += kernel(x - i * DX, y - (j + 0.5) * DY);
+        m_grid_u[i + 1][j].weight += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY);
 
-        m_grid_v[i][j].weight         += kernel(x - (i + 0.5) * DX, y - j * DY);
-        m_grid_v[i][j + 1].weight     += kernel(x - (i + 0.5) * DX, y - j * DY);
+        m_grid_v[i][j].weight     += kernel(x - (i + 0.5) * DX, y - j * DY);
+        m_grid_v[i][j + 1].weight += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY);
     }
     for (int i = 0; i < MATH_WIDTH + 1; i++) {
         for (int j = 0; j < MATH_HEIGHT + 1; j++) {
@@ -120,6 +118,59 @@ void Physician::put_particle_on_grid() {
             if (i < MATH_WIDTH && m_grid_v[i][j].weight)
                 m_grid_v[i][j].val = m_grid_v[i][j].sum / m_grid_v[i][j].weight;
         }
+    }
+}
+void Physician::pic(int i, int j) {
+
+}
+
+void Physician::flip(int i, int j) {
+
+}
+
+void Physician::get_velocity_from_the_grid() {
+    for (int p = 0; p < NB_PARTICLES; p++) {
+        double x = m_particles[p].x;
+        double y = m_particles[p].y;
+        double up = ;
+        double vp = ;
+
+        int i = x / DX;
+        int j = y / DY;
+
+		/*
+         *
+         *             j + 1  _______________
+         *                    |             |
+         *                    |  .          |
+         *      j + 0.5 * DY  |.   i,j      |
+         *                    |             |
+         *                    |    .        |
+         *              j     ---------------
+         *                   i *dx         (i + 1)*dx
+         *
+		 */
+		/* udatte u coord */
+		double sum = 0;
+		double weight = 0;
+
+		sum += kernel(x - i * DX, y - (j + 0.5) * DY) * m_grid_u[i][j].val;
+		sum += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY) * m_grid_u[i + 1][j].val;
+		weight += kernel(x - i * DX, y - (j + 0.5) * DY);
+		weight += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY);
+
+		m_particles[p].u = sum / weight;
+
+		/* udatte v coord */
+		sum = 0;
+		weight = 0;
+
+		sum += kernel(x - (i + 0.5) * DX, y - j * DY) * m_grid_v[i][j].val;
+		sum += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY) * m_grid_v[i][j + 1].val;
+		weight += kernel(x - (i + 0.5) * DX, y - j * DY);
+		weight += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY);
+
+		m_particles[p].v = sum / weight;
     }
 }
 
