@@ -17,7 +17,7 @@ extern "C" {
 #include <iostream>
 #include <mod1.hpp>
 #include "utils/pool.hpp"
-#include "renderedFrame.hpp"
+#include "renderer/renderedFrame.hpp"
 
 namespace mod1
 {

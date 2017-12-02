@@ -48,7 +48,7 @@ $(OBJ_DIR)/main.o: main.cpp mod1.hpp
 $(OBJ_DIR)/mod1.o: mod1.cpp mod1.hpp \
 	frameProductor.hpp \
 	userInterface.hpp \
-	renderedFrame.hpp \
+	renderer/renderedFrame.hpp \
 	utils/pool.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
@@ -64,7 +64,7 @@ $(OBJ_DIR)/frameProductor.o: frameProductor.cpp \
 	math/polynom.hpp \
 	physician/physician.hpp \
 	renderer/renderer.hpp \
-	renderedFrame.hpp \
+	renderer/renderedFrame.hpp \
 	mod1.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
@@ -73,8 +73,8 @@ $(OBJ_DIR)/physician.o: physician/physician.cpp \
 	mod1.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
-$(OBJ_DIR)/renderedFrame.o: renderedFrame.cpp \
-	renderedFrame.hpp
+$(OBJ_DIR)/renderedFrame.o: renderer/renderedFrame.cpp \
+	renderer/renderedFrame.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/renderer.o: renderer/renderer.cpp \

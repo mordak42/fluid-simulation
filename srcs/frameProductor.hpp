@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <thread>
-#include "renderedFrame.hpp"
+#include "renderer/renderedFrame.hpp"
 #include "renderer/renderer.hpp"
 #include "physician/physician.hpp"
 #include "math/polynom.hpp"
