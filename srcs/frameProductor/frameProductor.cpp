@@ -129,8 +129,6 @@ void FrameProductor::raytrace(ImgData *img) {
         std::cout << "i " << i << std::endl;
         std::cout << "j " << j << std::endl;
         index = i + MATH_WIDTH * (MATH_HEIGHT - j);
-        img->m_map[index].r = 0xFF;
-        img->m_map[index].g = 0xFF;
         img->m_map[index].b = 0xFF;
     }
 }

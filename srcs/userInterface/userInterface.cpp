@@ -62,6 +62,10 @@ static Uint32 customEventCb(Uint32 interval, void *param)
     return(interval);
 }
 
+inline int UserInterface::Rgb_to_int(int r, int g, int b) {
+    return (r << 16 | g << 8 | b);
+}
+
 void UserInterface::start() {
     if (m_ready == false) {
         std::cerr << __func__ << " : SDL2 not initialized" << std::endl;
@@ -129,7 +133,7 @@ void UserInterface::start() {
 Formule optimisee de Vcombey
 => proportions      j / math_size = i / m_size
                     int math_size = MATH_WIDTH * MATH_HEIGHT;
-                    int m_size = m_width * m_height;
+                        int m_size = m_width * m_height;
                     float i_cast = i;
                     j = (i_cast / m_size) * math_size;
 */
@@ -149,7 +153,9 @@ Formule optimisee de Vcombey
                     math_y = (i / m_width) * deltaHeight;
                     j = math_y * math_width + math_x;
 #endif
-                    ((int *)m_surface->pixels)[i] = (img->m_map[(int)j].r != 0) ? 0x00FFFFFF : 0x0;
+                    ((int *)m_surface->pixels)[i] = Rgb_to_int(img->m_map[(int)j].r,
+                                                               img->m_map[(int)j].g,
+                                                               img->m_map[(int)j].b);
                 }
                 SDL_UpdateWindowSurface(m_win);
                 m_pool->pushOutdatedFrame(img);

@@ -31,6 +31,7 @@ public:
 
 private:
     const std::shared_ptr<Pool> m_pool;
+    int Rgb_to_int(int r, int g, int b);
     SDL_Window *m_win = nullptr;
     SDL_Surface *m_surface = nullptr;
     bool m_ready = false;
