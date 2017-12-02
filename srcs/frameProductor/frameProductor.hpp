@@ -9,6 +9,12 @@
 #include "utils/polynom.hpp"
 
 /*
+ *                    grid_u, grid_v
+ *           pressurer              graviter
+ *                        physician
+*/
+
+/*
  * Some explications about auo amd new int[x][y][z] on the heap,
  * https://stackoverflow.com/questions/17258749/is-there-a-way-of-casting-a-pointer-to-an-array-type
  * https://www.reddit.com/r/cpp/comments/6ge86r/auto_for_in_class_initialization_of_nonstatic/

@@ -23,9 +23,11 @@ endif
 
 ### SOURCES ###
 
-SRC_CORE = main mod1 pool frameProductor renderer physician userInterface semaphore imgData lagrange polynom pressurer
+SRC_CORE = main mod1 pool frameProductor renderer physician userInterface semaphore imgData lagrange polynom pressurer graviter physicLaw
 
 SRC_LIST = $(SRC_CORE)
+
+LIMIT=20
 
 VPATH = srcs \
 srcs/utils \
@@ -57,7 +59,7 @@ TMP = $(basename $(notdir $(SRC)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 HEADERS = $(addsuffix .hpp, $(HEADERS_LIST))
 
-IFLAGS = -I./includes -I./srcs/frameProductor -I./srcs -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/
+IFLAGS = -I./includes -I./srcs/frameProductor -I./srcs -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/ -ferror-limit=$(LIMIT)
 LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lSDL2
 
 .PHONY: all clean fclean re help

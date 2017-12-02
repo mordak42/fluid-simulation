@@ -1,6 +1,6 @@
 
-#ifndef __PRESSURER_HPP__
-# define __PRESSURER_HPP__
+#ifndef __GRAVITER_HPP__
+# define __GRAVITER_HPP__
 
 #include <iostream>
 #include <stdio.h>
@@ -11,11 +11,11 @@
 
 namespace mod1
 {
-class Pressurer : public virtual PhysicLaw
+class Graviter : public virtual PhysicLaw
 {
 public:
-    Pressurer(struct cell **grid);
-    ~Pressurer();
+    Graviter(struct cell **grid);
+    ~Graviter();
     void solve_pressure(void);
 	void update_velocity(void);
 private:

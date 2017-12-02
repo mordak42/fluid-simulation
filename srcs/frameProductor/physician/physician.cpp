@@ -4,13 +4,11 @@ namespace mod1
 {
 
 Physician::Physician(struct particle *particles, struct cell **grid)
-                    : m_grid(grid),
-					  m_particles(particles)
-{
-    m_pressurer.reset(new Pressurer((struct velocity_field **)m_grid_u,
-									(struct velocity_field **)m_grid_v,
-									grid));
-}
+                    : PhysicLaw(),
+                      Graviter(grid),
+                      Pressurer(grid),
+                      m_grid(grid),
+					  m_particles(particles) {}
 
 Physician::~Physician() {}
 

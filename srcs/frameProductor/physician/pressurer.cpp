@@ -1,14 +1,11 @@
 #include "pressurer.hpp"
+#include "physicLaw.hpp"
 
 namespace mod1
 {
 
-Pressurer::Pressurer(struct velocity_field **grid_u,
-                     struct velocity_field **grid_v,
-                     struct cell **grid)
-                     : m_grid_u(grid_u),
-                       m_grid_v(grid_v),
-					   m_grid(grid) {}
+Pressurer::Pressurer(struct cell **grid)
+                     : PhysicLaw(), m_grid(grid) {}
 
 Pressurer::~Pressurer() {
 }
