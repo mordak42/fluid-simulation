@@ -141,7 +141,6 @@ void FrameProductor::threadHandler() {
         RenderedFrame *img = m_pool->popOutdatedItem();
         if (img == NULL)
             continue;
-        img->cleanFrame();
         raytrace(img);
         m_pool->pushRenderedItem(img);
     }

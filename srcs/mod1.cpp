@@ -6,6 +6,7 @@
 #include "frameProductor.hpp"
 #include "userInterface.hpp"
 #include "utils/pool.hpp"
+#include "renderedFrame.hpp"
 
 namespace mod1
 {

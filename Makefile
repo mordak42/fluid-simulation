@@ -25,7 +25,7 @@ endif
 
 LIMIT=20
 
-SRC_CORE = main mod1 pool frameProductor renderer physician userInterface semaphore imgData lagrange polynom graviter physicLaw pressurer
+SRC_CORE = main mod1 frameProductor renderedFrame renderer physician userInterface semaphore lagrange polynom graviter physicLaw pressurer
 VPATH = srcs
 
 OBJ_DIR = objs
@@ -91,6 +91,21 @@ $(OBJ_DIR)/lagrange.o: math/lagrange.cpp \
 
 $(OBJ_DIR)/polynom.o: math/polynom.cpp \
 	math/polynom.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/graviter.o: physician/graviter.cpp \
+	physician/graviter.hpp \
+	physician/physicLaw.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/physicLaw.o: physician/physicLaw.cpp \
+	physician/physicLaw.hpp \
+	mod1.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/pressurer.o: physician/pressurer.cpp \
+	physician/pressurer.hpp \
+	physician/physicLaw.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 clean:
