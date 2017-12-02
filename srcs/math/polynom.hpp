@@ -28,7 +28,6 @@ namespace mod1
 
             friend Polynom operator+ (Polynom &p, Polynom &q)
             {
-                //Polynom res((double*){0}, 1);
                 Polynom res;
                 res.push(0);
                 int i = 0;
@@ -67,7 +66,6 @@ namespace mod1
 
             friend Polynom operator* (Polynom &p, Polynom &q)
             {
-                //Polynom res((double*){0}, 1);
                 Polynom res;
                 res.push(0);
 

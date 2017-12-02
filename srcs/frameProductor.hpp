@@ -1,12 +1,14 @@
+
 #ifndef __FRAME_PRODUCTOR_HPP__
 # define __FRAME_PRODUCTOR_HPP__
 
 #include <iostream>
 #include <thread>
-#include "pool.hpp"
+#include "renderedFrame.hpp"
 #include "renderer/renderer.hpp"
 #include "physician/physician.hpp"
-#include "utils/polynom.hpp"
+#include "math/polynom.hpp"
+#include "utils/pool.hpp"
 
 /*
  *                    grid_u, grid_v
@@ -64,7 +66,7 @@ namespace mod1
 class FrameProductor
 {
 public:
-    FrameProductor(const std::shared_ptr<mod1::Pool> &pool);
+    FrameProductor(const std::shared_ptr<std::Pool<RenderedFrame>> &pool);
     ~FrameProductor();
     void start();
     void stop();
@@ -73,9 +75,9 @@ public:
 
 private:
     void threadHandler();
-    void raytrace(ImgData *img);
+    void raytrace(RenderedFrame *img);
 
-    const std::shared_ptr<Pool> m_pool;
+    const std::shared_ptr<std::Pool<RenderedFrame>> m_pool;
     bool m_keepGoing = false;
     auto_init(m_grid, new struct cell[MATH_WIDTH][MATH_HEIGHT]);
     auto_init(m_particles, new struct particle[NB_PARTICLES]);

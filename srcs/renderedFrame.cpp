@@ -15,7 +15,7 @@ void RenderedFrame::fillRGBPixel(uint8_t red,
                                  uint8_t blue,
                                  int location)
 {
-    if (location < 0 || location >= MATH_SIZE) {
+    if (location < 0 || location >= DEFAULT_RENDERED_FRAME_SIZE) {
         std::cerr << __func__ << " : Overflow, have " << location << std::endl;
         return ;
     }
@@ -26,7 +26,6 @@ void RenderedFrame::fillRGBPixel(uint8_t red,
 
 void RenderedFrame::cleanFrame() {
     bzero(m_map, DEFAULT_RENDERED_FRAME_SIZE * RENDERED_FRAME_BPP / 8);
-    m_state = IMG_DATA_CLEAN;
 }
 
 void RenderedFrame::cleanFrame(uint8_t red,

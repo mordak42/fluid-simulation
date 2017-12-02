@@ -1,3 +1,4 @@
+
 #ifndef __USER_INTERFACE_HPP
 # define __USER_INTERFACE_HPP
 
@@ -14,14 +15,16 @@ extern "C" {
 #endif
 
 #include <iostream>
-#include "pool.hpp"
+#include <mod1.hpp>
+#include "utils/pool.hpp"
+#include "renderedFrame.hpp"
 
 namespace mod1
 {
 class UserInterface
 {
 public:
-    UserInterface(const std::shared_ptr<mod1::Pool> &pool,
+    UserInterface(const std::shared_ptr<std::Pool<RenderedFrame>> &pool,
                   int width,
                   int height);
     ~UserInterface();
@@ -30,8 +33,8 @@ public:
     void stop();
 
 private:
-    const std::shared_ptr<Pool> m_pool;
     int Rgb_to_int(int r, int g, int b);
+    const std::shared_ptr<std::Pool<RenderedFrame>> m_pool;
     SDL_Window *m_win = nullptr;
     SDL_Surface *m_surface = nullptr;
     bool m_ready = false;

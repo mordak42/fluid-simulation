@@ -1,3 +1,7 @@
+
+#ifndef __SEMAPHORE_HPP__
+# define __SEMAPHORE_HPP__
+
 #include <iostream>
 #include <mutex>
 #include <condition_variable>
@@ -20,3 +24,5 @@ private:
     uint32_t m_count;
 };
 }
+
+#endif

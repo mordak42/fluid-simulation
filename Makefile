@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/18 22:40:01 by bmickael          #+#    #+#              #
-#    Updated: 2017/12/02 20:32:49 by bmickael         ###   ########.fr        #
+#    Updated: 2017/12/02 20:34:25 by bmickael         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,32 +45,52 @@ $(NAME): $(OBJ)
 $(OBJ_DIR)/main.o: main.cpp mod1.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
-$(OBJ_DIR)/mod1.o: mod1.cpp \
-	mod1.hpp \
-	frameProductor/frameProductor.hpp \
-	userInterface/userInterface.hpp \
-	utils/fifo.hpp \
-	utils/semaphore.hpp \
-	pool.hpp
-	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
-
-$(OBJ_DIR)/pool.o: pool.cpp \
-	pool.hpp \
-	utils/fifo.hpp \
-	utils/semaphore.hpp \
-	common.hpp
+$(OBJ_DIR)/mod1.o: mod1.cpp mod1.hpp \
+	frameProductor.hpp \
+	userInterface.hpp \
+	renderedFrame.hpp \
+	utils/pool.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/userInterface.o: userInterface.cpp \
-	pool.hpp \
+	utils/pool.hpp \
 	utils/fifo.hpp \
 	utils/semaphore.hpp \
-	common.hpp
+	mod1.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/frameProductor.o: frameProductor.cpp \
+	utils/pool.hpp \
+	math/polynom.hpp \
+	physician/physician.hpp \
+	renderer/renderer.hpp \
+	renderedFrame.hpp \
+	mod1.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/physician.o: physician/physician.cpp \
+	physician/physician.hpp \
+	mod1.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/renderedFrame.o: renderedFrame.cpp \
-	utils/renderedFrame.hpp \
-	common.h
+	renderedFrame.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/renderer.o: renderer/renderer.cpp \
+	renderer/renderer.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/semaphore.o: utils/semaphore.cpp \
+	utils/semaphore.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/lagrange.o: math/lagrange.cpp \
+	math/polynom.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/polynom.o: math/polynom.cpp \
+	math/polynom.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 clean:

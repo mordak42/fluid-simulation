@@ -7,14 +7,12 @@ static Polynom  pi_lagrange(double xj, struct point points[], int nb_point)
 {
     Polynom res;
     res.push(1.);
-    //(((double*){1}), 1);
     double divisor = 1;
 
     for (int i = 0; i < nb_point; i++)
     {
         if (points[i].x != xj)
         {
-          //  Polynom tmp((double*){-points[i].x, 1.0}, 2);
             Polynom tmp;
             tmp.push(-points[i].x);
             tmp.push(1.);
@@ -29,7 +27,6 @@ static Polynom  pi_lagrange(double xj, struct point points[], int nb_point)
 
 Polynom lagrange(struct point points[], int nb_point)
 {
-    //Polynom res((double*){0}, 1);
     Polynom res;
     res.push(0.);
 

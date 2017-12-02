@@ -4,10 +4,10 @@
 
 #include <iostream>
 #include <stdio.h>
-#include "common.hpp"
 #include "pressurer.hpp"
 #include "physicLaw.hpp"
 #include "graviter.hpp"
+#include <mod1.hpp>
 
 #define auto_init(variable, value) std::decay<decltype(value)>::type variable = value
 

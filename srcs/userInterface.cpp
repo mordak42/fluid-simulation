@@ -3,7 +3,7 @@
 
 using namespace mod1;
 
-UserInterface::UserInterface(const std::shared_ptr<mod1::Pool> &pool,
+UserInterface::UserInterface(const std::shared_ptr<std::Pool<RenderedFrame>> &pool,
                              int width,
                              int height) :
                                 m_pool(pool),
@@ -73,7 +73,7 @@ void UserInterface::start() {
     }
 
     SDL_Event e;
-    ImgData *img;
+    RenderedFrame *img;
     Uint32 delay = 1000 / 40;
     SDL_TimerID timerId = 0;
 
@@ -116,7 +116,7 @@ void UserInterface::start() {
                 stop();
                 break;
             case SDL_USEREVENT:
-                img = m_pool->popRenderedFrame();
+                img = m_pool->popRenderedItem();
                 if (img == nullptr)
                     break;
                 for (int i = 0; i < (m_width * m_height); i++) {
@@ -158,7 +158,7 @@ Formule optimisee de Vcombey
                                                                img->m_map[(int)j].b);
                 }
                 SDL_UpdateWindowSurface(m_win);
-                m_pool->pushOutdatedFrame(img);
+                m_pool->pushOutdatedItem(img);
                 break;
 
             case SDL_WINDOWEVENT:

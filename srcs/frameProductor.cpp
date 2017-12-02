@@ -1,3 +1,4 @@
+
 #include "frameProductor.hpp"
 #include <unistd.h>
 
@@ -39,7 +40,7 @@
 
 using namespace mod1;
 
-FrameProductor::FrameProductor(const std::shared_ptr<mod1::Pool> &pool) : m_pool(pool)
+FrameProductor::FrameProductor(const std::shared_ptr<std::Pool<RenderedFrame>> &pool) : m_pool(pool)
 {
     m_physician.reset(new Physician(m_particles, (struct cell **)m_grid));
 }
@@ -95,7 +96,7 @@ bool FrameProductor::parseFile() {
     return true;
 }
 
-void FrameProductor::raytrace(ImgData *img) {
+void FrameProductor::raytrace(RenderedFrame *img) {
     int index;
 
     for (int i = 0 ; i < MATH_WIDTH; i++)
@@ -136,12 +137,12 @@ void FrameProductor::raytrace(ImgData *img) {
 void FrameProductor::threadHandler() {
     while (m_keepGoing) {
         m_physician->put_velocity_on_grid();
-          m_physician->advect();
-        ImgData *img = m_pool->popOutdatedFrame();
+        m_physician->advect();
+        RenderedFrame *img = m_pool->popOutdatedItem();
         if (img == NULL)
             continue;
-        img->cleanImage();
+        img->cleanFrame();
         raytrace(img);
-        m_pool->pushRenderedFrame(img);
+        m_pool->pushRenderedItem(img);
     }
 }

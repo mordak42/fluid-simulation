@@ -3,9 +3,9 @@
 #include <iostream>
 #include <memory>
 #include "mod1.hpp"
-#include "frameProductor/frameProductor.hpp"
-#include "userInterface/userInterface.hpp"
-#include "pool.hpp"
+#include "frameProductor.hpp"
+#include "userInterface.hpp"
+#include "utils/pool.hpp"
 
 namespace mod1
 {
@@ -21,7 +21,7 @@ protected:
 private:
     std::unique_ptr<FrameProductor> m_frameProductor = nullptr;
     std::unique_ptr<UserInterface> m_userInterface = nullptr;
-    std::shared_ptr<Pool> m_pool;
+    std::shared_ptr<std::Pool<RenderedFrame>> m_pool;
 };
 }
 
@@ -54,7 +54,7 @@ Mod1Implementation::~Mod1Implementation() {
 #include <array>
 
 void Mod1Implementation::run(void) {
-    m_pool = std::make_shared<Pool>(250);
+    m_pool = std::make_shared<std::Pool<RenderedFrame>>(250);
     m_pool->init();
     std::cout << "initialisation done" << std::endl;
     m_frameProductor.reset(new FrameProductor(m_pool));
