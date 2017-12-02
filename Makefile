@@ -25,7 +25,8 @@ endif
 
 LIMIT=20
 
-SRC_CORE = main mod1 frameProductor renderedFrame renderer physician userInterface semaphore lagrange polynom graviter physicLaw pressurer
+SRC_CORE = main mod1 frameProductor renderedFrame renderer physician \
+userInterface semaphore lagrange polynom graviter physicLaw pressurer
 VPATH = srcs
 
 OBJ_DIR = objs

@@ -14,18 +14,9 @@
 #define PIC 0.95
 #define FLIP 1 - PIC
 
-#define NB_PARTICLES 1000
 /*
  * up = PIC * interp(ugrid, xp) + FLIP * (up + interp(∆u_grid)
  */
-
-struct particle
-{
-    double u;
-    double v;
-    double x;
-    double y;
-};
 
 namespace mod1
 {
@@ -40,10 +31,10 @@ public:
     void pic(int i, int j);
     void flip(int i, int j);
 	void advect();
+    struct cell **m_grid;
     std::unique_ptr<Pressurer> m_pressurer = nullptr;
-	struct cell **m_grid;
-    struct particle *m_particles;
 private:
+    struct particle *m_particles;
 	double kernel(double x, double y);
 	double hat(double r);
 	double b_spline(double r);

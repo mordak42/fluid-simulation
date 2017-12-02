@@ -23,6 +23,16 @@ struct velocity_field
     double  val;
 };
 
+#define NB_PARTICLES 1000
+
+struct particle
+{
+    double u;
+    double v;
+    double x;
+    double y;
+};
+
 struct cell
 {
     double              pressure;
