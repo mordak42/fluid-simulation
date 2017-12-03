@@ -82,6 +82,7 @@ $(OBJ_DIR)/renderedFrame.o: renderer/renderedFrame.cpp \
 
 $(OBJ_DIR)/renderer.o: renderer/renderer.cpp \
 	renderer/renderer.hpp \
+	renderer/renderedFrame.hpp \
 	physician/physicItems.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 

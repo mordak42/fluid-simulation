@@ -75,8 +75,8 @@ void UserInterface::start() {
     Uint32 delay = 1000 / 40;
     SDL_TimerID timerId = 0;
 
-    float math_width = GRID_WIDTH;
-    float math_height = GRID_HEIGHT;
+    float math_width = FRAME_WIDTH;
+    float math_height = FRAME_HEIGHT;
     int math_x;
     int math_y;
     float deltaWidth = math_width / m_width;

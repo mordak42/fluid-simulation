@@ -4,8 +4,8 @@
 
 #include <iostream>
 
-# define FRAME_WIDTH 200
-# define FRAME_HEIGHT 200
+# define FRAME_WIDTH 1000
+# define FRAME_HEIGHT 1000
 # define FRAME_SIZE (FRAME_WIDTH * FRAME_HEIGHT)
 # define RENDERED_FRAME_BPP 24
 
