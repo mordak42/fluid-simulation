@@ -1,5 +1,4 @@
 
-#include <iostream>
 #include "renderedFrame.hpp"
 
 using namespace mod1;

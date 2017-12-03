@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/18 22:40:01 by bmickael          #+#    #+#              #
-#    Updated: 2017/12/02 20:34:25 by bmickael         ###   ########.fr        #
+#    Updated: 2017/12/03 04:14:44 by bmickael         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ endif
 LIMIT=20
 
 SRC_CORE = main mod1 frameProductor renderedFrame renderer physician \
-userInterface semaphore lagrange polynom graviter physicLaw pressurer
+userInterface semaphore lagrange polynom graviter physicLaw pressurer physicItems
 VPATH = srcs
 
 OBJ_DIR = objs
@@ -46,7 +46,7 @@ $(NAME): $(OBJ)
 $(OBJ_DIR)/main.o: main.cpp mod1.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
-$(OBJ_DIR)/mod1.o: mod1.cpp mod1.hpp \
+$(OBJ_DIR)/mod1.o: mod1.cpp \
 	frameProductor.hpp \
 	userInterface.hpp \
 	renderer/renderedFrame.hpp \
@@ -57,7 +57,8 @@ $(OBJ_DIR)/userInterface.o: userInterface.cpp \
 	utils/pool.hpp \
 	utils/fifo.hpp \
 	utils/semaphore.hpp \
-	mod1.hpp
+	renderer/renderedFrame.hpp \
+	physician/physicItems.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/frameProductor.o: frameProductor.cpp \
@@ -66,12 +67,15 @@ $(OBJ_DIR)/frameProductor.o: frameProductor.cpp \
 	physician/physician.hpp \
 	renderer/renderer.hpp \
 	renderer/renderedFrame.hpp \
-	mod1.hpp
+	physician/physicItems.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/physician.o: physician/physician.cpp \
 	physician/physician.hpp \
-	mod1.hpp
+	physician/physicItems.hpp \
+	physician/graviter.hpp \
+	physician/physicLaw.hpp \
+	physician/pressurer.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/renderedFrame.o: renderer/renderedFrame.cpp \
@@ -79,7 +83,8 @@ $(OBJ_DIR)/renderedFrame.o: renderer/renderedFrame.cpp \
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/renderer.o: renderer/renderer.cpp \
-	renderer/renderer.hpp
+	renderer/renderer.hpp \
+	physician/physicItems.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/semaphore.o: utils/semaphore.cpp \
@@ -96,17 +101,22 @@ $(OBJ_DIR)/polynom.o: math/polynom.cpp \
 
 $(OBJ_DIR)/graviter.o: physician/graviter.cpp \
 	physician/graviter.hpp \
+	physician/physicItems.hpp \
 	physician/physicLaw.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/physicLaw.o: physician/physicLaw.cpp \
-	physician/physicLaw.hpp \
-	mod1.hpp
+	physician/physicLaw.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/pressurer.o: physician/pressurer.cpp \
 	physician/pressurer.hpp \
+	physician/physicItems.hpp \
 	physician/physicLaw.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/physicItems.o: physician/physicItems.cpp \
+	physician/physicItems.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 clean:

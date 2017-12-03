@@ -3,11 +3,14 @@
 namespace mod1
 {
 
-Graviter::Graviter(struct cell **grid)
-                     : PhysicLaw(), m_grid(grid) {}
+Graviter::Graviter(const std::shared_ptr<PhysicItems> &physicItems) :
+                                                    PhysicLaw(),
+                                                    m_physicItems(physicItems)
+{
+
+}
 
 Graviter::~Graviter() {
 }
 
 }
-

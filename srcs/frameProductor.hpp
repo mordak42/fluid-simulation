@@ -3,10 +3,11 @@
 # define __FRAME_PRODUCTOR_HPP__
 
 #include <iostream>
-#include <thread>
+
 #include "renderer/renderedFrame.hpp"
 #include "renderer/renderer.hpp"
 #include "physician/physician.hpp"
+#include "physician/physicItems.hpp"
 #include "math/polynom.hpp"
 #include "utils/pool.hpp"
 
@@ -59,8 +60,6 @@
  *
 */
 
-#define auto_init(variable, value) std::decay<decltype(value)>::type variable = value
-
 namespace mod1
 {
 class FrameProductor
@@ -75,13 +74,11 @@ public:
 
 private:
     void threadHandler();
-    void raytrace(RenderedFrame *img);
-
-    const std::shared_ptr<std::Pool<RenderedFrame>> m_pool;
     bool m_keepGoing = false;
-    auto_init(m_grid, new struct cell[MATH_WIDTH][MATH_HEIGHT]);
-    auto_init(m_particles, new struct particle[NB_PARTICLES]);
     Polynom m_groundLevel;
+    std::mutex m_threadProtection;
+    const std::shared_ptr<std::Pool<RenderedFrame>> &m_pool;
+    std::shared_ptr<PhysicItems> m_physicItems = nullptr;
     std::unique_ptr<Renderer> m_renderer = nullptr;
     std::unique_ptr<Physician> m_physician = nullptr;
 };

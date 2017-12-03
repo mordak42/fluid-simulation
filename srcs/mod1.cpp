@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <memory>
-#include "mod1.hpp"
+
 #include "frameProductor.hpp"
 #include "userInterface.hpp"
 #include "utils/pool.hpp"
@@ -29,10 +29,10 @@ private:
 using namespace mod1;
 
 /* ***** Mod1's methods implementation ***** */
-Mod1::Mod1()
-  : m_implementation(new Mod1Implementation()) {}
+Mod1::Mod1() : m_implementation(new Mod1Implementation()) {}
 
-Mod1::~Mod1() {}
+Mod1::~Mod1() {
+}
 
 void Mod1::run()
 {
@@ -50,9 +50,6 @@ Mod1Implementation::Mod1Implementation() {
 
 Mod1Implementation::~Mod1Implementation() {
 }
-
-#include "utils/fifo.hpp"
-#include <array>
 
 void Mod1Implementation::run(void) {
     m_pool = std::make_shared<std::Pool<RenderedFrame>>(250);

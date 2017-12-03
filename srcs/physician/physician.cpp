@@ -1,15 +1,14 @@
 
 #include "physician.hpp"
 
-namespace mod1
-{
+using namespace mod1;
 
-Physician::Physician(struct particle *particles, struct cell **grid)
-                    : PhysicLaw(),
-                      Graviter(grid),
-                      Pressurer(grid),
-                      m_grid(grid),
-					  m_particles(particles) {}
+Physician::Physician(const std::shared_ptr<PhysicItems> &physicItems) :
+                        PhysicLaw(),
+                        Graviter(physicItems),
+                        Pressurer(physicItems),
+                        m_physicItems(physicItems)
+{}
 
 Physician::~Physician() {}
 
@@ -88,34 +87,34 @@ void Physician::put_velocity_on_grid() {
          *
          *
          */
-        double x = m_particles[p].x;
-        double y = m_particles[p].y;
-        double up = m_particles[p].u;
-        double vp = m_particles[p].v;
+        double x = PARTICLES[p].x;
+        double y = PARTICLES[p].y;
+        double up = PARTICLES[p].u;
+        double vp = PARTICLES[p].v;
 
         int i = x / DX;
         int j = y / DY;
 
         //TODO: update also m_grid_u[i - 1]
 
-        m_grid_u[i][j].sum        += kernel(x - i * DX, y - (j + 0.5) * DY) * up;
-        m_grid_u[i + 1][j].sum    += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY) * up;
+        GRID_U[i][j].sum        += kernel(x - i * DX, y - (j + 0.5) * DY) * up;
+        GRID_U[i + 1][j].sum    += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY) * up;
 
-        m_grid_v[i][j].sum        += kernel(x - (i + 0.5) * DX, y - j * DY) * vp;
-        m_grid_v[i][j + 1].sum    += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY) * vp;
+        GRID_V[i][j].sum        += kernel(x - (i + 0.5) * DX, y - j * DY) * vp;
+        GRID_V[i][j + 1].sum    += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY) * vp;
 
-        m_grid_u[i][j].weight     += kernel(x - i * DX, y - (j + 0.5) * DY);
-        m_grid_u[i + 1][j].weight += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY);
+        GRID_U[i][j].weight     += kernel(x - i * DX, y - (j + 0.5) * DY);
+        GRID_U[i + 1][j].weight += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY);
 
-        m_grid_v[i][j].weight     += kernel(x - (i + 0.5) * DX, y - j * DY);
-        m_grid_v[i][j + 1].weight += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY);
+        GRID_V[i][j].weight     += kernel(x - (i + 0.5) * DX, y - j * DY);
+        GRID_V[i][j + 1].weight += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY);
     }
     for (int i = 0; i < MATH_WIDTH + 1; i++) {
         for (int j = 0; j < MATH_HEIGHT + 1; j++) {
-            if (j < MATH_HEIGHT && m_grid_u[i][j].weight)
-                m_grid_u[i][j].val = m_grid_u[i][j].sum / m_grid_u[i][j].weight;
-            if (i < MATH_WIDTH && m_grid_v[i][j].weight)
-                m_grid_v[i][j].val = m_grid_v[i][j].sum / m_grid_v[i][j].weight;
+            if (j < MATH_HEIGHT && GRID_U[i][j].weight)
+                GRID_U[i][j].val = GRID_U[i][j].sum / GRID_U[i][j].weight;
+            if (i < MATH_WIDTH && GRID_V[i][j].weight)
+                GRID_V[i][j].val = GRID_V[i][j].sum / GRID_V[i][j].weight;
         }
     }
 }
@@ -132,8 +131,8 @@ void Physician::flip(int i, int j) {
 
 void Physician::get_velocity_from_the_grid() {
     for (int p = 0; p < NB_PARTICLES; p++) {
-        double x = m_particles[p].x;
-        double y = m_particles[p].y;
+        double x = PARTICLES[p].x;
+        double y = PARTICLES[p].y;
 
         int i = x / DX;
         int j = y / DY;
@@ -154,39 +153,38 @@ void Physician::get_velocity_from_the_grid() {
 		double sum = 0;
 		double weight = 0;
 
-		sum += kernel(x - i * DX, y - (j + 0.5) * DY) * m_grid_u[i][j].val;
-		sum += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY) * m_grid_u[i + 1][j].val;
+		sum += kernel(x - i * DX, y - (j + 0.5) * DY) * GRID_U[i][j].val;
+		sum += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY) * GRID_U[i + 1][j].val;
 		weight += kernel(x - i * DX, y - (j + 0.5) * DY);
 		weight += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY);
 
-		m_particles[p].u = sum / weight;
+		PARTICLES[p].u = sum / weight;
 
 		/* udatte v coord */
 		sum = 0;
 		weight = 0;
 
-		sum += kernel(x - (i + 0.5) * DX, y - j * DY) * m_grid_v[i][j].val;
-		sum += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY) * m_grid_v[i][j + 1].val;
+		sum += kernel(x - (i + 0.5) * DX, y - j * DY) * GRID_V[i][j].val;
+		sum += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY) * GRID_V[i][j + 1].val;
 		weight += kernel(x - (i + 0.5) * DX, y - j * DY);
 		weight += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY);
 
-		m_particles[p].v = sum / weight;
+		PARTICLES[p].v = sum / weight;
     }
 }
 
 void Physician::init_particules() {
     for (int i = 0; i < 1000; i++) {
-        m_particles[i].x = i / 333 * DX + DX / 2;
-        m_particles[i].y = (MATH_HEIGHT - (i % 333) - 0.5) * DY;
-        m_particles[i].u = 0;
-        m_particles[i].v = -1;
+        PARTICLES[i].x = i / 333 * DX + DX / 2;
+        PARTICLES[i].y = (MATH_HEIGHT - (i % 333) - 0.5) * DY;
+        PARTICLES[i].u = 0;
+        PARTICLES[i].v = -1;
     }
 }
 
 void Physician::advect() {
     for (int p = 0; p < NB_PARTICLES; p++) {
-        m_particles[p].x += m_particles[p].u * DT;
-        m_particles[p].y += m_particles[p].v * DT;
+        PARTICLES[p].x += PARTICLES[p].u * DT;
+        PARTICLES[p].y += PARTICLES[p].v * DT;
     }
-}
 }

@@ -9,7 +9,10 @@ namespace std {
     static mod1::Mod1 *s_context = nullptr;
 
     static void defaultSignalsHandler(int sigNum __attribute__((unused))) {
-        exit(EXIT_FAILURE);
+        if (s_context != nullptr)
+            s_context->stop();
+        else
+            exit(EXIT_SUCCESS);
     }
 
     static void segvSignalsHandler(int sigNum __attribute__((unused))) {
@@ -27,14 +30,15 @@ namespace std {
     }
 }
 
+using namespace std;
+
 int main(const int argc __attribute__((unused)),
          const char **argv __attribute__((unused)))
 {
-    using namespace std;
-
     signalSetup();
     s_context = new mod1::Mod1();
     s_context->run();
     delete s_context;
+    s_context = nullptr;
     return 0;
 }

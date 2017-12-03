@@ -4,22 +4,21 @@
 
 #include <iostream>
 #include <stdio.h>
-#include <mod1.hpp>
-#include "physicLaw.hpp"
 
-#define auto_init(variable, value) std::decay<decltype(value)>::type variable = value
+#include "physicItems.hpp"
+#include "physicLaw.hpp"
 
 namespace mod1
 {
 class Pressurer : public virtual PhysicLaw
 {
 public:
-    Pressurer(struct cell **grid);
+    Pressurer(const std::shared_ptr<PhysicItems> &physicItems);
     ~Pressurer();
     void solve_pressure(void);
 	void update_velocity(void);
 private:
-	struct cell **m_grid;
+    const std::shared_ptr<PhysicItems> &m_physicItems;
 };
 }
 

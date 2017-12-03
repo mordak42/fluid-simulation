@@ -4,22 +4,21 @@
 
 #include <iostream>
 #include <stdio.h>
-#include <mod1.hpp>
-#include "physicLaw.hpp"
 
-#define auto_init(variable, value) std::decay<decltype(value)>::type variable = value
+#include "physicItems.hpp"
+#include "physicLaw.hpp"
 
 namespace mod1
 {
 class Graviter : public virtual PhysicLaw
 {
 public:
-    Graviter(struct cell **grid);
+    Graviter(const std::shared_ptr<PhysicItems> &physicItems);
     ~Graviter();
     void solve_pressure(void);
 	void update_velocity(void);
 private:
-	struct cell **m_grid;
+    const std::shared_ptr<PhysicItems> &m_physicItems;
 };
 }
 

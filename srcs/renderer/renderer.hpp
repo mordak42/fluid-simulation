@@ -3,19 +3,18 @@
 # define __RENDERER_HPP__
 
 #include "renderer/renderedFrame.hpp"
-#include <mod1.hpp>
+#include "physician/physicItems.hpp"
 
 namespace mod1
 {
 class Renderer
 {
 public:
-    Renderer(struct particle *particles, struct cell **grid);
+    Renderer(const std::shared_ptr<PhysicItems> &physicItems);
     ~Renderer();
     void raytrace(RenderedFrame *img);
 private:
-    struct particle *m_particles;
-    struct cell **m_grid;
+    const std::shared_ptr<PhysicItems> &m_physicItems;
 };
 }
 

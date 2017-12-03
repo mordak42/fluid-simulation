@@ -18,6 +18,7 @@ extern "C" {
 #include <mod1.hpp>
 #include "utils/pool.hpp"
 #include "renderer/renderedFrame.hpp"
+#include "physician/physicItems.hpp"
 
 namespace mod1
 {
@@ -34,7 +35,7 @@ public:
 
 private:
     int Rgb_to_int(int r, int g, int b);
-    const std::shared_ptr<std::Pool<RenderedFrame>> m_pool;
+    const std::shared_ptr<std::Pool<RenderedFrame>> &m_pool;
     SDL_Window *m_win = nullptr;
     SDL_Surface *m_surface = nullptr;
     bool m_ready = false;
