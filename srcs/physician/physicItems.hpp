@@ -2,6 +2,8 @@
 #ifndef __PHYSIC_ITEMS_HPP__
 # define __PHYSIC_ITEMS_HPP__
 
+#include <array>
+
 /* Ugly maccro definitions */
 #define GRID m_physicItems->m_grid
 #define PARTICLES m_physicItems->m_particles
@@ -59,10 +61,10 @@ class PhysicItems
 public:
     PhysicItems();
     ~PhysicItems();
-    struct cell m_grid[MATH_WIDTH][MATH_HEIGHT];
     struct particle m_particles[NB_PARTICLES];
     struct velocity_field m_grid_u[MATH_WIDTH + 1][MATH_HEIGHT];
     struct velocity_field m_grid_v[MATH_WIDTH][MATH_HEIGHT + 1];
+    std::array<std::array<struct cell, MATH_HEIGHT>, MATH_WIDTH> m_grid;
 };
 }
 
