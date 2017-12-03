@@ -34,7 +34,6 @@ private:
 	double kernel(double x, double y);
 	double hat(double r);
 	double b_spline(double r);
-    std::unique_ptr<Pressurer> m_pressurer = nullptr;
     const std::shared_ptr<PhysicItems> &m_physicItems;
 };
 }
