@@ -27,8 +27,8 @@ const double real_height = REAL_HEIGHT;
 const double frame_width = FRAME_WIDTH;
 const double frame_height = FRAME_HEIGHT;
 
-# define DX real_width / grid_width
-# define DY DX
+# define DX (real_width / grid_width)
+# define DY (DX)
 
 # define DT 0.04
 
