@@ -42,17 +42,22 @@ template <class T> Pool<T>::Pool(uint32_t nbItems) :
 
 template <class T> Pool<T>::~Pool() {
     m_ready = false;
+    T *item;
 
     size_t tmp;
 
     tmp = m_actives.size();
-    for (size_t i = 0; i < tmp; i++)
-        free(m_actives.pop());
-
+    for (size_t i = 0; i < tmp; i++) {
+        item = m_actives.pop();
+        if (item)
+            delete item;
+    }
     tmp = m_inactives.size();
-    for (size_t i = 0; i < tmp; i++)
-        free(m_inactives.pop());
-
+    for (size_t i = 0; i < tmp; i++) {
+        item = m_inactives.pop();
+        if (item)
+            delete item;
+    }
     std::cout << "Pool terminated" << std::endl;
 }
 

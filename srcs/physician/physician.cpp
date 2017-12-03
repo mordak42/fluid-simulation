@@ -62,8 +62,15 @@ double Physician::kernel(double x, double y) {
 }
 
 void Physician::put_velocity_on_grid() {
+    for (int i = 0; i < MATH_WIDTH; i++) {
+        for (int j = 0; j < MATH_HEIGHT; j++) {
+                GRID_U[i][j].sum = 0;
+                GRID_V[i][j].sum = 0;
+                GRID_U[i][j].weight = 0;
+                GRID_V[i][j].weight = 0;
+        }
+    }
     for (int p = 0; p < NB_PARTICLES; p++) {
-
         /*
          * m_grid[i][j] is the case where the particle is
          * so the particle velocity contribute to
@@ -97,6 +104,7 @@ void Physician::put_velocity_on_grid() {
 
         //TODO: update also m_grid_u[i - 1]
 
+
         GRID_U[i][j].sum        += kernel(x - i * DX, y - (j + 0.5) * DY) * up;
         GRID_U[i + 1][j].sum    += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY) * up;
 
@@ -109,8 +117,8 @@ void Physician::put_velocity_on_grid() {
         GRID_V[i][j].weight     += kernel(x - (i + 0.5) * DX, y - j * DY);
         GRID_V[i][j + 1].weight += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY);
     }
-    for (int i = 0; i < MATH_WIDTH + 1; i++) {
-        for (int j = 0; j < MATH_HEIGHT + 1; j++) {
+    for (int i = 0; i < MATH_WIDTH; i++) {
+        for (int j = 0; j < MATH_HEIGHT; j++) {
             if (j < MATH_HEIGHT && GRID_U[i][j].weight)
                 GRID_U[i][j].val = GRID_U[i][j].sum / GRID_U[i][j].weight;
             if (i < MATH_WIDTH && GRID_V[i][j].weight)
