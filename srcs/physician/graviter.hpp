@@ -3,7 +3,7 @@
 # define __GRAVITER_HPP__
 
 #include <iostream>
-#include <stdio.h>
+#include <memory>
 
 #include "physicItems.hpp"
 #include "physicLaw.hpp"

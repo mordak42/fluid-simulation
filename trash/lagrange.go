@@ -39,7 +39,6 @@ func lagrange(grid*[300][300][601]float64, pts[]point, env * env) {
 	for i, grid_x := range grid {
 		for j, _ := range grid_x {
 			carte[i][j] = sigma_lagrange(float64(i), float64(j), pts)
-			//fmt.Printf("carte i j is %f\n",carte[i][j])
 		}
 	}
 	var max float64
@@ -95,7 +94,7 @@ func lagrange(grid*[300][300][601]float64, pts[]point, env * env) {
 	//				grid[i - 1][j][carte[i - 1][j]
 
 				if is != 1 {
-					continue 
+					continue
 				}
 					pot := []float64{float64(i), float64(j), float64(z) - 300}//carte[i][j]}
 					project_and_draw(pot, env)

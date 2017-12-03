@@ -3,6 +3,8 @@
 # define __POLYNOM_HPP__
 
 #include <iostream>
+#include <string.h>
+
 #define NB_COEFS_MAX 100
 
 namespace mod1

@@ -17,7 +17,7 @@ static Polynom  pi_lagrange(double xj, struct point points[], int nb_point)
             tmp.push(-points[i].x);
             tmp.push(1.);
             res = res * tmp;
-            printf("/ %f - %f\n", xj, points[i].x);
+            std::cout << "/ " << xj << " - " << points[i].x << std::endl;
             divisor *= (xj - points[i].x);
         }
     }

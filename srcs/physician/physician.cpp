@@ -27,7 +27,7 @@ double Physician::hat(double r) {
         return (1 + r);
     else
     {
-        printf("bad input for function hat ?\n");
+        std::cerr << "bad input for function hat ?" << std::endl;
         return 0;
     }
 }
@@ -48,7 +48,7 @@ double Physician::b_spline(double r) {
         return (0.5 * (1.5 - r) * (1.5 - r));
     else
     {
-        printf("bad input for function b_spline ?\n");
+        std::cerr << "bad input for function b_spline ?" << std::endl;
         return 0;
     }
 }

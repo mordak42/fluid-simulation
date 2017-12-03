@@ -1,6 +1,8 @@
 
 #include "renderedFrame.hpp"
 
+#include <string.h>
+
 using namespace mod1;
 
 RenderedFrame::RenderedFrame() {

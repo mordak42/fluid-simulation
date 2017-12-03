@@ -23,8 +23,6 @@ endif
 
 ### SOURCES ###
 
-LIMIT=20
-
 SRC_CORE = main mod1 frameProductor renderedFrame renderer physician \
 userInterface semaphore lagrange polynom graviter physicLaw pressurer physicItems
 VPATH = srcs
@@ -33,7 +31,7 @@ OBJ_DIR = objs
 TMP = $(basename $(notdir $(SRC_CORE)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 
-IFLAGS = -I./srcs -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/ -ferror-limit=$(LIMIT)
+IFLAGS = -I./srcs -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/
 LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lSDL2 -lpthread
 
 .PHONY: all clean fclean re help

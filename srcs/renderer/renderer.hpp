@@ -2,6 +2,8 @@
 #ifndef __RENDERER_HPP__
 # define __RENDERER_HPP__
 
+#include <memory>
+
 #include "renderer/renderedFrame.hpp"
 #include "physician/physicItems.hpp"
 

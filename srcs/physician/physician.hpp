@@ -3,7 +3,7 @@
 # define __PHYSICIAN_HPP__
 
 #include <iostream>
-#include <stdio.h>
+
 #include "pressurer.hpp"
 #include "physicLaw.hpp"
 #include "graviter.hpp"
