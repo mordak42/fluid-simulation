@@ -64,7 +64,7 @@ void FrameProductor::stop() {
     std::lock_guard<std::mutex> lock(m_threadProtection);
 }
 
-#define SIZE_EXEMPLE 5
+#define SIZE_EXEMPLE 4
 
 static void    debug_poly(Polynom poly)
 {
@@ -86,19 +86,17 @@ bool FrameProductor::parseFile() {
     struct point p[SIZE_EXEMPLE];
     p[0].x = 0;
     p[0].y = 0;
-    p[1].x = 200;
-    p[1].y = 150;
-    p[2].x = 400;
-    p[2].y = 500;
-    p[3].x = 600;
-    p[3].y = 50;
-    p[4].x = 1000;
-    p[4].y = 0;
+    p[1].x = 0.2 * REAL_SIZE;
+    p[1].y = 0.3 * REAL_SIZE;
+    p[2].x = 0.8 * REAL_SIZE;
+    p[2].y = -0.3 * REAL_SIZE;
+    p[3].x = REAL_SIZE;
+    p[3].y = 0;
     m_groundLevel = lagrange(p, SIZE_EXEMPLE);
     debug_poly(m_groundLevel);
     for (int i = 0 ; i < MATH_WIDTH; i++) {
         for (int j = -MATH_HEIGHT / 2 ; j < MATH_HEIGHT / 2; j++)
-            GRID[i][j + MATH_HEIGHT / 2].type = ((m_groundLevel.eval((double)i) - j)) > 0 ? SOLID : AIR;
+            GRID[i][j + MATH_HEIGHT / 2].type = ((m_groundLevel.eval((double)i * DX) - j * DY)) > 0 ? SOLID : AIR;
         }
     m_physician->init_particules();
     return true;
@@ -108,7 +106,8 @@ void FrameProductor::threadHandler() {
     std::lock_guard<std::mutex> lock(m_threadProtection);
 
     while (m_keepGoing) {
-        m_physician->put_velocity_on_grid();
+      //  m_physician->put_velocity_on_grid();
+      //  m_physician->get_velocity_from_the_grid();
         m_physician->advect();
         RenderedFrame *img = m_pool->popOutdatedItem();
         if (img == NULL)

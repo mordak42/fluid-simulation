@@ -9,8 +9,8 @@
 #define GRID_V m_physicItems->m_grid_v
 
 /* Grid values for Physician part */
-# define MATH_WIDTH 1000
-# define MATH_HEIGHT 2000
+# define MATH_WIDTH 200
+# define MATH_HEIGHT 100
 # define MATH_SIZE (MATH_WIDTH) * (MATH_HEIGHT)
 # define NB_PARTICLES 1000
 
