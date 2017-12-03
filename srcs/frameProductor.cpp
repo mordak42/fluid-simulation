@@ -59,7 +59,8 @@ void FrameProductor::start() {
 
 void FrameProductor::stop() {
     m_keepGoing = false;
-
+    /* Send a artificial token to quit */
+    m_pool->sendToken();
     /* Unlocked only  when the frameProductor thread has finished his works ! */
     std::lock_guard<std::mutex> lock(m_threadProtection);
 }
@@ -105,11 +106,13 @@ bool FrameProductor::parseFile() {
 void FrameProductor::threadHandler() {
     std::lock_guard<std::mutex> lock(m_threadProtection);
 
-    while (m_keepGoing) {
-      //  m_physician->put_velocity_on_grid();
-      //  m_physician->get_velocity_from_the_grid();
+    while (true) {
+        //  m_physician->put_velocity_on_grid();
+        //  m_physician->get_velocity_from_the_grid();
         m_physician->advect();
         RenderedFrame *img = m_pool->popOutdatedItem();
+        if (m_keepGoing == false)
+            break;
         if (img == NULL)
             continue;
         m_renderer->raytrace(img);

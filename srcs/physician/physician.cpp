@@ -181,15 +181,36 @@ void Physician::get_velocity_from_the_grid() {
     }
 }
 
+
 void Physician::init_particules() {
-    for (int i = 0; i < 1000; i++) {
+
+//    for ()
+    for (int i = 0; i < NB_PARTICLES; i++) {
+
+
+        //double abstract_x = x + (n % 9) * padding_x;
+
+
         PARTICLES[i].x = i / 333 * DX + DX / 2;
         PARTICLES[i].y = (GRID_HEIGHT - (i % 333) - 0.5) * DY;
+
         PARTICLES[i].u = 0;
         PARTICLES[i].v = -1;
     }
 }
 
+/*
+int Physician::init_particules(int ox, int oy, int width, int height) {
+    int nb_particles = width * height * DENSITY;
+    double padding = 1 / DENSITY;
+    for (int i = 0; i < nb_particles; i++) {
+        PARTICLES[i].x = ((double)ox + (i % (width * DENSITY)) / DENSITY) * DX;
+        PARTICLES[i].y = ((double)oy - (i / (width * DENSITY)) / DENSITY) * DY;
+                                        // i % (width * racine(DENSITY))
+    }
+    return nb_particles;
+}
+*/
 void Physician::advect() {
     for (int p = 0; p < NB_PARTICLES; p++) {
         PARTICLES[p].x += PARTICLES[p].u * DT;

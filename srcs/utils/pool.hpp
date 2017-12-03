@@ -23,6 +23,7 @@ public:
     T *popRenderedItem(void);
     void pushOutdatedItem(T *item);
     void pushRenderedItem(T *item);
+    void sendToken();
 
 private:
     std::fifo<T *> m_actives;
@@ -124,5 +125,14 @@ template <class T> void Pool<T>::pushOutdatedItem(T *item) {
     m_inactives.push(item);
     m_availabilitySem.notify();
 }
+
+template <class T> void Pool<T>::sendToken() {
+    if (m_ready == false) {
+        cerr << __func__ << " : Pool not initialized" << endl;
+        return;
+    }
+    m_availabilitySem.notify();
+}
+
 }
 #endif

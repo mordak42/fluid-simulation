@@ -12,11 +12,14 @@
 # define GRID_WIDTH 200
 # define GRID_HEIGHT 200
 # define GRID_SIZE (GRID_WIDTH) * (GRID_HEIGHT)
-# define NB_PARTICLES 1000
+# define NB_PARTICLES 3600
+
+# define DENSITY 9
 
 /* Realism Number of meters */
-# define  REAL_WIDTH 20
-# define  REAL_HEIGHT 20
+# define REAL_WIDTH 20
+# define REAL_HEIGHT 20
+
 
 const double grid_width = GRID_WIDTH;
 const double grid_height = GRID_HEIGHT;
