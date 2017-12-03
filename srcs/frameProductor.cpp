@@ -86,17 +86,17 @@ bool FrameProductor::parseFile() {
     struct point p[SIZE_EXEMPLE];
     p[0].x = 0;
     p[0].y = 0;
-    p[1].x = 0.2 * REAL_SIZE;
-    p[1].y = 0.3 * REAL_SIZE;
-    p[2].x = 0.8 * REAL_SIZE;
-    p[2].y = -0.3 * REAL_SIZE;
-    p[3].x = REAL_SIZE;
+    p[1].x = 0.2 * real_width;
+    p[1].y = 0.4 * real_height;
+    p[2].x = 0.8 * real_width;
+    p[2].y = -0.4 * real_height;
+    p[3].x = real_width;
     p[3].y = 0;
     m_groundLevel = lagrange(p, SIZE_EXEMPLE);
     debug_poly(m_groundLevel);
-    for (int i = 0 ; i < MATH_WIDTH; i++) {
-        for (int j = -MATH_HEIGHT / 2 ; j < MATH_HEIGHT / 2; j++)
-            GRID[i][j + MATH_HEIGHT / 2].type = ((m_groundLevel.eval((double)i * DX) - j * DY)) > 0 ? SOLID : AIR;
+    for (int i = 0 ; i < GRID_WIDTH; i++) {
+        for (int j = -GRID_HEIGHT / 2 ; j < GRID_HEIGHT / 2; j++)
+            GRID[i][j + GRID_HEIGHT / 2].type = m_groundLevel.eval(GRID_TO_REAL(i)) - GRID_TO_REAL(j) > 0 ? SOLID : AIR;
         }
     m_physician->init_particules();
     return true;

@@ -62,8 +62,8 @@ double Physician::kernel(double x, double y) {
 }
 
 void Physician::put_velocity_on_grid() {
-    for (int i = 0; i < MATH_WIDTH; i++) {
-        for (int j = 0; j < MATH_HEIGHT; j++) {
+    for (int i = 0; i < GRID_WIDTH; i++) {
+        for (int j = 0; j < GRID_HEIGHT; j++) {
                 GRID_U[i][j].sum = 0;
                 GRID_V[i][j].sum = 0;
                 GRID_U[i][j].weight = 0;
@@ -117,11 +117,11 @@ void Physician::put_velocity_on_grid() {
         GRID_V[i][j].weight     += kernel(x - (i + 0.5) * DX, y - j * DY);
         GRID_V[i][j + 1].weight += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY);
     }
-    for (int i = 0; i < MATH_WIDTH; i++) {
-        for (int j = 0; j < MATH_HEIGHT; j++) {
-            if (j < MATH_HEIGHT && GRID_U[i][j].weight)
+    for (int i = 0; i < GRID_WIDTH; i++) {
+        for (int j = 0; j < GRID_HEIGHT; j++) {
+            if (j < GRID_HEIGHT && GRID_U[i][j].weight)
                 GRID_U[i][j].val = GRID_U[i][j].sum / GRID_U[i][j].weight;
-            if (i < MATH_WIDTH && GRID_V[i][j].weight)
+            if (i < GRID_WIDTH && GRID_V[i][j].weight)
                 GRID_V[i][j].val = GRID_V[i][j].sum / GRID_V[i][j].weight;
         }
     }
@@ -184,7 +184,7 @@ void Physician::get_velocity_from_the_grid() {
 void Physician::init_particules() {
     for (int i = 0; i < 1000; i++) {
         PARTICLES[i].x = i / 333 * DX + DX / 2;
-        PARTICLES[i].y = (MATH_HEIGHT - (i % 333) - 0.5) * DY;
+        PARTICLES[i].y = (GRID_HEIGHT - (i % 333) - 0.5) * DY;
         PARTICLES[i].u = 0;
         PARTICLES[i].v = -1;
     }

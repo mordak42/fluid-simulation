@@ -4,10 +4,9 @@
 
 #include <iostream>
 
-# define DEFAULT_RENDERED_FRAME_WIDTH 2000
-# define DEFAULT_RENDERED_FRAME_HEIGHT 1000
-# define DEFAULT_RENDERED_FRAME_SIZE \
-        (DEFAULT_RENDERED_FRAME_WIDTH * DEFAULT_RENDERED_FRAME_HEIGHT)
+# define FRAME_WIDTH 200
+# define FRAME_HEIGHT 200
+# define FRAME_SIZE (FRAME_WIDTH * FRAME_HEIGHT)
 # define RENDERED_FRAME_BPP 24
 
 namespace mod1
@@ -28,7 +27,7 @@ public:
         uint8_t g;
         uint8_t b;
     };
-    t_pix m_map[DEFAULT_RENDERED_FRAME_SIZE];
+    t_pix m_map[FRAME_SIZE];
 };
 }
 

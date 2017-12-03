@@ -13,8 +13,8 @@ Pressurer::~Pressurer() {}
 void Pressurer::update_velocity(void) {
     double scale = 1;
 
-    for (int i = 0 ; i < MATH_WIDTH; i++)
-    for (int j = 0 ; j < MATH_HEIGHT; j++) {
+    for (int i = 0 ; i < GRID_WIDTH; i++)
+    for (int j = 0 ; j < GRID_HEIGHT; j++) {
         if (i > 0 && (GRID[i][j].type == FLUID || GRID[i - 1][j].type == FLUID))
         {
             if (GRID[i][j].type == SOLID || GRID[i - 1][j].type == SOLID)
