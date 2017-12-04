@@ -1,7 +1,9 @@
 
 #ifndef __PHYSIC_ITEMS_HPP__
 # define __PHYSIC_ITEMS_HPP__
+
 #include "../renderer/renderedFrame.hpp"
+
 /* Ugly maccro definitions */
 #define GRID m_physicItems->m_grid
 #define PARTICLES m_physicItems->m_particles
@@ -12,9 +14,9 @@
 # define GRID_WIDTH 200
 # define GRID_HEIGHT 200
 # define GRID_SIZE (GRID_WIDTH) * (GRID_HEIGHT)
-# define NB_PARTICLES 3600
+# define NB_PARTICLES 1600
 
-# define DENSITY 9
+# define DENSITY_RACINE 2
 
 /* Realism Number of meters */
 # define REAL_WIDTH 20
@@ -33,14 +35,8 @@ const double frame_height = FRAME_HEIGHT;
 # define DX (real_width / grid_width)
 # define DY (DX)
 
+/* Interval de temps en seconde entre deux moments */
 # define DT 0.04
-
-# define GRID_TO_REAL(x) ((double)x / grid_width * real_width)
-# define REAL_TO_GRID(x) ((double)x / real_width * grid_width)
-# define FRAME_TO_GRID_WIDTH(x) ((double)x / frame_width * grid_width)
-# define FRAME_TO_GRID_HEIGHT(x) (GRID_HEIGHT - 1 - (double)x / frame_height * grid_height)
-# define GRID_TO_FRAME(x, y) ((double)x * frame_width / grid_width + y * frame_height / grid_height * frame_width)
-# define REAL_TO_FRAME(x, y) ((double)x * frame_width / real_width + y * frame_height / grid_height * frame_width)
 
 namespace mod1
 {

@@ -23,7 +23,7 @@ class Physician : public Graviter, public Pressurer
 public:
     Physician(const std::shared_ptr<PhysicItems> &physicItems);
     ~Physician();
-    void init_particules();
+    int init_particules(int ox, int oy, int width, int height);
     void get_velocity_from_the_grid();
     void put_velocity_on_grid();
     void pic(int i, int j);

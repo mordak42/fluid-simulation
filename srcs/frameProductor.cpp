@@ -97,9 +97,9 @@ bool FrameProductor::parseFile() {
     debug_poly(m_groundLevel);
     for (int i = 0 ; i < GRID_WIDTH; i++) {
         for (int j = -GRID_HEIGHT / 2 ; j < GRID_HEIGHT / 2; j++)
-            GRID[i][j + GRID_HEIGHT / 2].type = m_groundLevel.eval(GRID_TO_REAL(i)) - GRID_TO_REAL(j) > 0 ? SOLID : AIR;
+            GRID[i][j + GRID_HEIGHT / 2].type = m_groundLevel.eval(i * DX) - j *DY > 0 ? SOLID : AIR;
         }
-    m_physician->init_particules();
+    m_physician->init_particules(0, 199, 20, 20);
     return true;
 }
 
@@ -107,14 +107,15 @@ void FrameProductor::threadHandler() {
     std::lock_guard<std::mutex> lock(m_threadProtection);
 
     while (true) {
-        //  m_physician->put_velocity_on_grid();
-        //  m_physician->get_velocity_from_the_grid();
+        m_physician->put_velocity_on_grid();
+        m_physician->get_velocity_from_the_grid();
         m_physician->advect();
         RenderedFrame *img = m_pool->popOutdatedItem();
         if (m_keepGoing == false)
             break;
         if (img == NULL)
             continue;
+        img->cleanFrame();
         m_renderer->raytrace(img);
         m_pool->pushRenderedItem(img);
     }
