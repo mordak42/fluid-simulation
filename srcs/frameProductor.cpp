@@ -108,6 +108,7 @@ void FrameProductor::threadHandler() {
 
     while (true) {
         m_physician->put_velocity_on_grid();
+        m_physician->applyGravity();
         m_physician->get_velocity_from_the_grid();
         m_physician->advect();
         RenderedFrame *img = m_pool->popOutdatedItem();

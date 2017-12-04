@@ -52,7 +52,7 @@ Mod1Implementation::~Mod1Implementation() {
 }
 
 void Mod1Implementation::run(void) {
-    m_pool = std::make_shared<std::Pool<RenderedFrame>>(250);
+    m_pool = std::make_shared<std::Pool<RenderedFrame>>(4);
 
     m_pool->init();
     std::cout << "initialisation done" << std::endl;

@@ -68,6 +68,8 @@ void Physician::put_velocity_on_grid() {
                 GRID_V[i][j].sum = 0;
                 GRID_U[i][j].weight = 0;
                 GRID_V[i][j].weight = 0;
+                GRID_V[i][j].val = 0;
+                GRID_U[i][j].val = 0;
         }
     }
     for (int p = 0; p < NB_PARTICLES; p++) {
@@ -101,7 +103,8 @@ void Physician::put_velocity_on_grid() {
 
         int i = x / DX;
         int j = y / DY;
-
+        if (GRID[i][j].type == AIR)
+            GRID[i][j].type = FLUID;
         //TODO: update also m_grid_u[i - 1]
 
 
@@ -117,8 +120,8 @@ void Physician::put_velocity_on_grid() {
         GRID_V[i][j].weight     += kernel(x - (i + 0.5) * DX, y - j * DY);
         GRID_V[i][j + 1].weight += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY);
     }
-    for (int i = 0; i < GRID_WIDTH; i++) {
-        for (int j = 0; j < GRID_HEIGHT; j++) {
+    for (int i = 0; i < GRID_WIDTH + 1; i++) {
+        for (int j = 0; j < GRID_HEIGHT + 1; j++) {
             if (j < GRID_HEIGHT && GRID_U[i][j].weight)
                 GRID_U[i][j].val = GRID_U[i][j].sum / GRID_U[i][j].weight;
             if (i < GRID_WIDTH && GRID_V[i][j].weight)
@@ -186,7 +189,7 @@ int Physician::init_particules(int ox, int oy, int width, int height) {
     for (int i = 0; i < nb_particles; i++) {
         PARTICLES[i].x = ((double)ox + ((double)(i % (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DX;
         PARTICLES[i].y = ((double)oy - ((double)(i / (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DY;
-        PARTICLES[i].v = -6;
+        PARTICLES[i].v = 0;
         PARTICLES[i].u = 0;
     }
     return nb_particles;
