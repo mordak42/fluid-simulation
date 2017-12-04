@@ -5,6 +5,7 @@
 #include <iostream>
 #include <queue>
 #include <mutex>
+#include <array>
 
 #include "utils/semaphore.hpp"
 #include "utils/fifo.hpp"
@@ -31,6 +32,7 @@ private:
 
     Semaphore m_availabilitySem;
     uint32_t m_nbItems;
+    std::vector<T *> m_refVector;
     bool m_ready = false;
 };
 
@@ -43,22 +45,10 @@ template <class T> Pool<T>::Pool(uint32_t nbItems) :
 
 template <class T> Pool<T>::~Pool() {
     m_ready = false;
-    T *item;
 
-    size_t tmp;
+    for (size_t i = 0; i < m_nbItems; i++)
+        delete m_refVector[i];
 
-    tmp = m_actives.size();
-    for (size_t i = 0; i < tmp; i++) {
-        item = m_actives.pop();
-        if (item)
-            delete item;
-    }
-    tmp = m_inactives.size();
-    for (size_t i = 0; i < tmp; i++) {
-        item = m_inactives.pop();
-        if (item)
-            delete item;
-    }
     std::cout << "Pool terminated" << std::endl;
 }
 
@@ -72,8 +62,10 @@ template <class T> bool Pool<T>::init() {
         return false;
     }
     try {
+        m_refVector.resize(m_nbItems);
         for (unsigned long i = 0; i < m_nbItems; i++) {
                 T *tmp = new T();
+                m_refVector[i] = tmp;
                 m_inactives.push(tmp);
         }
         m_ready = true;
