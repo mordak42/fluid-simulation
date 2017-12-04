@@ -4,9 +4,9 @@
 
 #include <iostream>
 
-namespace std
+namespace lib
 {
-template <class T> class fifo
+template <class T> class Fifo
 {
 
 typedef struct s_list {
@@ -15,8 +15,8 @@ typedef struct s_list {
 } t_list;
 
 public:
-    fifo();
-    ~fifo();
+    Fifo();
+    ~Fifo();
 
     bool push(T elem);
     T pop();
@@ -29,9 +29,9 @@ private:
     std::mutex m_mutex;
 };
 
-template <class T> fifo<T>::fifo() {}
+template <class T> Fifo<T>::Fifo() {}
 
-template <class T> fifo<T>::~fifo() {
+template <class T> Fifo<T>::~Fifo() {
     t_list *tmp;
 
     while (m_firstElem) {
@@ -41,7 +41,7 @@ template <class T> fifo<T>::~fifo() {
     }
 }
 
-template <class T> bool fifo<T>::push(T elem) {
+template <class T> bool Fifo<T>::push(T elem) {
     std::lock_guard<std::mutex>lock(m_mutex);
     t_list *newElem = (t_list *)malloc(sizeof(t_list));
     if (newElem == nullptr)
@@ -60,7 +60,7 @@ template <class T> bool fifo<T>::push(T elem) {
     return true;
 }
 
-template <class T> T fifo<T>::pop() {
+template <class T> T Fifo<T>::pop() {
     std::lock_guard<std::mutex>lock(m_mutex);
     if (m_firstElem == nullptr)
         return nullptr;
@@ -78,7 +78,7 @@ template <class T> T fifo<T>::pop() {
     return output;
 }
 
-template <class T> size_t fifo<T>::size() {
+template <class T> size_t Fifo<T>::size() {
     return m_size;
 }
 };

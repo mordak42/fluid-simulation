@@ -6,13 +6,13 @@
 #include <mutex>
 #include <condition_variable>
 
-namespace std
+namespace lib
 {
-class semaphore
+class Semaphore
 {
 public:
-    semaphore(uint32_t initialCount);
-    ~semaphore();
+    Semaphore(uint32_t initialCount);
+    ~Semaphore();
 
     void notify();
     void wait();

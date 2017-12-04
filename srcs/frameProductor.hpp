@@ -65,7 +65,7 @@ namespace mod1
 class FrameProductor
 {
 public:
-    FrameProductor(const std::shared_ptr<std::Pool<RenderedFrame>> &pool);
+    FrameProductor(const std::shared_ptr<lib::Pool<RenderedFrame>> &pool);
     ~FrameProductor();
     void start();
     void stop();
@@ -77,7 +77,7 @@ private:
     bool m_keepGoing = false;
     Polynom m_groundLevel;
     std::mutex m_threadProtection;
-    const std::shared_ptr<std::Pool<RenderedFrame>> &m_pool;
+    const std::shared_ptr<lib::Pool<RenderedFrame>> &m_pool;
     std::shared_ptr<PhysicItems> m_physicItems = nullptr;
     std::unique_ptr<Renderer> m_renderer = nullptr;
     std::unique_ptr<Physician> m_physician = nullptr;

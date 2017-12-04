@@ -3,7 +3,7 @@
 
 using namespace mod1;
 
-UserInterface::UserInterface(const std::shared_ptr<std::Pool<RenderedFrame>> &pool,
+UserInterface::UserInterface(const std::shared_ptr<lib::Pool<RenderedFrame>> &pool,
                              int width,
                              int height) :
                                 m_pool(pool),
@@ -154,5 +154,5 @@ void UserInterface::start() {
 }
 
 void UserInterface::stop() {
-    m_continueLoopHook = false;                                                 // TODO Param ther userEvent than frame !
+    m_continueLoopHook = false;
 }

@@ -4,6 +4,8 @@
 
 #include <memory>
 
+# define NB_BUFFERED_FRAMES 10
+
 namespace mod1
 {
 

@@ -9,7 +9,7 @@
 #include "utils/semaphore.hpp"
 #include "utils/fifo.hpp"
 
-namespace std
+namespace lib
 {
 template <class T> class Pool
 {
@@ -26,10 +26,10 @@ public:
     void sendToken();
 
 private:
-    std::fifo<T *> m_actives;
-    std::fifo<T *> m_inactives;
+    Fifo<T *> m_actives;
+    Fifo<T *> m_inactives;
 
-    semaphore m_availabilitySem;
+    Semaphore m_availabilitySem;
     uint32_t m_nbItems;
     bool m_ready = false;
 };
@@ -38,7 +38,7 @@ template <class T> Pool<T>::Pool(uint32_t nbItems) :
                             m_availabilitySem(nbItems),
                             m_nbItems(nbItems)
 {
-        cout << "Pool initialisation" << endl;
+        std::cout << "Pool initialisation" << std::endl;
 }
 
 template <class T> Pool<T>::~Pool() {
@@ -63,7 +63,7 @@ template <class T> Pool<T>::~Pool() {
 }
 
 /* TODO Out of memory case:
-* It's difficult to reproduce in OSX, but we have to manage this exeption
+* It's difficult to reproduce in OSX, but we have to manage this exception
 * imperatively */
 
 template <class T> bool Pool<T>::init() {
@@ -89,7 +89,7 @@ template <class T> bool Pool<T>::init() {
 /* Productor side */
 template <class T> T *Pool<T>::popOutdatedItem(void) {
     if (m_ready == false) {
-        cerr << __func__ << " : Pool not initialized" << endl;
+        std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return nullptr;
     }
     m_availabilitySem.wait();
@@ -99,7 +99,7 @@ template <class T> T *Pool<T>::popOutdatedItem(void) {
 
 template <class T> void Pool<T>::pushRenderedItem(T *item) {
     if (m_ready == false) {
-        cerr << __func__ << " : Pool not initialized" << endl;
+        std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return;
     }
     m_actives.push(item);
@@ -108,7 +108,7 @@ template <class T> void Pool<T>::pushRenderedItem(T *item) {
 /* Consumer side */
 template <class T> T *Pool<T>::popRenderedItem(void) {
     if (m_ready == false) {
-        cerr << __func__ << " : Pool not initialized" << endl;
+        std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return nullptr;
     }
     if (m_actives.size() == 0)
@@ -119,16 +119,17 @@ template <class T> T *Pool<T>::popRenderedItem(void) {
 
 template <class T> void Pool<T>::pushOutdatedItem(T *item) {
     if (m_ready == false) {
-        cerr << __func__ << " : Pool not initialized" << endl;
+        std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return;
     }
     m_inactives.push(item);
     m_availabilitySem.notify();
 }
 
+/* Exception side, send a artificial token */
 template <class T> void Pool<T>::sendToken() {
     if (m_ready == false) {
-        cerr << __func__ << " : Pool not initialized" << endl;
+        std::cerr << __func__ << " : Pool not initialized" << std::endl;
         return;
     }
     m_availabilitySem.notify();

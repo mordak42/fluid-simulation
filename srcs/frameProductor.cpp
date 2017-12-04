@@ -41,7 +41,7 @@
 
 using namespace mod1;
 
-FrameProductor::FrameProductor(const std::shared_ptr<std::Pool<RenderedFrame>> &pool) :
+FrameProductor::FrameProductor(const std::shared_ptr<lib::Pool<RenderedFrame>> &pool) :
                                                                     m_pool(pool)
 {
     m_physicItems = std::make_shared<PhysicItems>();

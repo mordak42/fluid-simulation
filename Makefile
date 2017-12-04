@@ -48,7 +48,8 @@ $(OBJ_DIR)/mod1.o: mod1.cpp \
 	frameProductor.hpp \
 	userInterface.hpp \
 	renderer/renderedFrame.hpp \
-	utils/pool.hpp
+	utils/pool.hpp \
+	mod1.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/userInterface.o: userInterface.cpp \

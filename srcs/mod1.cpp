@@ -22,7 +22,7 @@ protected:
 private:
     std::unique_ptr<FrameProductor> m_frameProductor = nullptr;
     std::unique_ptr<UserInterface> m_userInterface = nullptr;
-    std::shared_ptr<std::Pool<RenderedFrame>> m_pool;
+    std::shared_ptr<lib::Pool<RenderedFrame>> m_pool;
 };
 }
 
@@ -52,7 +52,7 @@ Mod1Implementation::~Mod1Implementation() {
 }
 
 void Mod1Implementation::run(void) {
-    m_pool = std::make_shared<std::Pool<RenderedFrame>>(4);
+    m_pool = std::make_shared<lib::Pool<RenderedFrame>>(NB_BUFFERED_FRAMES);
 
     m_pool->init();
     std::cout << "initialisation done" << std::endl;

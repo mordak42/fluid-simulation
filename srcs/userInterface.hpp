@@ -25,7 +25,7 @@ namespace mod1
 class UserInterface
 {
 public:
-    UserInterface(const std::shared_ptr<std::Pool<RenderedFrame>> &pool,
+    UserInterface(const std::shared_ptr<lib::Pool<RenderedFrame>> &pool,
                   int width,
                   int height);
     ~UserInterface();
@@ -35,7 +35,7 @@ public:
 
 private:
     int Rgb_to_int(int r, int g, int b);
-    const std::shared_ptr<std::Pool<RenderedFrame>> &m_pool;
+    const std::shared_ptr<lib::Pool<RenderedFrame>> &m_pool;
     SDL_Window *m_win = nullptr;
     SDL_Surface *m_surface = nullptr;
     bool m_ready = false;

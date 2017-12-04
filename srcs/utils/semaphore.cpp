@@ -1,26 +1,26 @@
 
 #include "semaphore.hpp"
 
-using namespace std;
+using namespace lib;
 
-semaphore::semaphore(uint32_t initialCount) : m_count(initialCount) {}
+Semaphore::Semaphore(uint32_t initialCount) : m_count(initialCount) {}
 
-semaphore::~semaphore() {};
+Semaphore::~Semaphore() {};
 
-void semaphore::notify() {
+void Semaphore::notify() {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
     ++m_count;
     m_condition.notify_one();
 }
 
-void semaphore::wait() {
+void Semaphore::wait() {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
     if (!m_count)
         m_condition.wait(lock);
     --m_count;
 }
 
-bool semaphore::try_wait() {
+bool Semaphore::try_wait() {
     std::unique_lock<decltype(m_mutex)> lock(m_mutex);
     if (m_count) {
         --m_count;
