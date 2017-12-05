@@ -64,6 +64,15 @@ inline int UserInterface::Rgb_to_int(int r, int g, int b) {
     return (r << 16 | g << 8 | b);
 }
 
+static void getDps() {
+    using namespace std::chrono;
+    static high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+    std::cout << "DPS = " << 1 / duration_cast<duration<double>>(t2 - t1).count() << std::endl;
+    t1 = t2;
+}
+
 void UserInterface::start() {
     if (m_ready == false) {
         std::cerr << __func__ << " : SDL2 not initialized" << std::endl;
@@ -72,7 +81,7 @@ void UserInterface::start() {
 
     SDL_Event e;
     RenderedFrame *img;
-    Uint32 delay = 1000 / 40;
+    Uint32 delay = 1000 / 25;
     SDL_TimerID timerId = 0;
 
     float math_width = FRAME_WIDTH;
@@ -115,6 +124,7 @@ void UserInterface::start() {
                 img = m_pool->popRenderedItem();
                 if (img == nullptr)
                     break;
+                getDps();
                 for (int i = 0; i < (m_width * m_height); i++) {
                     float j;
                     math_x = (i % m_width) * deltaWidth;

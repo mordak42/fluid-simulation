@@ -27,7 +27,7 @@ double Physician::hat(double r) {
         return (1 + r);
     else
     {
-        std::cerr << "bad input for function hat ?" << std::endl;
+//      std::cerr << "bad input for function hat ?" << std::endl;
         return 0;
     }
 }
