@@ -13,12 +13,12 @@
 
 /*
  *                    grid_u, grid_v
- *           pressurer              graviter
+ *           pressure                 gravity
  *                        physician
 */
 
 /*
- * Some explications about auo amd new int[x][y][z] on the heap,
+ * Some explanations about new int[x][y][z] on the heap,
  * https://stackoverflow.com/questions/17258749/is-there-a-way-of-casting-a-pointer-to-an-array-type
  * https://www.reddit.com/r/cpp/comments/6ge86r/auto_for_in_class_initialization_of_nonstatic/
  * http://en.cppreference.com/w/cpp/types/decay

@@ -7,7 +7,7 @@ using namespace mod1;
 Polynom::Polynom(double *coefs, int nb_coefs)
 {
     if (nb_coefs > NB_COEFS_MAX)                                                // TODO Avoid crash exception
-        std::cout << "nb coefs > NB_COEFS_MAX" << std::endl;
+        std::cout << "nb coefficients > NB_COEFS_MAX" << std::endl;
     memcpy(m_coefs, coefs, nb_coefs * sizeof(double));
     m_nb_coefs = nb_coefs;
 }

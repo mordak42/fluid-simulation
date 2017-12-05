@@ -4,7 +4,7 @@
 
 #include "../renderer/renderedFrame.hpp"
 
-/* Ugly maccro definitions */
+/* Ugly macro definitions */
 #define GRID m_physicItems->m_grid
 #define PARTICLES m_physicItems->m_particles
 #define GRID_U m_physicItems->m_grid_u
@@ -35,7 +35,7 @@ const double frame_height = FRAME_HEIGHT;
 # define DX (real_width / grid_width)
 # define DY (DX)
 
-/* Interval de temps en seconde entre deux moments */
+/* Time interval between two displayed frames */
 # define DT 0.04
 
 namespace mod1

@@ -40,7 +40,7 @@ template <class T> Pool<T>::Pool(uint32_t nbItems) :
                             m_availabilitySem(nbItems),
                             m_nbItems(nbItems)
 {
-        std::cout << "Pool initialisation" << std::endl;
+        std::cout << "Pool initialization" << std::endl;
 }
 
 template <class T> Pool<T>::~Pool() {
@@ -78,7 +78,7 @@ template <class T> bool Pool<T>::init() {
     }
 }
 
-/* Productor side */
+/* Productive side */
 template <class T> T *Pool<T>::popOutdatedItem(void) {
     if (m_ready == false) {
         std::cerr << __func__ << " : Pool not initialized" << std::endl;

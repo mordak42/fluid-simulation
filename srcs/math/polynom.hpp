@@ -24,7 +24,7 @@ namespace mod1
             double  m_coefs[NB_COEFS_MAX] = {0};
             int     m_nb_coefs = 0;
             /*
-             ** les coeficiant sont stockes dans l ordre
+             ** Coefficients are stocked on order
              ** P(X) = coefs[0] + coefs[1]X + coef[2]X^2 ...
              */
 

@@ -78,7 +78,7 @@ static void    debug_poly(Polynom poly)
 }
 
 /*
- * google exemple:
+ * google example:
  * 3.77604e-08*x^4 +  -6.61458e-05*x^3 +  0.0316146*x^2 +  -3.22917*x^1 +  0
 */
 

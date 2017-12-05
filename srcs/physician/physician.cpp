@@ -161,7 +161,7 @@ void Physician::get_velocity_from_the_grid() {
          *                   i *dx         (i + 1)*dx
          *
 		 */
-		/* udatte u coord */
+		/* update u coordinate */
 		double sum = 0;
 		double weight = 0;
 
@@ -172,7 +172,7 @@ void Physician::get_velocity_from_the_grid() {
 
 		PARTICLES[p].u = sum / weight;
 
-		/* udatte v coord */
+		/* update v coordinate */
 		sum = 0;
 		weight = 0;
 

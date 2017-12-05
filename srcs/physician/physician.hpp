@@ -13,7 +13,7 @@
 #define FLIP 1 - PIC
 
 /*
- * up = PIC * interp(ugrid, xp) + FLIP * (up + interp(∆u_grid)
+ * up = PIC * interpolation(ugrid, xp) + FLIP * (up + interpolation(∆u_grid)
  */
 
 namespace mod1

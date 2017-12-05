@@ -55,7 +55,7 @@ void Mod1Implementation::run(void) {
     m_pool = std::make_shared<lib::Pool<RenderedFrame>>(NB_BUFFERED_FRAMES);
 
     m_pool->init();
-    std::cout << "initialisation done" << std::endl;
+    std::cout << "initialization done" << std::endl;
     m_frameProductor.reset(new FrameProductor(m_pool));
     m_userInterface.reset(new UserInterface(m_pool, WINDOW_WIDTH, WINDOW_HEIGHT));
 

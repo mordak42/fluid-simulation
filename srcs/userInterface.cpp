@@ -20,7 +20,7 @@ bool UserInterface::init() {
         return false;
     }
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER)) {
-        std::cerr << __func__ << " : Cannot init SDL" << SDL_GetError() << std::endl;
+        std::cerr << __func__ << " : Cannot initialize SDL" << SDL_GetError() << std::endl;
         return false;
     }
 
@@ -87,7 +87,7 @@ void UserInterface::start() {
     {
         switch (e.type) {
             case SDL_KEYDOWN:
-                std::cout << "SDL_KEYDOWN: scancode -> " << e.key.keysym.scancode << std::endl;
+                std::cout << "SDL_KEYDOWN: scan code -> " << e.key.keysym.scancode << std::endl;
                 switch (e.key.keysym.scancode) {
                     case SDL_SCANCODE_ESCAPE:
                         m_continueLoopHook = false;
@@ -142,7 +142,7 @@ void UserInterface::start() {
                     std::cout << "window has moved !" << std::endl;
                     break;
                 default:
-                    std::cout << "defaut window event" << std::endl;
+                    std::cout << "default window event" << std::endl;
                     break;
                 }
         }
