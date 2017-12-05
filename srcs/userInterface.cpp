@@ -66,11 +66,17 @@ inline int UserInterface::Rgb_to_int(int r, int g, int b) {
 
 static void getDps() {
     using namespace std::chrono;
-    static high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
-    std::cout << "DPS = " << 1 / duration_cast<duration<double>>(t2 - t1).count() << std::endl;
-    t1 = t2;
+    static high_resolution_clock::time_point t1 = t2;
+    static uint32_t nb_frames = 0;
+    nb_frames++;
+
+    if (duration_cast<duration<double>>(t2 - t1).count() > 1) {
+        std::cout << "DPS = " << nb_frames << std::endl;
+        nb_frames = 0;
+        t1 = t2;
+    }
 }
 
 void UserInterface::start() {
