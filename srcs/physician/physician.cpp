@@ -31,6 +31,7 @@ double Physician::hat(double r) {
         return 0;
     }
 }
+
 /*
  * function b_spline(r) =
  *      1 / 2 (r + 3 / 2) ^ 2 if -3 / 2 <= r < -1 / 2
