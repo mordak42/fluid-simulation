@@ -1,8 +1,5 @@
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 #include "userInterface.hpp"
-#include <unistd.h>
 
 using namespace mod1;
 
@@ -27,6 +24,12 @@ bool UserInterface::init() {
         return false;
     }
 
+    TTF_Init();
+    m_font = TTF_OpenFont("srcs/fonts/Chalkduster.ttf", 25);
+    if (m_font == nullptr) {
+        std::cerr << "font is null" << std::endl;
+        return false;
+    }
     m_win = SDL_CreateWindow("MOD 1",
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
@@ -133,15 +136,10 @@ void UserInterface::start() {
                 img = m_pool->popRenderedItem();
                 if (img == nullptr)
                 {
-                    TTF_Font * font = TTF_OpenFont("./Chalkduster.ttf", 25);
-                    if (font == nullptr)
-                        std::cerr << "font is null" << std::endl;
                     SDL_Color color = { 255, 255, 255, 0 };
-                    SDL_Surface *font_surface = TTF_RenderText_Solid(font,
-                            "FAMINE", color);
+                    SDL_Surface *font_surface = TTF_RenderText_Solid(m_font, "FAMINE", color);
                     SDL_BlitSurface(font_surface, NULL, m_surface, NULL);
                     SDL_UpdateWindowSurface(m_win);
-                    usleep (100000);
                     break;
                 }
                 getDps();
@@ -178,6 +176,8 @@ void UserInterface::start() {
         }
     }
     SDL_DestroyWindow(m_win);
+    TTF_CloseFont(m_font);
+    TTF_Quit();
     SDL_RemoveTimer(timerId);
     SDL_Quit();
     m_ready = false;
