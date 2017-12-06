@@ -27,7 +27,7 @@ double Physician::hat(double r) {
         return (1 + r);
     else
     {
-        std::cerr << "bad input for function hat ?" << std::endl;
+        //std::cerr << "bad input for function hat ?" << std::endl;
         return 0;
     }
 }
@@ -71,6 +71,8 @@ void Physician::put_velocity_on_grid() {
                 GRID_V[i][j].weight = 0;
                 GRID_V[i][j].val = 0;
                 GRID_U[i][j].val = 0;
+                if (GRID[i][j].type == FLUID)
+                    GRID[i][j].type = AIR;
         }
     }
     for (int p = 0; p < NB_PARTICLES; p++) {
@@ -191,7 +193,7 @@ int Physician::init_particules(int ox, int oy, int width, int height) {
         PARTICLES[i].x = ((double)ox + ((double)(i % (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DX;
         PARTICLES[i].y = ((double)oy - ((double)(i / (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DY;
         PARTICLES[i].v = 0;
-        PARTICLES[i].u = 0;
+        PARTICLES[i].u = -2;
     }
     return nb_particles;
 }

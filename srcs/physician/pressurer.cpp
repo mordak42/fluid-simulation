@@ -10,8 +10,10 @@ Pressurer::Pressurer(const std::shared_ptr<PhysicItems> &physicItems) :
 
 Pressurer::~Pressurer() {}
 
+
+/* Last step: One time we know pressure, we can update velocity for each cell of grid. */
 void Pressurer::update_velocity(void) {
-    double scale = 1;
+    double scale = DT / DX;
 
     for (int i = 0 ; i < GRID_WIDTH; i++)
     for (int j = 0 ; j < GRID_HEIGHT; j++) {

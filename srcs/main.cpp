@@ -30,11 +30,35 @@ namespace std {
     }
 }
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include "openblas/cblas.h"
+#ifdef __cplusplus
+}
+#endif
+
+#include <stdio.h>
+
+void testBlast(void) {
+    int i = 0;
+    double A[6] = {1.0, 2.0, 1.0, -3.0, 4.0, -1.0};
+    double B[6] = {1.0, 2.0, 1.0, -3.0, 4.0, -1.0};
+    double C[9] = {.5, .5, .5, .5, .5, .5, .5, .5, .5};
+
+    cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, 3, 3, 2, 1, A, 3, B, 3, 2, C, 3);
+
+    for(i = 0; i < 9; i++)
+        printf("%lf ", C[i]);
+    printf("\n");
+}
+
 using namespace std;
 
 int main(const int argc __attribute__((unused)),
          const char **argv __attribute__((unused)))
 {
+    testBlast();
     signalSetup();
     s_context = new mod1::Mod1();
     s_context->run();
