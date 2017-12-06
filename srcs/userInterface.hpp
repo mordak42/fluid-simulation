@@ -10,6 +10,7 @@
 extern "C" {
 #endif
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_ttf.h"
 #ifdef __cplusplus
 }
 #endif
@@ -38,6 +39,7 @@ private:
     const std::shared_ptr<lib::Pool<RenderedFrame>> &m_pool;
     SDL_Window *m_win = nullptr;
     SDL_Surface *m_surface = nullptr;
+    TTF_Font *m_font = nullptr;
     bool m_ready = false;
     bool m_continueLoopHook = true;
     int m_width;
