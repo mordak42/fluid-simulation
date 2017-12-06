@@ -31,8 +31,8 @@ OBJ_DIR = objs
 TMP = $(basename $(notdir $(SRC_CORE)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 
-IFLAGS = -I./srcs -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/
-LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lSDL2 -lpthread
+IFLAGS = -I./srcs -I$(HOME)/.brew/Cellar/sdl2/2.0.7/include/ -I $(HOME)/.brew/Cellar/sdl2_ttf/2.0.14/include/SDL2
+LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lSDL2 -lpthread -L /Users/vcombey/.brew/Cellar/sdl2_ttf/2.0.14/lib -lSDL2_ttf
 
 .PHONY: all clean fclean re help
 

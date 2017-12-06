@@ -1,5 +1,8 @@
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include "userInterface.hpp"
+#include <unistd.h>
 
 using namespace mod1;
 
@@ -129,7 +132,18 @@ void UserInterface::start() {
             case SDL_USEREVENT:
                 img = m_pool->popRenderedItem();
                 if (img == nullptr)
+                {
+                    TTF_Font * font = TTF_OpenFont("./Chalkduster.ttf", 25);
+                    if (font == nullptr)
+                        std::cerr << "font is null" << std::endl;
+                    SDL_Color color = { 255, 255, 255, 0 };
+                    SDL_Surface *font_surface = TTF_RenderText_Solid(font,
+                            "FAMINE", color);
+                    SDL_BlitSurface(font_surface, NULL, m_surface, NULL);
+                    SDL_UpdateWindowSurface(m_win);
+                    usleep (100000);
                     break;
+                }
                 getDps();
                 for (int i = 0; i < (m_width * m_height); i++) {
                     float j;
@@ -137,8 +151,8 @@ void UserInterface::start() {
                     math_y = (i / m_width) * deltaHeight;
                     j = math_y * math_width + math_x;
                     ((int *)m_surface->pixels)[i] = Rgb_to_int(img->m_map[(int)j].r,
-                                                               img->m_map[(int)j].g,
-                                                               img->m_map[(int)j].b);
+                        img->m_map[(int)j].g,
+                        img->m_map[(int)j].b);
                 }
                 SDL_UpdateWindowSurface(m_win);
                 m_pool->pushOutdatedItem(img);
@@ -146,20 +160,20 @@ void UserInterface::start() {
 
             case SDL_WINDOWEVENT:
                 switch (e.window.event) {
-                case SDL_WINDOWEVENT_RESIZED:
-                    m_width = e.window.data1;
-                    m_height = e.window.data2;
-                    m_surface = SDL_GetWindowSurface(m_win);
-                    std::cout << "new size = " << m_width << " - " << m_height << std::endl;
-                    deltaWidth = math_width / m_width;
-                    deltaHeight = math_height / m_height;
-                    break;
-                case SDL_WINDOWEVENT_MOVED:
-                    std::cout << "window has moved !" << std::endl;
-                    break;
-                default:
-                    std::cout << "default window event" << std::endl;
-                    break;
+                    case SDL_WINDOWEVENT_RESIZED:
+                        m_width = e.window.data1;
+                        m_height = e.window.data2;
+                        m_surface = SDL_GetWindowSurface(m_win);
+                        std::cout << "new size = " << m_width << " - " << m_height << std::endl;
+                        deltaWidth = math_width / m_width;
+                        deltaHeight = math_height / m_height;
+                        break;
+                    case SDL_WINDOWEVENT_MOVED:
+                        std::cout << "window has moved !" << std::endl;
+                        break;
+                    default:
+                        std::cout << "default window event" << std::endl;
+                        break;
                 }
         }
     }
