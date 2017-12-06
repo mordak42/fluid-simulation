@@ -193,7 +193,7 @@ int Physician::init_particules(int ox, int oy, int width, int height) {
         PARTICLES[i].x = ((double)ox + ((double)(i % (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DX;
         PARTICLES[i].y = ((double)oy - ((double)(i / (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DY;
         PARTICLES[i].v = 0;
-        PARTICLES[i].u = 0;
+        PARTICLES[i].u = -2;
     }
     return nb_particles;
 }
