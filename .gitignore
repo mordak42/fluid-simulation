@@ -1,6 +1,5 @@
 *.o
 mod1
-*.a
 .cproject
 .project
 .settings/*
