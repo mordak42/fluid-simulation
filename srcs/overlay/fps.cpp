@@ -7,8 +7,6 @@ Fps::Fps() {
 }
 
 Fps::~Fps() {
-//    if (m_ready)
-//        TTF_CloseFont(m_font);
 }
 
 int Fps::init() {
@@ -16,7 +14,7 @@ int Fps::init() {
         std::cerr << "FPS overlay already initialized" << std::endl;
         return false;
     }
-    if (!TTF_WasInit() && TTF_Init() < 0) {
+    if (!TTF_WasInit()) {
         std::cerr << "Cannot initialize TTF" << std::endl;
         return false;
     }

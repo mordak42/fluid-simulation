@@ -6,9 +6,8 @@ using namespace mod1;
 UserInterface::UserInterface(const std::shared_ptr<lib::Pool<RenderedFrame>> &pool,
                              int width,
                              int height) :
-                                m_pool(pool),
-                                m_width(width),
-                                m_height(height)
+                                SdlContext(width, height),
+                                m_pool(pool)
 {
 }
 
@@ -19,26 +18,10 @@ bool UserInterface::init() {
         std::cerr << __func__ << " : SDL2 already initialized" << std::endl;
         return false;
     }
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER)) {
-        std::cerr << __func__ << " : Cannot initialize SDL" << SDL_GetError() << std::endl;
-        return false;
-    }
-
-    TTF_Init();
     m_fpsDisplayer.init();
     m_font = TTF_OpenFont("srcs/fonts/Chalkduster.ttf", 25);
     if (m_font == nullptr) {
         std::cerr << "font is null" << std::endl;
-        return false;
-    }
-    m_win = SDL_CreateWindow("MOD 1",
-            SDL_WINDOWPOS_CENTERED,
-            SDL_WINDOWPOS_CENTERED,
-            m_width,
-            m_height,
-            SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
-    if (m_win == nullptr) {
-        std::cerr << __func__ << " : Cannot create window" << std::endl;
         return false;
     }
     m_surface = SDL_GetWindowSurface(m_win);
@@ -164,9 +147,7 @@ void UserInterface::start() {
         }
     }
     SDL_DestroyWindow(m_win);
-    TTF_Quit();
     SDL_RemoveTimer(timerId);
-    SDL_Quit();
     m_ready = false;
 }
 

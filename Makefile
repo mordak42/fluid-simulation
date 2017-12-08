@@ -24,7 +24,7 @@ endif
 ### SOURCES ###
 
 SRC_CORE = main mod1 frameProductor renderedFrame renderer physician \
-userInterface semaphore lagrange polynom graviter physicLaw pressurer physicItems fps
+userInterface semaphore lagrange polynom graviter physicLaw pressurer physicItems fps sdlContext
 VPATH = srcs
 
 OBJ_DIR = objs
@@ -122,6 +122,10 @@ $(OBJ_DIR)/physicItems.o: physician/physicItems.cpp \
 
 $(OBJ_DIR)/fps.o: overlay/fps.cpp \
 	overlay/fps.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/sdlContext.o: overlay/sdlContext.cpp \
+	overlay/sdlContext.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 clean:

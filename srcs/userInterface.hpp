@@ -17,6 +17,8 @@ extern "C" {
 
 #include <iostream>
 #include <mod1.hpp>
+
+#include "overlay/sdlContext.hpp"
 #include "utils/pool.hpp"
 #include "renderer/renderedFrame.hpp"
 #include "physician/physicItems.hpp"
@@ -24,7 +26,7 @@ extern "C" {
 
 namespace mod1
 {
-class UserInterface
+class UserInterface : public SdlContext
 {
 public:
     UserInterface(const std::shared_ptr<lib::Pool<RenderedFrame>> &pool,
@@ -38,13 +40,10 @@ public:
 private:
     int Rgb_to_int(int r, int g, int b);
     const std::shared_ptr<lib::Pool<RenderedFrame>> &m_pool;
-    SDL_Window *m_win = nullptr;
     SDL_Surface *m_surface = nullptr;
     TTF_Font *m_font = nullptr;
     bool m_ready = false;
     bool m_continueLoopHook = true;
-    int m_width;
-    int m_height;
     Fps m_fpsDisplayer;
 };
 }
