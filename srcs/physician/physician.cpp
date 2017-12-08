@@ -106,6 +106,10 @@ void Physician::put_velocity_on_grid() {
 
         int i = x / DX;
         int j = y / DY;
+        if (i < 0 || i >= GRID_WIDTH)
+            continue;
+        if (j < 0 || j >= GRID_HEIGHT)
+            continue;
         if (GRID[i][j].type == AIR)
             GRID[i][j].type = FLUID;
         //TODO: update also m_grid_u[i - 1]
@@ -151,6 +155,10 @@ void Physician::get_velocity_from_the_grid() {
         int i = x / DX;
         int j = y / DY;
 
+        if (i < 0 || i >= GRID_WIDTH)
+            continue;
+        if (j < 0 || j >= GRID_HEIGHT)
+            continue;
 		/*
          *
          *             j + 1  _______________
