@@ -35,8 +35,11 @@ void Renderer::raytrace(RenderedFrame *img) {
     {
         int x = PARTICLES[p].x * prop_x;
         int y = FRAME_HEIGHT - 1 - PARTICLES[p].y * prop_y;
-        img->m_map[y * FRAME_WIDTH + x].b = 0x00;
-        img->m_map[y * FRAME_WIDTH + x].g = 0x00;
-        img->m_map[y * FRAME_WIDTH + x].r = 0xFF;
+        int index = y * FRAME_WIDTH + x;
+        if (index < 0 || index >= FRAME_SIZE)
+            continue ;
+        img->m_map[index].b = 0x00;
+        img->m_map[index].g = 0x00;
+        img->m_map[index].r = 0xFF;
     }
 }

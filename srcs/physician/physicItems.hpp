@@ -64,7 +64,6 @@ struct particle
 
 struct cell
 {
-    double              pressure;
     enum material_type  type;
 };
 
