@@ -25,6 +25,7 @@ bool UserInterface::init() {
     }
 
     TTF_Init();
+    m_fpsDisplayer.init();
     m_font = TTF_OpenFont("srcs/fonts/Chalkduster.ttf", 25);
     if (m_font == nullptr) {
         std::cerr << "font is null" << std::endl;
@@ -70,21 +71,6 @@ inline int UserInterface::Rgb_to_int(int r, int g, int b) {
     return (r << 16 | g << 8 | b);
 }
 
-static void getDps() {
-    using namespace std::chrono;
-
-    high_resolution_clock::time_point t2 = high_resolution_clock::now();
-    static high_resolution_clock::time_point t1 = t2;
-    static uint32_t nb_frames = 0;
-    nb_frames++;
-
-    if (duration_cast<duration<double>>(t2 - t1).count() > 1) {
-        std::cout << "DPS = " << nb_frames << std::endl;
-        nb_frames = 0;
-        t1 = t2;
-    }
-}
-
 void UserInterface::start() {
     if (m_ready == false) {
         std::cerr << __func__ << " : SDL2 not initialized" << std::endl;
@@ -106,6 +92,7 @@ void UserInterface::start() {
     timerId = SDL_AddTimer(delay, customEventCb, NULL);
     while (m_continueLoopHook && SDL_WaitEvent(&e))
     {
+        m_fpsDisplayer.setTimeOrigin();
         switch (e.type) {
             case SDL_KEYDOWN:
                 std::cout << "SDL_KEYDOWN: scan code -> " << e.key.keysym.scancode << std::endl;
@@ -134,28 +121,29 @@ void UserInterface::start() {
                 break;
             case SDL_USEREVENT:
                 img = m_pool->popRenderedItem();
-                if (img == nullptr)
-                {
+                if (img) {
+                    m_fpsDisplayer.updateFpsCounter();
+                    for (int i = 0; i < (m_width * m_height); i++) {
+                        float j;
+                        math_x = (i % m_width) * deltaWidth;
+                        math_y = (i / m_width) * deltaHeight;
+                        j = math_y * math_width + math_x;
+                        ((int *)m_surface->pixels)[i] = Rgb_to_int(img->m_map[(int)j].r,
+                            img->m_map[(int)j].g,
+                            img->m_map[(int)j].b);
+                    }
+                    m_pool->pushOutdatedItem(img);
+                    m_fpsDisplayer.fillInformations(m_surface, false);
+                    SDL_UpdateWindowSurface(m_win);
+
+                    m_fpsDisplayer.updateIddleField();
+                } else {
                     SDL_Color color = { 255, 255, 255, 0 };
                     SDL_Surface *font_surface = TTF_RenderText_Solid(m_font, "FAMINE", color);
                     SDL_BlitSurface(font_surface, NULL, m_surface, NULL);
-                    SDL_UpdateWindowSurface(m_win);
-                    break;
+                    SDL_UpdateWindowSurface(m_win); // TODO SDL_UpdateWindowSurfaceRects
                 }
-                getDps();
-                for (int i = 0; i < (m_width * m_height); i++) {
-                    float j;
-                    math_x = (i % m_width) * deltaWidth;
-                    math_y = (i / m_width) * deltaHeight;
-                    j = math_y * math_width + math_x;
-                    ((int *)m_surface->pixels)[i] = Rgb_to_int(img->m_map[(int)j].r,
-                        img->m_map[(int)j].g,
-                        img->m_map[(int)j].b);
-                }
-                SDL_UpdateWindowSurface(m_win);
-                m_pool->pushOutdatedItem(img);
                 break;
-
             case SDL_WINDOWEVENT:
                 switch (e.window.event) {
                     case SDL_WINDOWEVENT_RESIZED:
@@ -176,7 +164,6 @@ void UserInterface::start() {
         }
     }
     SDL_DestroyWindow(m_win);
-    TTF_CloseFont(m_font);
     TTF_Quit();
     SDL_RemoveTimer(timerId);
     SDL_Quit();
