@@ -1,6 +1,6 @@
 
 #include "pressurer.hpp"
-
+#include <math.h>
 using namespace mod1;
 
 Pressurer::Pressurer(const std::shared_ptr<PhysicItems> &physicItems) :
@@ -74,14 +74,18 @@ void Pressurer::calcA()
 
 void::Pressurer::calcPrecon()
 {
+	double e;
+	double tau = 0.97;
+	double sigma = 0.25;
+
 	for(int i = 1; i < GRID_WIDTH; i++) {
 		for(int j = 1; j < GRID_WIDTH; j++) {
 			if (GRID[i][j].type == FLUID) {
 				e = A[i][j].diag - (A[i - 1][j].plusi * precon[i-1][j] * A[i-1][j].plusi * precon[i-1][j]) -
-					(A[i][j-1].plusj * precon[i][j-1] * A[i][j-1] * precon[i][j-1]) -
+					(A[i][j-1].plusj * precon[i][j-1] * A[i][j-1].plusj * precon[i][j-1]) -
 					tau * (A[i-1][j].plusi * A[i-1][j].plusj + 
 							A[i][j-1].plusj *
-							A[i][j-1].plusi)
+							A[i][j-1].plusi);
 					if (e < sigma * A[i][j].diag)
 						e = A[i][j].diag;
 				precon[i][j] = 1 / sqrt(e);
@@ -122,6 +126,7 @@ void Pressurer::ApplyA(double (&s)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_
 	for (int i = 0 ; i < GRID_WIDTH; i++) {
 		for (int j = 0 ; j < GRID_HEIGHT; j++) {
 			if (GRID[i][j].type == FLUID) {
+				t = 0;
 				t += A[i][j].diag * s[i][j];
 				t += A[i][j].plusi * s[i+1][j];
 				t += A[i][j].plusi * s[i-1][j];
