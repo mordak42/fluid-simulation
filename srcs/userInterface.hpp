@@ -20,6 +20,7 @@ extern "C" {
 #include "utils/pool.hpp"
 #include "renderer/renderedFrame.hpp"
 #include "physician/physicItems.hpp"
+#include "overlay/fps.hpp"
 
 namespace mod1
 {
@@ -44,6 +45,7 @@ private:
     bool m_continueLoopHook = true;
     int m_width;
     int m_height;
+    Fps m_fpsDisplayer;
 };
 }
 

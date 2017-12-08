@@ -24,7 +24,7 @@ endif
 ### SOURCES ###
 
 SRC_CORE = main mod1 frameProductor renderedFrame renderer physician \
-userInterface semaphore lagrange polynom graviter physicLaw pressurer physicItems
+userInterface semaphore lagrange polynom graviter physicLaw pressurer physicItems fps
 VPATH = srcs
 
 OBJ_DIR = objs
@@ -57,7 +57,8 @@ $(OBJ_DIR)/userInterface.o: userInterface.cpp \
 	utils/fifo.hpp \
 	utils/semaphore.hpp \
 	renderer/renderedFrame.hpp \
-	physician/physicItems.hpp
+	physician/physicItems.hpp \
+	overlay/fps.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/frameProductor.o: frameProductor.cpp \
@@ -117,6 +118,10 @@ $(OBJ_DIR)/pressurer.o: physician/pressurer.cpp \
 
 $(OBJ_DIR)/physicItems.o: physician/physicItems.cpp \
 	physician/physicItems.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/fps.o: overlay/fps.cpp \
+	overlay/fps.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 clean:
