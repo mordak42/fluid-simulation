@@ -211,9 +211,11 @@ void Pressurer::calcNegativeDivergence(void) {
             if (GRID[i][j].type == FLUID) {
                 b[i][j] -= scale * (GRID_U[i + 1][j].val - GRID_U[i][j].val +
                         GRID_V[i][j + 1].val - GRID_V[i][j].val);
+                std::cout << b[i][j] << std::endl;
             }
         }
     }
+    //:TODO see that
     /* handle boundary conditions */
     /* but we don't handle moving solids */
     double uSolid = 0;
@@ -267,6 +269,9 @@ void::Pressurer::PCG(void) {
 
     bzeroVect(p);
     cpyVect(b, r);//r = b;
+    //std::cout << normeVect(r) << std::endl;
+    if (normeVect(r) == 0)
+        return ;
     applyPrecon(r, z);
     cpyVect(z, s);//s = z;
     sigma = dotProduct(z, r);
