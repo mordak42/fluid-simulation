@@ -72,7 +72,7 @@ void UserInterface::start() {
 
     SDL_Event e;
     RenderedFrame *img;
-    Uint32 delay = 1000 / 40;
+    Uint32 delay = 1000 / 1;
     SDL_TimerID timerId = 0;
 
     float math_width = FRAME_WIDTH;
