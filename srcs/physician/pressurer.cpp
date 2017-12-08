@@ -18,6 +18,34 @@ void Pressurer::bzeroVect(double (&vect)[GRID_WIDTH][GRID_HEIGHT]) {
 	}
 }
 
+/* return the norm max(abs(vect[i][j])) */
+
+double Pressurer::normeVect(double (&vect)[GRID_WIDTH][GRID_HEIGHT]) {
+	double normeMax = 0;
+	for (int i = 0 ; i < GRID_WIDTH; i++) {
+		for (int j = 0 ; j < GRID_HEIGHT; j++) {
+			normeMax = max(abs(vect[i][j], normeMax);
+		}
+	}
+}
+
+double Pressurer::dotProduct(double (&a)[GRID_WIDTH][GRID_HEIGHT], double (&b)[GRID_WIDTH][GRID_HEIGHT]) {
+	double res;
+	for (int i = 0 ; i < GRID_WIDTH; i++) {
+		for (int j = 0 ; j < GRID_HEIGHT; j++) {
+			res += a[i][j] * b[i][j];
+		}
+	}
+}
+
+void Pressurer::cpyVect(double (&original)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_WIDTH][GRID_HEIGHT]) {
+	for (int i = 0 ; i < GRID_WIDTH; i++) {
+		for (int j = 0 ; j < GRID_HEIGHT; j++) {
+			res[i][j] = original[i][j];
+		}
+	}
+}
+
 /* Last step: One time we know pressure, we can update velocity for each cell of grid. */
 void Pressurer::updateVelocity(void) {
     double scale = DT / DX;
@@ -43,6 +71,15 @@ void Pressurer::updateVelocity(void) {
 }
 void Pressurer::calcA()
 {
+	/* initialize to 0 */
+	for (int i = 0 ; i < GRID_WIDTH; i++) {
+		for (int j = 0 ; j < GRID_HEIGHT; j++) {
+			A[i][j].diag = 0;
+			A[i][j].plusi = 0;
+			A[i][j].plusj = 0;
+		}
+	}
+
 	double scale = DT / (DX * DX); // DENSITY = 1 ?
 	for (int i = 0 ; i < GRID_WIDTH; i++) {
 		for (int j = 0 ; j < GRID_HEIGHT; j++) {
@@ -78,6 +115,7 @@ void::Pressurer::calcPrecon()
 	double tau = 0.97;
 	double sigma = 0.25;
 
+	bzeroVect(precon);
 	for(int i = 1; i < GRID_WIDTH; i++) {
 		for(int j = 1; j < GRID_WIDTH; j++) {
 			if (GRID[i][j].type == FLUID) {
@@ -94,14 +132,16 @@ void::Pressurer::calcPrecon()
 	}
 }
 
-void Pressurer::applyPrecon(double (&r)[GRID_WIDTH][GRID_HEIGHT])
+void Pressurer::applyPrecon(double (&r)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_WIDTH][GRID_HEIGHT])
 {
 	double t;
+	bzeroVect(q);
+	bzeroVect(res);
 	/* first solve Lq = r */
 	for(int i = 1; i < GRID_WIDTH; i++) {
 		for(int j = 1; j < GRID_WIDTH; j++) {
 			if (GRID[i][j].type == FLUID) {
-				t = r[i][j] - A[i-1][j].plusi * precon[i-1][j]*q[i-1][j] // WARNING initialize q
+				t = r[i][j] - A[i-1][j].plusi * precon[i-1][j]*q[i-1][j]
 					        - A[i][j-1].plusj * precon[i][j-1]*q[i][j-1];
 				q[i][j] = t * precon[i][j];
 			}
@@ -110,9 +150,9 @@ void Pressurer::applyPrecon(double (&r)[GRID_WIDTH][GRID_HEIGHT])
 	for(int i = GRID_WIDTH - 1; i >= 0; i--) {
 		for(int j = GRID_HEIGHT - 1; j >= 0; j--) {
 			if (GRID[i][j].type == FLUID) {
-				t = q[i][j] - A[i][j].plusi * precon[i][j]*z[i+1][j] // WARNING depasse grid_size
-					        - A[i][j-1].plusj * precon[i][j]*z[i][j+1];
-				z[i][j] = t * precon[i][j];
+				t = q[i][j] - A[i][j].plusi * precon[i][j]*res[i+1][j] // WARNING depasse grid_size
+					        - A[i][j-1].plusj * precon[i][j]*res[i][j+1];
+				res[i][j] = t * precon[i][j];
 			}
 		}
 	}
@@ -120,7 +160,7 @@ void Pressurer::applyPrecon(double (&r)[GRID_WIDTH][GRID_HEIGHT])
 
 /* perform A * s */
 
-void Pressurer::ApplyA(double (&s)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_WIDTH][GRID_HEIGHT])
+void Pressurer::applyA(double (&s)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_WIDTH][GRID_HEIGHT])
 {
 	double t;
 	for (int i = 0 ; i < GRID_WIDTH; i++) {
@@ -128,7 +168,7 @@ void Pressurer::ApplyA(double (&s)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_
 			if (GRID[i][j].type == FLUID) {
 				t = 0;
 				t += A[i][j].diag * s[i][j];
-				t += A[i][j].plusi * s[i+1][j];
+				t += A[i][j].plusi * s[i+1][j]; // TODO: depasse GRID_WIDTH
 				t += A[i][j].plusi * s[i-1][j];
 				t += A[i][j].plusj * s[i][j+1];
 				t += A[i][j].plusj * s[i][j-1];
@@ -137,68 +177,13 @@ void Pressurer::ApplyA(double (&s)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_
 		}
 	}
 }
-
-/*
-   • Setinitialguess p=0 
-   andresidualvector r=b
-   (Ifr=0then return p)
-   • Set auxiliary vector z = applyPreconditioner(r), 
-   and search vector s = z
-   • σ = dotproduct(z, r)
-   • Loop until done (or maximum iterations exceeded):
-   • Set auxiliary vector z = applyA(s)
-   • α = σ/dotproduct(z, s)
-   • Update p←p + αs and r←r−αz 
-   • If max |r| ≤ tol then return p
-   • Set auxiliary vector z = applyPreconditioner(r) 
-   • σnew = dotproduct(z, r)
-   • β = σnew/σ
-   • Setsearchvector s=z+βs
-   • σ=σnew
-   • Return p (and report iteration limit exceeded)
-   */
-/*
-   void::Pressurer::PCG() {
-   double sigma;
-   double sigma_new;
-   int i;
-   double alpha;
-
-   p = 0;
-   r = b;
-   z = applyPreconditioner(r);
-   s = z;
-   sigma = dotProduct(z, r);
-   for (i = 0; i < 200; i++)
-   {
-   z = applyA(s);
-   alpha = sigma / dotProduct(z, s);
-   p += alpha * s;
-   r -= alpha * z;
-   if (normeMax(r) <= tol)
-   return (p);
-   z = applyPreconditioner(r);
-   sigma_new = dotProduct(z, r);
-   beta = sigma_new / sigma;
-   s = z + beta * s;
-   sigma = sigma_new;
-   }
-   if (i == 200) {
-   std::cout << "Warning nb max iteration occur in PCG" :: << std::endl;
-   }
-   }
-   */
 /* calc b the right hand side of Ap = b */
+
 void Pressurer::calcNegativeDivergence(void) {
 	double scale = 1.0 / DX;
 
 	/* init 0 */
 	bzeroVect(b);
-/*	for (int i = 0 ; i < GRID_WIDTH; i++) {
-		for (int j = 0 ; j < GRID_HEIGHT; j++) {
-			b[i][j] = 0;
-		}
-	}*/
 	/* calculate negative divergence of velocity */
 	for (int i = 0 ; i < GRID_WIDTH; i++) {
 		for (int j = 0 ; j < GRID_HEIGHT; j++) {
@@ -232,6 +217,54 @@ void Pressurer::calcNegativeDivergence(void) {
 	}
 }
 
+void::Pressurer::PCG(void) {
+/*
+   1. Setinitialguess p=0 
+   2. andresidualvector r=b
+   3. (Ifr=0then return p)
+   4. Set auxiliary vector z = applyPreconditioner(r), 
+   5. and search vector s = z
+   6. σ = dotproduct(z, r)
+   7. Loop until done (or maximum iterations exceeded):
+   8. Set auxiliary vector z = applyA(s)
+   9. α = σ/dotproduct(z, s)
+   10 Update p←p + αs and r←r−αz 
+   • If max |r| ≤ tol then return p
+   • Set auxiliary vector z = applyPreconditioner(r) 
+   • σnew = dotproduct(z, r)
+   • β = σnew/σ
+   • Setsearchvector s=z+βs
+   • σ=σnew
+   • Return p (and report iteration limit exceeded)
+   */
+   double	sigma;
+   double	sigma_new;
+   int		i;
+   double	alpha;
+
+   bzeroVect(p);
+   cpyVect(b, r);//r = b;
+   applyPrecon(r, z);
+   cpyVect(z, s);//s = z;
+   sigma = dotProduct(z, r);
+   for (i = 0; i < 200; i++)
+   {
+	   z = applyA(s);
+	   alpha = sigma / dotProduct(z, s);
+	   p += alpha * s;
+	   r -= alpha * z;
+	   if (normeVect(r) <= tol)
+		   return (p);
+	   z = applyPrecon(r);
+	   sigma_new = dotProduct(z, r);
+	   beta = sigma_new / sigma;
+	   s = z + beta * s;
+	   sigma = sigma_new;
+   }
+   if (i == 200) {
+	   std::cout << "Warning nb max iteration occur in PCG" :: << std::endl;
+   }
+}
 
 void Pressurer::solvePressure(void) {
 
@@ -246,4 +279,5 @@ void Pressurer::solvePressure(void) {
 	(void)s;
 	(void)b;
 	(void)p;
+	(void)r;
 }
