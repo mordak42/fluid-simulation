@@ -8,6 +8,13 @@
 #include "physicItems.hpp"
 #include "physicLaw.hpp"
 
+struct Acell {
+	double diag;
+	double plusi;
+	double plusj;
+};
+
+
 namespace mod1
 {
 class Pressurer : public virtual PhysicLaw
@@ -15,10 +22,23 @@ class Pressurer : public virtual PhysicLaw
 public:
     Pressurer(const std::shared_ptr<PhysicItems> &physicItems);
     ~Pressurer();
-    void solve_pressure(void);
-	void update_velocity(void);
+	void solvePressure(void);
 private:
+	void updateVelocity(void);
+	void calcNegativeDivergence(void);
+	void bzeroVect(double (&vect)[GRID_WIDTH][GRID_HEIGHT]);
+	void calcA();
+	void calcPrecon(double (&r)[GRID_WIDTH][GRID_HEIGHT]);
+	void ApplyA(double (&s)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_WIDTH][GRID_HEIGHT]);
     const std::shared_ptr<PhysicItems> &m_physicItems;
+	struct Acell   A[GRID_WIDTH][GRID_HEIGHT];
+	double	       precon[GRID_WIDTH][GRID_HEIGHT];
+    double	       z[GRID_WIDTH][GRID_HEIGHT];
+    double	       s[GRID_WIDTH][GRID_HEIGHT];
+    double	       b[GRID_WIDTH][GRID_HEIGHT];
+    double	       p[GRID_WIDTH][GRID_HEIGHT];
+
+    double	       p[GRID_WIDTH][GRID_HEIGHT];
 };
 }
 
