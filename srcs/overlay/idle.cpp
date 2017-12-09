@@ -1,23 +1,23 @@
 
-#include "fps.hpp"
+#include "idle.hpp"
 
 using namespace mod1;
 
-Fps::Fps() : SdlContext() {
+Idle::Idle(int nbFrames) : SdlContext(), m_nbFrames(nbFrames) {
     /* Debug test */
     updateRefCount();
 }
 
-Fps::~Fps() {
-    for (int i = 0; i < MAX_FPS_NUMBER; i++) {
+Idle::~Idle() {
+    for (int i = 0; i < MAX_IDLE_NUMBER; i++) {
         SDL_FreeSurface(m_font_surface[i]);
     }
     TTF_CloseFont(m_font);
 }
 
-int Fps::fpsMeterInit() {
+int Idle::IdleMeterInit() {
     if (m_ready == true) {
-        std::cerr << "FPS overlay already initialized" << std::endl;
+        std::cerr << "Idle overlay already initialized" << std::endl;
         return false;
     }
     if (!TTF_WasInit()) {
@@ -32,15 +32,15 @@ int Fps::fpsMeterInit() {
     }
     SDL_Color color = {255, 255, 255, 0};
     char nbr[16 + 1];
-    for (int i = 0; i < MAX_FPS_NUMBER; i++) {
-        snprintf(nbr, 16, "DPS %.2i", i);
+    for (int i = 0; i < MAX_IDLE_NUMBER; i++) {
+        snprintf(nbr, 16, "Idle %.2i%%", i);
         m_font_surface[i] = TTF_RenderText_Solid(m_font, nbr, color);
     }
     m_ready = true;
     return true;
 }
 
-void Fps::setTimeOrigin() {
+void Idle::setIdleStartPoint() {
     if (m_ready == false) {
         std::cerr << "FPS meter were never initialized" << std::endl;
         return;
@@ -50,29 +50,31 @@ void Fps::setTimeOrigin() {
     m_originTime = high_resolution_clock::now();
 }
 
-void Fps::updateFpsCounter() {
+void Idle::updateIdleField() {
     if (m_ready == false) {
         std::cerr << "FPS meter were never initialized" << std::endl;
         return;
     }
     using namespace std::chrono;
 
-    high_resolution_clock::time_point timeNow = high_resolution_clock::now();
-    m_nbFrames++;
-    if (duration_cast<duration<double>>(timeNow - m_originTime).count() > 1) {
-        m_savedFps = m_nbFrames > 99 ? 99 : m_nbFrames;
-        m_nbFrames = 0;
-        m_originTime = timeNow;
-    }
+    struct SDL_Rect area = {m_width - m_font_surface[m_savedIdle]->w - PADDING_IDLE_X, PADDING_IDLE_Y, m_font_surface[m_savedIdle]->w, m_font_surface[m_savedIdle]->h};
+    SDL_BlitSurface(m_font_surface[m_savedIdle], NULL, m_surface, &area);
 }
 
-void Fps::updateFpsField() {
+void Idle::determineIdle() {
     if (m_ready == false) {
         std::cerr << "FPS meter were never initialized" << std::endl;
         return;
     }
-    if (m_savedFps < 0)
-        return;
-    struct SDL_Rect area = {m_width - m_font_surface[m_savedFps]->w - PADDING_FPS, PADDING_FPS, m_font_surface[m_savedFps]->w, m_font_surface[m_savedFps]->h};
-    SDL_BlitSurface(m_font_surface[m_savedFps], NULL, m_surface, &area);
+    using namespace std::chrono;
+    m_count++;
+    if (m_count > m_nbFrames / 4) {
+        high_resolution_clock::time_point timeNow = high_resolution_clock::now();
+        double timeElapsedMs = duration_cast<duration<double>>(timeNow - m_originTime).count() * 1000;
+        double ratio = timeElapsedMs / (1000.0 / m_nbFrames);
+        m_savedIdle = 100 - (100 * ratio);
+        if (m_savedIdle < 0)
+            m_savedIdle = 0;
+        m_count = 0;
+    }
 }

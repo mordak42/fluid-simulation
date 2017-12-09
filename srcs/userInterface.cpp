@@ -7,8 +7,13 @@ UserInterface::UserInterface(const std::shared_ptr<lib::Pool<RenderedFrame>> &po
                              int width,
                              int height) :
                                 SdlContext(width, height),
+                                Fps(),
+                                Idle(NB_FRAMES_PER_SECOND),
+                                Famine(),
                                 m_pool(pool)
 {
+    /* Debug test */
+    updateRefCount();
 }
 
 UserInterface::~UserInterface() {}
@@ -18,14 +23,19 @@ bool UserInterface::init() {
         std::cerr << __func__ << " : SDL2 already initialized" << std::endl;
         return false;
     }
-    m_fpsDisplayer.init();
-    m_font = TTF_OpenFont("srcs/fonts/Chalkduster.ttf", 25);
-    if (m_font == nullptr) {
-        std::cerr << "font is null" << std::endl;
-        return false;
-    }
+
     m_surface = SDL_GetWindowSurface(m_win);
     m_ready = true;
+
+    if (initFamine() == false)
+        std::cerr << "Cannot initialize Famine" << std::endl;
+    if (fpsMeterInit() == false)
+        std::cerr << "Cannot initialize FPS meter" << std::endl;
+    if (IdleMeterInit() == false)
+        std::cerr << "Cannot initialize Idle meter" << std::endl;
+
+    /* Debug test */
+    std::cout << "Actual parent refCount is " << getRefCount() << "/4" << std::endl;
     return true;
 }
 static Uint32 customEventCb(Uint32 interval, void *param)
@@ -62,7 +72,7 @@ void UserInterface::start() {
 
     SDL_Event e;
     RenderedFrame *img;
-    Uint32 delay = 1000 / 25;
+    Uint32 delay = 1000 / NB_FRAMES_PER_SECOND;
     SDL_TimerID timerId = 0;
 
     float math_width = FRAME_WIDTH;
@@ -72,10 +82,10 @@ void UserInterface::start() {
     float deltaWidth = math_width / m_width;
     float deltaHeight = math_height / m_height;
 
+    setTimeOrigin();
     timerId = SDL_AddTimer(delay, customEventCb, NULL);
     while (m_continueLoopHook && SDL_WaitEvent(&e))
     {
-        m_fpsDisplayer.setTimeOrigin();
         switch (e.type) {
             case SDL_KEYDOWN:
                 std::cout << "SDL_KEYDOWN: scan code -> " << e.key.keysym.scancode << std::endl;
@@ -105,7 +115,8 @@ void UserInterface::start() {
             case SDL_USEREVENT:
                 img = m_pool->popRenderedItem();
                 if (img) {
-                    m_fpsDisplayer.updateFpsCounter();
+                    setIdleStartPoint();
+                    updateFpsCounter();
                     for (int i = 0; i < (m_width * m_height); i++) {
                         float j;
                         math_x = (i % m_width) * deltaWidth;
@@ -116,15 +127,18 @@ void UserInterface::start() {
                             img->m_map[(int)j].b);
                     }
                     m_pool->pushOutdatedItem(img);
-                    m_fpsDisplayer.fillInformations(m_surface, false);
+                    updateFamineField();
+                    updateFpsField();
+                    updateIdleField();
                     SDL_UpdateWindowSurface(m_win);
-
-                    m_fpsDisplayer.updateIddleField();
-                } else {
-                    SDL_Color color = { 255, 255, 255, 0 };
-                    SDL_Surface *font_surface = TTF_RenderText_Solid(m_font, "FAMINE", color);
-                    SDL_BlitSurface(font_surface, NULL, m_surface, NULL);
-                    SDL_UpdateWindowSurface(m_win); // TODO SDL_UpdateWindowSurfaceRects
+                    determineIdle();
+                }
+                else {
+                    setFamine();                    //  TODO SDL_UpdateWindowSurfaceRects
+                    updateFamineField();
+                    updateFpsField();
+                    updateIdleField();
+                    SDL_UpdateWindowSurface(m_win);
                 }
                 break;
             case SDL_WINDOWEVENT:
@@ -146,7 +160,6 @@ void UserInterface::start() {
                 }
         }
     }
-    SDL_DestroyWindow(m_win);
     SDL_RemoveTimer(timerId);
     m_ready = false;
 }

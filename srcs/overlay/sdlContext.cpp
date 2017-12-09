@@ -58,6 +58,17 @@ bool SdlContext::init() {
 }
 
 SdlContext::~SdlContext() {
+    SDL_DestroyWindow(m_win);
     TTF_Quit();
     SDL_Quit();
+}
+
+/* Debug test */
+
+void SdlContext::updateRefCount() {
+    m_refCount++;
+}
+
+int SdlContext::getRefCount() {
+    return m_refCount;
 }

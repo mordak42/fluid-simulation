@@ -24,7 +24,7 @@ endif
 ### SOURCES ###
 
 SRC_CORE = main mod1 frameProductor renderedFrame renderer physician \
-userInterface semaphore lagrange polynom graviter physicLaw pressurer physicItems fps sdlContext
+userInterface semaphore lagrange polynom graviter physicLaw pressurer physicItems fps idle famine sdlContext
 VPATH = srcs
 
 OBJ_DIR = objs
@@ -49,6 +49,10 @@ $(OBJ_DIR)/mod1.o: mod1.cpp \
 	userInterface.hpp \
 	renderer/renderedFrame.hpp \
 	utils/pool.hpp \
+	overlay/fps.hpp \
+	overlay/idle.hpp \
+	overlay/famine.hpp \
+	overlay/sdlContext.hpp \
 	mod1.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
@@ -58,7 +62,10 @@ $(OBJ_DIR)/userInterface.o: userInterface.cpp \
 	utils/semaphore.hpp \
 	renderer/renderedFrame.hpp \
 	physician/physicItems.hpp \
-	overlay/fps.hpp
+	overlay/fps.hpp \
+	overlay/idle.hpp \
+	overlay/famine.hpp \
+	overlay/sdlContext.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/frameProductor.o: frameProductor.cpp \
@@ -121,7 +128,18 @@ $(OBJ_DIR)/physicItems.o: physician/physicItems.cpp \
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/fps.o: overlay/fps.cpp \
-	overlay/fps.hpp
+	overlay/fps.hpp \
+	overlay/sdlContext.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+	
+$(OBJ_DIR)/idle.o: overlay/idle.cpp \
+	overlay/idle.hpp \
+	overlay/sdlContext.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/famine.o: overlay/famine.cpp \
+	overlay/famine.hpp \
+	overlay/sdlContext.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/sdlContext.o: overlay/sdlContext.cpp \

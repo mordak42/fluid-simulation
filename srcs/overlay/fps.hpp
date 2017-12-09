@@ -2,36 +2,34 @@
 #ifndef __FPS_HPP__
 # define __FPS_HPP__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_ttf.h"
-#ifdef __cplusplus
-}
-#endif
+#define MAX_FPS_NUMBER 100
+#define PADDING_FPS 10
 
 #include <iostream>
 #include <chrono>
 
+#include "overlay/sdlContext.hpp"
+
 namespace mod1
 {
-class Fps
+class Fps : public virtual SdlContext
 {
+
 public:
     Fps();
     ~Fps();
-    int init();
+    int fpsMeterInit();
     void setTimeOrigin();
     void updateFpsCounter();
-    void updateIddleField();
-    void fillInformations(SDL_Surface *screen, bool enableDisplaying);
+    void updateFpsField();
 
 private:
     TTF_Font *m_font = nullptr;
-    bool m_ready = false;
+    SDL_Surface *m_font_surface[MAX_FPS_NUMBER] = {0};
     std::chrono::high_resolution_clock::time_point m_originTime;
     int m_nbFrames = 0;
+    int m_savedFps = -1;
+    bool m_ready = false;
 };
 }
 
