@@ -71,7 +71,7 @@ void Pressurer::updateVelocity(void) {
     double scale = DT / DX;
 
     for (int i = 0 ; i < GRID_WIDTH; i++) {
-        for (int j = 0 ; j < GRID_HEIGHT; j++) { //TODO: replace by if weight > 0
+        for (int j = 0 ; j < GRID_HEIGHT; j++) {
             if (i > 0 && (GRID_U[i][j].weight > 0 || GRID_U[i - 1][j].weight > 0))
             {
                 if (GRID[i][j].type == SOLID || GRID[i - 1][j].type == SOLID)
@@ -121,7 +121,7 @@ void Pressurer::calcA()
                     A[i][j].diag += scale;
                     A[i][j].plusj -= scale;
                 }
-                else if (j < GRID_HEIGHT && GRID[i][j + 1].type == FLUID) {
+                else if (j < GRID_HEIGHT && GRID[i][j + 1].type == AIR) {
                     A[i][j].diag += scale;
                 }
             }
@@ -211,7 +211,7 @@ void Pressurer::calcNegativeDivergence(void) {
             if (GRID[i][j].type == FLUID) {
                 b[i][j] -= scale * (GRID_U[i + 1][j].val - GRID_U[i][j].val +
                         GRID_V[i][j + 1].val - GRID_V[i][j].val);
-                std::cout << b[i][j] << std::endl;
+                //std::cout << b[i][j] << std::endl;
             }
         }
     }
@@ -260,7 +260,7 @@ void::Pressurer::PCG(void) {
        • σ=σnew
        • Return p (and report iteration limit exceeded)
        */
-    double  tol = 0.000001;
+    double  tol = 0.000001 * normeVect(b);
     double	sigma;
     double	sigma_new;
     int		i;
@@ -281,10 +281,10 @@ void::Pressurer::PCG(void) {
         alpha = sigma / dotProduct(z, s);
         /* p += alpha * s; */
         multScalVect(alpha, s, tmp); // tmp = alpha * s;
-        addVect(r, tmp, p); //p += alpha_s;
+        addVect(p, tmp, p); //p += alpha_s;
         /* r -= alpha * z; */
         multScalVect(-alpha, z, tmp); // tmp = -alpha * z;
-        addVect(r, tmp, r);
+        addVect(r, tmp, r); //r += tmp;
         if (normeVect(r) <= tol)
             return ;
         applyPrecon(r, z);
