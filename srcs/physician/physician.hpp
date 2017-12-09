@@ -9,8 +9,8 @@
 #include "graviter.hpp"
 #include "physicItems.hpp"
 
-#define PIC 0.95
-#define FLIP 1 - PIC
+#define PIC 0.02
+#define FLIP (1.0 - PIC)
 
 /*
  * up = PIC * interpolation(ugrid, xp) + FLIP * (up + interpolation(∆u_grid)

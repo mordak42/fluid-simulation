@@ -59,7 +59,7 @@ double Physician::b_spline(double r) {
  */
 
 double Physician::kernel(double x, double y) {
-    return (b_spline(x / DX) * hat(y / DY));
+    return (hat(x / DX) * hat(y / DY));
 }
 
 void Physician::put_velocity_on_grid() {
@@ -177,26 +177,41 @@ void Physician::get_velocity_from_the_grid() {
          *
 		 */
 		/* update u coordinate */
-		double sum = 0;
+		double sum_pic = 0;
+		double sum_flip = 0;
 		double weight = 0;
 
-		sum += kernel(x - i * DX, y - (j + 0.5) * DY) * GRID_U[i][j].val;
-		sum += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY) * GRID_U[i + 1][j].val;
+		sum_pic += kernel(x - i * DX, y - (j + 0.5) * DY) * GRID_U[i][j].val;
+		sum_pic += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY) * GRID_U[i + 1][j].val;
+
+		sum_flip += kernel(x - i * DX, y - (j + 0.5) * DY) * (GRID_U[i][j].val - GRID_U[i][j].oldVal);
+		sum_flip += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY) * (GRID_U[i + 1][j].val - GRID_U[i + 1][j].oldVal);
+
 		weight += kernel(x - i * DX, y - (j + 0.5) * DY);
 		weight += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY);
 
-		PARTICLES[p].u = sum / weight;
+		PARTICLES[p].u = PIC * (sum_pic / weight) + FLIP * (PARTICLES[p].u + sum_flip / weight);
+		//PARTICLES[p].u = sum_pic / weight;
+        std::cout << "sum_flip" << sum_flip << std::endl;
+        std::cout << "FLIP" << FLIP << std::endl;
 
 		/* update v coordinate */
-		sum = 0;
+		sum_pic = 0;
+		sum_flip = 0;
 		weight = 0;
 
-		sum += kernel(x - (i + 0.5) * DX, y - j * DY) * GRID_V[i][j].val;
-		sum += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY) * GRID_V[i][j + 1].val;
+		sum_pic += kernel(x - (i + 0.5) * DX, y - j * DY) * GRID_V[i][j].val;
+		sum_pic += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY) * GRID_V[i][j + 1].val;
+
+		sum_flip += kernel(x - (i + 0.5) * DX, y - j * DY) * (GRID_V[i][j].val - GRID_V[i][j].oldVal);
+		sum_flip += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY) * (GRID_V[i][j + 1].val - GRID_V[i][j + 1].oldVal);
+
 		weight += kernel(x - (i + 0.5) * DX, y - j * DY);
 		weight += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY);
 
-		PARTICLES[p].v = sum / weight;
+		PARTICLES[p].v = PIC * (sum_pic / weight) + FLIP * (PARTICLES[p].v + sum_flip / weight);
+		//PARTICLES[p].v = sum_pic / weight;
+        std::cout << "sum_flip" << sum_flip << std::endl;
     }
 }
 
@@ -210,7 +225,6 @@ int Physician::init_particules(int ox, int oy, int width, int height) {
     }
     return nb_particles;
 }
-
 
 void Physician::advect() {
 
