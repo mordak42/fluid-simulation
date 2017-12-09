@@ -45,6 +45,7 @@ struct velocity_field
     double  weight;
     double  sum;
     double  val;
+    double  oldVal;
 };
 
 enum material_type

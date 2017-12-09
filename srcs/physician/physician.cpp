@@ -69,6 +69,8 @@ void Physician::put_velocity_on_grid() {
                 GRID_V[i][j].sum = 0;
                 GRID_U[i][j].weight = 0;
                 GRID_V[i][j].weight = 0;
+                GRID_V[i][j].oldVal = 0;
+                GRID_U[i][j].oldVal = 0;
                 GRID_V[i][j].val = 0;
                 GRID_U[i][j].val = 0;
                 if (GRID[i][j].type == FLUID)
@@ -128,10 +130,14 @@ void Physician::put_velocity_on_grid() {
     }
     for (int i = 0; i < GRID_WIDTH + 1; i++) {
         for (int j = 0; j < GRID_HEIGHT + 1; j++) {
-            if (j < GRID_HEIGHT && GRID_U[i][j].weight)
+            if (j < GRID_HEIGHT && GRID_U[i][j].weight) {
                 GRID_U[i][j].val = GRID_U[i][j].sum / GRID_U[i][j].weight;
-            if (i < GRID_WIDTH && GRID_V[i][j].weight)
+                GRID_U[i][j].oldVal = GRID_U[i][j].val;
+			}
+            if (i < GRID_WIDTH && GRID_V[i][j].weight) {
                 GRID_V[i][j].val = GRID_V[i][j].sum / GRID_V[i][j].weight;
+                GRID_V[i][j].oldVal = GRID_V[i][j].val;
+			}
         }
     }
 }
