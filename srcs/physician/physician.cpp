@@ -59,7 +59,7 @@ double Physician::b_spline(double r) {
  */
 
 double Physician::kernel(double x, double y) {
-    return (hat(x / DX) * hat(y / DY));
+    return (b_spline(x / DX) * hat(y / DY));
 }
 
 void Physician::put_velocity_on_grid() {
@@ -205,9 +205,31 @@ int Physician::init_particules(int ox, int oy, int width, int height) {
     return nb_particles;
 }
 
+
 void Physician::advect() {
+
     for (int p = 0; p < NB_PARTICLES; p++) {
-        PARTICLES[p].x += PARTICLES[p].u * DT;
-        PARTICLES[p].y += PARTICLES[p].v * DT;
-    }
+		PARTICLES[p].x += PARTICLES[p].u * DT;
+		PARTICLES[p].y += PARTICLES[p].v * DT;
+	}
+
+/* hack pour que les particules ne rentre pas dans le mur */
+	/*
+    for (int p = 0; p < NB_PARTICLES; p++) {
+	double new_x;
+	double new_y;
+		new_x = PARTICLES[p].x + PARTICLES[p].u * DT;
+		new_y = PARTICLES[p].y + PARTICLES[p].v * DT;
+
+        int i = new_x / DX;
+        int j = new_y / DY;
+
+        if (i < 0 || i >= GRID_WIDTH || j < 0 || j >= GRID_HEIGHT || GRID[i][j].type == SOLID)
+            continue;
+		if (new_x / DX) {
+			PARTICLES[p].x = new_x;
+			PARTICLES[p].y = new_y;
+		}
+	}
+	*/
 }
