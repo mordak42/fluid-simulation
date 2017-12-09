@@ -2,31 +2,26 @@
 #ifndef __USER_INTERFACE_HPP
 # define __USER_INTERFACE_HPP
 
-# define WINDOW_WIDTH 2000
-# define WINDOW_HEIGHT 1000
+# define WINDOW_WIDTH 1920
+# define WINDOW_HEIGHT 1080
 # define WINDOW_SIZE (WINDOW_WIDTH * WINDOW_HEIGHT)
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_ttf.h"
-#ifdef __cplusplus
-}
-#endif
+# define NB_FRAMES_PER_SECOND 25
 
 #include <iostream>
 #include <mod1.hpp>
 
-#include "overlay/sdlContext.hpp"
 #include "utils/pool.hpp"
 #include "renderer/renderedFrame.hpp"
 #include "physician/physicItems.hpp"
+
+#include "overlay/sdlContext.hpp"
 #include "overlay/fps.hpp"
+#include "overlay/famine.hpp"
+#include "overlay/idle.hpp"
 
 namespace mod1
 {
-class UserInterface : public SdlContext
+class UserInterface : public Fps, public Idle, public Famine
 {
 public:
     UserInterface(const std::shared_ptr<lib::Pool<RenderedFrame>> &pool,
@@ -40,11 +35,8 @@ public:
 private:
     int Rgb_to_int(int r, int g, int b);
     const std::shared_ptr<lib::Pool<RenderedFrame>> &m_pool;
-    SDL_Surface *m_surface = nullptr;
-    TTF_Font *m_font = nullptr;
     bool m_ready = false;
     bool m_continueLoopHook = true;
-    Fps m_fpsDisplayer;
 };
 }
 
