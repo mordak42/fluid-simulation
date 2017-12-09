@@ -7,7 +7,7 @@
 # define FRAME_WIDTH 1000
 # define FRAME_HEIGHT 1000
 # define FRAME_SIZE (FRAME_WIDTH * FRAME_HEIGHT)
-# define RENDERED_FRAME_BPP 24
+# define RENDERED_FRAME_BPP 32
 
 namespace mod1
 {
@@ -23,6 +23,7 @@ public:
     void cleanFrame(uint8_t red, uint8_t green, uint8_t blue);
 
     struct t_pix {
+        uint8_t a;
         uint8_t r;
         uint8_t g;
         uint8_t b;

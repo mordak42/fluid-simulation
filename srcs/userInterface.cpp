@@ -118,13 +118,9 @@ void UserInterface::start() {
                     setIdleStartPoint();
                     updateFpsCounter();
                     for (int i = 0; i < (m_width * m_height); i++) {
-                        float j;
                         math_x = (i % m_width) * deltaWidth;
                         math_y = (i / m_width) * deltaHeight;
-                        j = math_y * math_width + math_x;
-                        ((int *)m_surface->pixels)[i] = Rgb_to_int(img->m_map[(int)j].r,
-                            img->m_map[(int)j].g,
-                            img->m_map[(int)j].b);
+                        ((int *)m_surface->pixels)[i] = ((int *)img->m_map)[(int)(math_y * math_width + math_x)];
                     }
                     m_pool->pushOutdatedItem(img);
                     updateFamineField();

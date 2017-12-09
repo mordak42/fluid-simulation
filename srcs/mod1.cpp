@@ -52,7 +52,7 @@ Mod1Implementation::~Mod1Implementation() {
 }
 
 void Mod1Implementation::run(void) {
-    m_pool = std::make_shared<lib::Pool<RenderedFrame>>(1);
+    m_pool = std::make_shared<lib::Pool<RenderedFrame>>(NB_BUFFERED_FRAMES);
 
     m_pool->init();
     std::cout << "initialization done" << std::endl;

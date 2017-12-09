@@ -21,11 +21,7 @@ void Renderer::raytrace(RenderedFrame *img) {
             int grid_coord_i = (double)x * prop_x;
             int grid_coord_j = (GRID_HEIGHT - 1 - (double)y * prop_y);
             if (GRID[grid_coord_i][grid_coord_j].type == SOLID)
-            {
-                img->m_map[y * FRAME_WIDTH + x].r = 0xFF;
-                img->m_map[y * FRAME_WIDTH + x].g = 0xFF;
-                img->m_map[y * FRAME_WIDTH + x].b = 0xFF;
-            }
+                ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x00ffffff;
         }
     }
     prop_x = frame_width / real_width;
@@ -38,8 +34,6 @@ void Renderer::raytrace(RenderedFrame *img) {
         int index = y * FRAME_WIDTH + x;
         if (index < 0 || index >= FRAME_SIZE)
             continue ;
-        img->m_map[index].b = 0x00;
-        img->m_map[index].g = 0x00;
-        img->m_map[index].r = 0xFF;
+        ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x000000ff;
     }
 }
