@@ -6,7 +6,6 @@
 #define PADDING_FPS 10
 
 #include <iostream>
-#include <chrono>
 
 #include "overlay/sdlContext.hpp"
 

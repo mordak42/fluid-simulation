@@ -137,7 +137,7 @@ void::Pressurer::calcPrecon()
 
     bzeroVect(precon);
     for(int i = 1; i < GRID_WIDTH; i++) {
-        for(int j = 1; j < GRID_WIDTH; j++) {
+        for(int j = 1; j < GRID_HEIGHT; j++) {
             if (GRID[i][j].type == FLUID) {
                 e = A[i][j].diag - (A[i - 1][j].plusi * precon[i-1][j] * A[i-1][j].plusi * precon[i-1][j]) -
                     (A[i][j-1].plusj * precon[i][j-1] * A[i][j-1].plusj * precon[i][j-1]) -
@@ -159,7 +159,7 @@ void Pressurer::applyPrecon(double (&r)[GRID_WIDTH][GRID_HEIGHT], double (&res)[
     bzeroVect(res);
     /* first solve Lq = r */
     for(int i = 1; i < GRID_WIDTH; i++) {
-        for(int j = 1; j < GRID_WIDTH; j++) {
+        for(int j = 1; j < GRID_HEIGHT; j++) {
             if (GRID[i][j].type == FLUID) {
                 t = r[i][j] - A[i-1][j].plusi * precon[i-1][j]*q[i-1][j]
                     - A[i][j-1].plusj * precon[i][j-1]*q[i][j-1];

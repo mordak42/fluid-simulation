@@ -7,7 +7,6 @@
 #define PADDING_IDLE_Y 10
 
 #include <iostream>
-#include <chrono>
 
 #include "overlay/sdlContext.hpp"
 
