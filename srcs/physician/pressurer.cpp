@@ -190,9 +190,9 @@ void Pressurer::applyA(double (&s)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_
                 t = 0;
                 t += A[i][j].diag * s[i][j];
                 t += A[i][j].plusi * s[i+1][j]; // TODO: depasse GRID_WIDTH
-                t += A[i][j].plusi * s[i-1][j];
+                t += A[i - 1][j].plusi * s[i-1][j];
                 t += A[i][j].plusj * s[i][j+1];
-                t += A[i][j].plusj * s[i][j-1];
+                t += A[i][j - 1].plusj * s[i][j-1];
                 res[i][j] = t;
             }
         }

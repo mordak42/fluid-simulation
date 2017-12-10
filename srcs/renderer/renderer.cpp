@@ -34,6 +34,6 @@ void Renderer::raytrace(RenderedFrame *img) {
         int index = y * FRAME_WIDTH + x;
         if (index < 0 || index >= FRAME_SIZE)
             continue ;
-        ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x000000ff;
+        ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x5ecabb;
     }
 }

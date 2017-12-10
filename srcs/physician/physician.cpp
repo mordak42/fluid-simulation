@@ -192,8 +192,8 @@ void Physician::get_velocity_from_the_grid() {
 
 		PARTICLES[p].u = PIC * (sum_pic / weight) + FLIP * (PARTICLES[p].u + sum_flip / weight);
 		//PARTICLES[p].u = sum_pic / weight;
-        std::cout << "sum_flip" << sum_flip << std::endl;
-        std::cout << "FLIP" << FLIP << std::endl;
+        //std::cout << "sum_flip" << sum_flip << std::endl;
+        //std::cout << "FLIP" << FLIP << std::endl;
 
 		/* update v coordinate */
 		sum_pic = 0;
@@ -211,7 +211,7 @@ void Physician::get_velocity_from_the_grid() {
 
 		PARTICLES[p].v = PIC * (sum_pic / weight) + FLIP * (PARTICLES[p].v + sum_flip / weight);
 		//PARTICLES[p].v = sum_pic / weight;
-        std::cout << "sum_flip" << sum_flip << std::endl;
+        //std::cout << "sum_flip" << sum_flip << std::endl;
     }
 }
 

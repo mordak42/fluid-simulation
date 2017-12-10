@@ -99,7 +99,7 @@ bool FrameProductor::parseFile() {
         for (int j = -GRID_HEIGHT / 2 ; j < GRID_HEIGHT / 2; j++)
             GRID[i][j + GRID_HEIGHT / 2].type = m_groundLevel.eval(i * DX) - j *DY > 0 ? SOLID : AIR;
         }
-    m_physician->init_particules(150, 40, 20, 200);
+    m_physician->init_particules(150, 40, 20, 20);
     return true;
 }
 
