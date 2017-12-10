@@ -64,6 +64,8 @@ inline int UserInterface::Rgb_to_int(int r, int g, int b) {
     return (r << 16 | g << 8 | b);
 }
 
+#include <unistd.h>
+
 void UserInterface::start() {
     if (m_ready == false) {
         std::cerr << __func__ << " : SDL2 not initialized" << std::endl;
@@ -73,7 +75,7 @@ void UserInterface::start() {
     SDL_Event e;
     RenderedFrame *img;
     Uint32 delay = 1000 / NB_FRAMES_PER_SECOND;
-    SDL_TimerID timerId = 0;
+   // SDL_TimerID timerId = 0;
 
     float math_width = FRAME_WIDTH;
     float math_height = FRAME_HEIGHT;
@@ -81,7 +83,9 @@ void UserInterface::start() {
     float deltaHeight = math_height / m_height;
 
     setTimeOrigin();
-    timerId = SDL_AddTimer(delay, customEventCb, NULL);
+    SDL_TimerID timerId = SDL_AddTimer(delay, customEventCb, NULL);
+    bool displayWanted = false;
+    bool oneTimeDisplay = true;
     while (m_continueLoopHook && SDL_WaitEvent(&e))
     {
         switch (e.type) {
@@ -93,15 +97,11 @@ void UserInterface::start() {
                         break;
                     case SDL_SCANCODE_S:
                         std::cout << "touch start" << std::endl;
-                        if (timerId == 0)
-                            timerId = SDL_AddTimer(delay, customEventCb, NULL);
+                        displayWanted = true;
                         break;
                     case SDL_SCANCODE_H:
                         std::cout << "touch halt" << std::endl;
-                        if (timerId) {
-                            SDL_RemoveTimer(timerId);
-                            timerId = 0;
-                        }
+                        displayWanted = false;
                         break;
                     default:
                         break;
@@ -111,8 +111,11 @@ void UserInterface::start() {
                 stop();
                 break;
             case SDL_USEREVENT:
+                if (!displayWanted && !oneTimeDisplay)
+                    break;
                 img = m_pool->popRenderedItem();
                 if (img) {
+                    oneTimeDisplay = false;
                     setIdleStartPoint();
                     updateFpsCounter();
                     int h = m_width;
@@ -148,6 +151,13 @@ void UserInterface::start() {
                         std::cout << "new size = " << m_width << " - " << m_height << std::endl;
                         deltaWidth = math_width / m_width;
                         deltaHeight = math_height / m_height;
+                        if (displayWanted == false) {
+#ifdef __APPLE__
+                            // Work-Around on OSX, when switch to fullScreen mode, resize event come sometimes too soon.
+                            usleep(250000);
+#endif
+                            oneTimeDisplay = true;
+                        }
                         break;
                     case SDL_WINDOWEVENT_MOVED:
                         std::cout << "window has moved !" << std::endl;
