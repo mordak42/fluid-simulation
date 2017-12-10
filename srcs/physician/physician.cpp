@@ -59,7 +59,7 @@ double Physician::b_spline(double r) {
  */
 
 double Physician::kernel(double x, double y) {
-    return (hat(x / DX) * hat(y / DY));
+    return (b_spline(x / DX) * b_spline(y / DY));
 }
 
 void Physician::put_velocity_on_grid() {
@@ -77,7 +77,7 @@ void Physician::put_velocity_on_grid() {
                     GRID[i][j].type = AIR;
         }
     }
-    for (int p = 0; p < NB_PARTICLES; p++) {
+    for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
         /*
          * m_grid[i][j] is the case where the particle is
          * so the particle velocity contribute to
@@ -153,7 +153,7 @@ void Physician::flip(int i, int j) {
 }
 
 void Physician::get_velocity_from_the_grid() {
-    for (int p = 0; p < NB_PARTICLES; p++) {
+    for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
         double x = PARTICLES[p].x;
         double y = PARTICLES[p].y;
 
@@ -218,9 +218,11 @@ void Physician::get_velocity_from_the_grid() {
 
 int Physician::init_particules(int ox, int oy, int width, int height) {
     int nb_particles = width * height * DENSITY_RACINE * DENSITY_RACINE;
-    for (int i = 0; i < nb_particles; i++) {
+    unsigned long int i = PARTICLES.size();
+    PARTICLES.resize(i + nb_particles);
+    for (; i < PARTICLES.size(); i++) {
         PARTICLES[i].x = ((double)ox + ((double)(i % (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DX;
-        PARTICLES[i].y = ((double)oy - ((double)(i / (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DY;
+        PARTICLES[i].y = ((double)oy + ((double)(i / (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DY;
         PARTICLES[i].v = 0;
         PARTICLES[i].u = 0;
     }
@@ -229,7 +231,7 @@ int Physician::init_particules(int ox, int oy, int width, int height) {
 
 void Physician::advect() {
 
-    for (int p = 0; p < NB_PARTICLES; p++) {
+    for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
 		PARTICLES[p].x += PARTICLES[p].u * DT;
 		PARTICLES[p].y += PARTICLES[p].v * DT;
 	}

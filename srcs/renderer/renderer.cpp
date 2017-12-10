@@ -27,7 +27,7 @@ void Renderer::raytrace(RenderedFrame *img) {
     prop_x = frame_width / real_width;
     prop_y = frame_height / real_height;
 
-    for (int p = 0; p < NB_PARTICLES; p++)
+    for (unsigned long int p = 0; p < PARTICLES.size(); p++)
     {
         int x = PARTICLES[p].x * prop_x;
         int y = FRAME_HEIGHT - 1 - PARTICLES[p].y * prop_y;

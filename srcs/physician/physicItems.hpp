@@ -4,6 +4,8 @@
 
 #include "../renderer/renderedFrame.hpp"
 
+#include <vector>
+
 /* Ugly macro definitions */
 #define GRID m_physicItems->m_grid
 #define PARTICLES m_physicItems->m_particles
@@ -14,14 +16,12 @@
 # define GRID_WIDTH 200
 # define GRID_HEIGHT 200
 # define GRID_SIZE (GRID_WIDTH) * (GRID_HEIGHT)
-# define NB_PARTICLES 1600
 
 # define DENSITY_RACINE 2
 
 /* Realism Number of meters */
 # define REAL_WIDTH 20
 # define REAL_HEIGHT 20
-
 
 const double grid_width = GRID_WIDTH;
 const double grid_height = GRID_HEIGHT;
@@ -74,9 +74,9 @@ public:
     PhysicItems();
     ~PhysicItems();
     struct cell m_grid[GRID_WIDTH][GRID_HEIGHT];
-    struct particle m_particles[NB_PARTICLES];
     struct velocity_field m_grid_u[GRID_WIDTH + 1][GRID_HEIGHT];
     struct velocity_field m_grid_v[GRID_WIDTH][GRID_HEIGHT + 1];
+    std::vector<struct particle> m_particles;
 };
 }
 
