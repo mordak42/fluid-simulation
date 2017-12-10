@@ -2,9 +2,6 @@
 #ifndef __USER_INTERFACE_HPP
 # define __USER_INTERFACE_HPP
 
-# define WINDOW_WIDTH 1920
-# define WINDOW_HEIGHT 1080
-# define WINDOW_SIZE (WINDOW_WIDTH * WINDOW_HEIGHT)
 # define NB_FRAMES_PER_SECOND 25
 
 #include <iostream>
