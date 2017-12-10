@@ -296,7 +296,7 @@ void::Pressurer::PCG(void) {
         sigma = sigma_new;
     }
     if (i == 200) {
-        std::cout << "Warning nb max iteration occur in PCG" << std::endl;
+     //   std::cout << "Warning nb max iteration occur in PCG" << std::endl;
     }
 }
 

@@ -77,8 +77,6 @@ void UserInterface::start() {
 
     float math_width = FRAME_WIDTH;
     float math_height = FRAME_HEIGHT;
-    int math_x;
-    int math_y;
     float deltaWidth = math_width / m_width;
     float deltaHeight = math_height / m_height;
 
@@ -117,11 +115,35 @@ void UserInterface::start() {
                 if (img) {
                     setIdleStartPoint();
                     updateFpsCounter();
+ /*
+  * NEW VERSION:
+  * functional test at 1600 * 900:
+  * 91 - 92% with void screen
+  * 75 - 76% with picture in old style version
+  * 90 - 91 % with big upgrade XD
+  */
+                    int h = m_width;
+                    for (int y = 0; y < m_height; y++) {
+                        double j = (int)(deltaHeight * y) * math_width;
+                        for (int i = h - m_width; i < h; i++) {
+                            ((int *)m_surface->pixels)[i] = ((int *)img->m_map)[(int)(j)];
+                            j += deltaWidth;
+                        }
+                        h += m_width;
+                    }
+/*
+ * OLD VERSION: TODO Test if the result is the same
+ **/
+
+ /*
+                    int math_x;
+                    int math_y;
                     for (int i = 0; i < (m_width * m_height); i++) {
                         math_x = (i % m_width) * deltaWidth;
                         math_y = (i / m_width) * deltaHeight;
                         ((int *)m_surface->pixels)[i] = ((int *)img->m_map)[(int)(math_y * math_width + math_x)];
                     }
+*/
                     m_pool->pushOutdatedItem(img);
                     updateFamineField();
                     updateFpsField();
