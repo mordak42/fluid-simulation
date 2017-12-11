@@ -1,6 +1,8 @@
 
 #include "physician.hpp"
 
+#include <ctime>
+
 using namespace mod1;
 
 Physician::Physician(const std::shared_ptr<PhysicItems> &physicItems) :

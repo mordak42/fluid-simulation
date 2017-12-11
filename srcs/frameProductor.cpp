@@ -99,13 +99,16 @@ bool FrameProductor::parseFile() {
         for (int j = -GRID_HEIGHT / 2 ; j < GRID_HEIGHT / 2; j++)
             GRID[i][j + GRID_HEIGHT / 2].type = m_groundLevel.eval(i * DX) - j *DY > 0 ? SOLID : AIR;
         }
-    return m_physician->init_particules(100, 140, 80, 40, true) > 0 ? true : false;
+    //return m_physician->init_particules(100, 140, 80, 40, true) > 0 ? true : false;
+    return true;
 }
 
 void FrameProductor::threadHandler() {
     std::lock_guard<std::mutex> lock(m_threadProtection);
-
+    int i = 0;
     while (true) {
+        if (i % 100 == 0)
+            m_physician->init_particules(140, 40, 20, 20, true);
         m_physician->put_velocity_on_grid();
         m_physician->applyGravity();
         m_physician->solvePressure();
@@ -119,5 +122,6 @@ void FrameProductor::threadHandler() {
         img->cleanFrame();
         m_renderer->raytrace(img);
         m_pool->pushRenderedItem(img);
+        i++;
     }
 }
