@@ -16,6 +16,39 @@
  * up = PIC * interpolation(ugrid, xp) + FLIP * (up + interpolation(∆u_grid)
  */
 
+struct vector3d
+{
+    double x, y, z;
+ 
+    inline vector3d( void ) {}
+    inline vector3d( const double X, const double Y, const double Z )
+    { x = X; y = Y; z = Z; }
+
+    inline vector3d operator + ( const vector3d& A ) const
+    { return vector3d( x + A.x, y + A.y, z + A.z ); }
+
+    inline vector3d operator += ( const vector3d& A ) const
+    { return vector3d( x + A.x, y + A.y, z + A.z ); }
+
+    inline vector3d operator - ( const vector3d& A ) const
+    { return vector3d( x - A.x, y - A.y, z - A.z ); }
+
+    inline vector3d operator + ( const double A ) const
+    { return vector3d( x + A, y + A, z + A ); }
+
+    inline vector3d operator * ( const double A ) const
+    { return vector3d( x * A, y * A, z * A ); }
+
+    inline vector3d operator / ( const double A ) const
+    { return vector3d( x / A, y / A, z / A ); }
+
+    inline vector3d operator - ( const double A ) const
+    { return vector3d( x - A, y - A, z - A ); }
+
+    inline double Dot( const vector3d& A ) const
+    { return A.x*x + A.y*y + A.z*z; }
+};
+
 namespace mod1
 {
 class Physician : public Graviter, public Pressurer
@@ -35,6 +68,10 @@ private:
 	double hat(double r);
 	double b_spline(double r);
     const std::shared_ptr<PhysicItems> &m_physicItems;
+	double evaluateComponentVelocity(vector3d position, vector3d gridOffset, char field);
+	double cubicInterpolate(double p[4], double x);
+	double	 bicubicInterpolate(double p[4][4], double x, double y);
+	vector3d evaluateVelocityAtPosition(vector3d position);
 };
 }
 
