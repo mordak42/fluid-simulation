@@ -3,50 +3,14 @@
 
 #include <thread>
 
-/*
- *      the MAC grid
- *
- *          j, v
- *          |
- *          |
- *          |
- *          |
- *          |---------------- i, u
- *          /
- *         /
- *        /
- *       /
- *      k, w
- *
- *      p(i,j,k) = pi,j,k
- *      u(i,j,k) = ui−1/2,j,k
- *      v(i,j,k) = vi,j−1/2,k
- *      w(i,j,k) = wi,j,k−1/2
- *
- * in 2 dimensions:
- *
- *                         v(i, j + 1/2) <=> v(i, j + 1)
- *                           ^
- *                    _______|_______
- *                    |             |
- *                    |             |
- *  u(i - 1/2, j)   <-|  p(i,j)     |-> u(i + 1/2, j) <=> v(i + 1, j)
- *  <=> u(i - 1/2, j) |             |
- *                    |             |
- *                    ---------------
- *                           |
- *                         v(i, j - 1/2) <=> v(i, j)
- *
- */
-
 using namespace mod1;
 
 FrameProductor::FrameProductor(const std::shared_ptr<lib::Pool<RenderedFrame>> &pool) :
+                                                                    PhysicItems(),
+                                                                    Renderer(),
+                                                                    Physician(),
                                                                     m_pool(pool)
 {
-    m_physicItems = std::make_shared<PhysicItems>();
-    m_physician.reset(new Physician(m_physicItems));
-    m_renderer.reset(new Renderer(m_physicItems));
 }
 
 FrameProductor::~FrameProductor() {}
@@ -108,19 +72,19 @@ void FrameProductor::threadHandler() {
     int i = 0;
     while (true) {
         if (i % 100 == 0)
-            m_physician->init_particules(140, 40, 20, 20, true);
-        m_physician->put_velocity_on_grid();
-        m_physician->applyGravity();
-        m_physician->solvePressure();
-        m_physician->get_velocity_from_the_grid();
-        m_physician->advect();
+            init_particules(140, 40, 20, 20, true);
+        put_velocity_on_grid();
+        applyGravity();
+        solvePressure();
+        get_velocity_from_the_grid();
+        advect();
         RenderedFrame *img = m_pool->popOutdatedItem();
         if (m_keepGoing == false)
             break;
         if (img == NULL)
             continue;
         img->cleanFrame();
-        m_renderer->raytrace(img);
+        raytrace(img);
         m_pool->pushRenderedItem(img);
         i++;
     }

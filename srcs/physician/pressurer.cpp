@@ -3,10 +3,7 @@
 #include <math.h>
 using namespace mod1;
 
-Pressurer::Pressurer(const std::shared_ptr<PhysicItems> &physicItems) :
-    PhysicLaw(),
-    m_physicItems(physicItems)
-{}
+Pressurer::Pressurer() {}
 
 Pressurer::~Pressurer() {}
 
@@ -240,26 +237,28 @@ void Pressurer::calcNegativeDivergence(void) {
     }
 }
 
+
+/*
+ * Setinitialguess p=0 
+ * andresidualvector r=b
+ * (Ifr=0then return p)
+ * Set auxiliary vector z = applyPreconditioner(r), 
+ * and search vector s = z
+ * σ = dotproduct(z, r)
+ * Loop until done (or maximum iterations exceeded):
+ * Set auxiliary vector z = applyA(s)
+ * α = σ/dotproduct(z, s)
+ * Update p←p + αs and r←r−αz 
+ * If max |r| ≤ tol then return p
+ * Set auxiliary vector z = applyPreconditioner(r) 
+ * σnew = dotproduct(z, r)
+ * β = σnew/σ
+ * Setsearchvector s=z+βs
+ * σ=σnew
+ * Return p (and report iteration limit exceeded)
+ */
+
 void::Pressurer::PCG(void) {
-    /*
-       1. Setinitialguess p=0 
-       2. andresidualvector r=b
-       3. (Ifr=0then return p)
-       4. Set auxiliary vector z = applyPreconditioner(r), 
-       5. and search vector s = z
-       6. σ = dotproduct(z, r)
-       7. Loop until done (or maximum iterations exceeded):
-       8. Set auxiliary vector z = applyA(s)
-       9. α = σ/dotproduct(z, s)
-       10 Update p←p + αs and r←r−αz 
-       • If max |r| ≤ tol then return p
-       • Set auxiliary vector z = applyPreconditioner(r) 
-       • σnew = dotproduct(z, r)
-       • β = σnew/σ
-       • Setsearchvector s=z+βs
-       • σ=σnew
-       • Return p (and report iteration limit exceeded)
-       */
     double  tol = 0.000001 * normeVect(b);
     double	sigma;
     double	sigma_new;
@@ -306,11 +305,4 @@ void Pressurer::solvePressure(void) {
     calcPrecon();
     PCG();
     updateVelocity();
-    (void)A;
-    (void)precon;
-    (void)z;
-    (void)s;
-    (void)b;
-    (void)p;
-    (void)r;
 }

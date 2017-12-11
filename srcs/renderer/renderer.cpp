@@ -3,8 +3,7 @@
 
 using namespace mod1;
 
-Renderer::Renderer(const std::shared_ptr<PhysicItems> &physicItems) :
-                                        m_physicItems(physicItems)
+Renderer::Renderer()
 {
 }
 

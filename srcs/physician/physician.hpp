@@ -19,9 +19,10 @@
 namespace mod1
 {
 class Physician : public Graviter, public Pressurer
+
 {
 public:
-    Physician(const std::shared_ptr<PhysicItems> &physicItems);
+    Physician();
     ~Physician();
     uint32_t init_particules(uint32_t ox, uint32_t oy, uint32_t width, uint32_t height, bool randomize);
     void get_velocity_from_the_grid();
@@ -33,7 +34,6 @@ private:
 	double kernel(double x, double y);
 	double hat(double r);
 	double b_spline(double r);
-    const std::shared_ptr<PhysicItems> &m_physicItems;
 	double evaluateComponentVelocity(vector3d position, vector3d gridOffset, char field, char method);
 	double cubicInterpolate(double p[4], double x);
 	double	 bicubicInterpolate(double p[4][4], double x, double y);

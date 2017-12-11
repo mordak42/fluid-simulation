@@ -9,14 +9,13 @@
 
 namespace mod1
 {
-class Renderer
+class Renderer: public virtual PhysicItems
 {
 public:
-    Renderer(const std::shared_ptr<PhysicItems> &physicItems);
+    Renderer();
     ~Renderer();
     void raytrace(RenderedFrame *img);
 private:
-    const std::shared_ptr<PhysicItems> &m_physicItems;
 };
 }
 
