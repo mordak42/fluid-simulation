@@ -216,13 +216,28 @@ void Physician::get_velocity_from_the_grid() {
     }
 }
 
-int Physician::init_particules(int ox, int oy, int width, int height) {
-    int nb_particles = width * height * DENSITY_RACINE * DENSITY_RACINE;
+uint32_t Physician::init_particules(uint32_t ox, uint32_t oy, uint32_t width, uint32_t height, bool randomize) {
+    if (ox + width >= GRID_WIDTH || oy + height >= GRID_HEIGHT) {
+        std::cerr << "Some particles will be outside the grid: " << ox + width << " " << oy + height << " on " << GRID_WIDTH << "*" << GRID_HEIGHT << std::endl;
+        return 0;
+    }
+    uint32_t nb_particles = width * height * DENSITY_RACINE * DENSITY_RACINE;
+    if (nb_particles == 0) {
+        std::cerr << "There are no particle to fill it" << std::endl;
+        return 0;
+    }
+    std::srand(std::time(0));
     unsigned long int i = PARTICLES.size();
     PARTICLES.resize(i + nb_particles);
     for (; i < PARTICLES.size(); i++) {
-        PARTICLES[i].x = ((double)ox + ((double)(i % (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DX;
-        PARTICLES[i].y = ((double)oy + ((double)(i / (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DY;
+        double a = ox;
+        double b = oy;
+        if (randomize) {
+            a += (double)std::rand() / RAND_MAX * DX / DENSITY_RACINE;
+            b += (double)std::rand() / RAND_MAX * DY / DENSITY_RACINE;
+        }
+        PARTICLES[i].x = (a + ((double)(i % (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DX;
+        PARTICLES[i].y = (b + ((double)(i / (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DY;
         PARTICLES[i].v = 0;
         PARTICLES[i].u = 0;
     }

@@ -59,7 +59,8 @@ void Mod1Implementation::run(void) {
     m_frameProductor.reset(new FrameProductor(m_pool));
     m_userInterface.reset(new UserInterface(m_pool, 1920, 1080));
 
-    m_frameProductor->parseFile();
+    if (!m_frameProductor->parseFile())
+        return;
     m_frameProductor->start();
     m_userInterface->init();
 
