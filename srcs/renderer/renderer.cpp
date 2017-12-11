@@ -29,8 +29,8 @@ void Renderer::raytrace(RenderedFrame *img) {
 
     for (unsigned long int p = 0; p < PARTICLES.size(); p++)
     {
-        int x = PARTICLES[p].x * prop_x;
-        int y = FRAME_HEIGHT - 1 - PARTICLES[p].y * prop_y;
+        int x = PARTICLES[p].pos.x * prop_x;
+        int y = FRAME_HEIGHT - 1 - PARTICLES[p].pos.y * prop_y;
         int index = y * FRAME_WIDTH + x;
         if (index < 0 || index >= FRAME_SIZE)
             continue ;

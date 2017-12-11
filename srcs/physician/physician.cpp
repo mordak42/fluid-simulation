@@ -49,20 +49,29 @@ double Physician::bicubicInterpolate(double p[4][4], double x, double y) {
     return cubicInterpolate(arr, y);
 }
 
-double Physician::evaluateComponentVelocity(vector3d position, 
-                                 vector3d gridOffset, 
-                                 char field) {
-    position += gridOffset;
-    int gi = position.x / DX; 
-    int gj = position.y / DX; 
+double Physician::evaluateComponentVelocity(vector3d position,
+										    vector3d gridOffset,
+										    char field, char method)
+{
+	//std::cout << "before: "<<position.x << std::endl;
+	//std::cout << "before: "<<position.y << std::endl;
+    position = position - gridOffset;
+	//std::cout << position.x << std::endl;
+	//std::cout << position.y << std::endl;
+    int gi = position.x / DX;
+    int gj = position.y / DX;
 
 	double points[4][4];
 	for (int j = 0; j < 4; j++) {
 		for (int i = 0; i < 4; i++) {
-			if (field == 'u')
+			if (field == 'u' && method == 'p')
 				points[j][i] = GRID_U[i + gi - 1][j + gj - 1].val;
-			else if (field == 'v')
+			else if (field == 'v' && method == 'p')
 				points[j][i] = GRID_V[i + gi - 1][j + gj - 1].val;
+			else if (field == 'u' && method == 'f')
+				points[j][i] = GRID_U[i + gi - 1][j + gj - 1].val - GRID_U[i + gi - 1][j + gj - 1].oldVal;
+			else if (field == 'v' && method == 'f')
+				points[j][i] = GRID_V[i + gi - 1][j + gj - 1].val - GRID_V[i + gi - 1][j + gj - 1].oldVal;
 		}
 	}
 
@@ -72,14 +81,14 @@ double Physician::evaluateComponentVelocity(vector3d position,
 	return bicubicInterpolate(points, interp.x, interp.y);
 }
 
-vector3d Physician::evaluateVelocityAtPosition(vector3d position) {
+vector3d Physician::evaluateVelocityAtPosition(vector3d position, char method) {
 	double hdx = 0.5 * DX;
 	vector3d offsetU(0.0, hdx, hdx);
 	vector3d offsetV(hdx, 0.0, hdx);
-	vector3d offsetW(hdx, hdx, 0.0);
+//	vector3d offsetW(hdx, hdx, 0.0);
 
-	double vx = evaluateComponentVelocity(position, offsetU, 'u');
-	double vy = evaluateComponentVelocity(position, offsetV, 'v');
+	double vx = evaluateComponentVelocity(position, offsetU, 'u', method);
+	double vy = evaluateComponentVelocity(position, offsetV, 'v', method);
 	return vector3d(vx, vy, 0);
 }
 /*
@@ -119,8 +128,8 @@ void Physician::put_velocity_on_grid() {
 			GRID_V[i][j].sum = 0;
 			GRID_U[i][j].weight = 0;
 			GRID_V[i][j].weight = 0;
-			GRID_V[i][j].oldVal = 0;
 			GRID_U[i][j].oldVal = 0;
+			GRID_V[i][j].oldVal = 0;
 			GRID_V[i][j].val = 0;
 			GRID_U[i][j].val = 0;
 			if (GRID[i][j].type == FLUID)
@@ -151,11 +160,12 @@ void Physician::put_velocity_on_grid() {
 		 *
 		 *
 		 */
-		double x = PARTICLES[p].x;
-		double y = PARTICLES[p].y;
-		double up = PARTICLES[p].u;
-		double vp = PARTICLES[p].v;
+		double x = PARTICLES[p].pos.x;
+		double y = PARTICLES[p].pos.y;
+		double up = PARTICLES[p].vel.x;
+		double vp = PARTICLES[p].vel.y;
 
+		//std::cout << "x"<<x <<"y" << y << "velx"<< up << "vely" << vp <<std::endl;
 		int i = x / DX;
 		int j = y / DY;
 		if (i < 0 || i >= GRID_WIDTH)
@@ -191,87 +201,23 @@ void Physician::put_velocity_on_grid() {
 		}
 	}
 }
-void Physician::pic(int i, int j) {
-	(void)i;
-	(void)j;
-}
-
-void Physician::flip(int i, int j) {
-
-	(void)i;
-	(void)j;
-}
 
 void Physician::get_velocity_from_the_grid() {
 	for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
 		
-		vector3d position(PARTICLES[p].x, PARTICLES[p].y, 0);
-		vector3d velocity = evaluateVelocityAtPosition(position);
-		PARTICLES[p].u = velocity.x;
-		PARTICLES[p].v = velocity.y;
-		/*
-		double x = PARTICLES[p].x;
-		double y = PARTICLES[p].y;
-	
-		int i = x / DX;
-		int j = y / DY;
-
-		if (i < 0 || i >= GRID_WIDTH)
-			continue;
-		if (j < 0 || j >= GRID_HEIGHT)
-			continue;
-			*/
-		/*
-		 *
-		 *             j + 1  _______________
-		 *                    |             |
-		 *                    |  .          |
-		 *      j + 0.5 * DY  |.   i,j      |
-		 *                    |             |
-		 *                    |    .        |
-		 *              j     ---------------
-		 *                   i *dx         (i + 1)*dx
-		 *
-		 */
-		/* update u coordinate */
-		/*double sum_pic = 0;
-		double sum_flip = 0;
-		double weight = 0;
-
-		sum_pic += kernel(x - i * DX, y - (j + 0.5) * DY) * GRID_U[i][j].val;
-		sum_pic += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY) * GRID_U[i + 1][j].val;
-
-		sum_flip += kernel(x - i * DX, y - (j + 0.5) * DY) * (GRID_U[i][j].val - GRID_U[i][j].oldVal);
-		sum_flip += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY) * (GRID_U[i + 1][j].val - GRID_U[i + 1][j].oldVal);
-
-		weight += kernel(x - i * DX, y - (j + 0.5) * DY);
-		weight += kernel(x - (i + 1) * DX, y - (j + 0.5) * DY);
-
-		PARTICLES[p].u = PIC * (sum_pic / weight) + FLIP * (PARTICLES[p].u + sum_flip / weight);
-		//PARTICLES[p].u = sum_pic / weight;
-
-		//   std::cout << "sum_flip" << sum_flip << std::endl;
-		//   std::cout << "FLIP" << FLIP << std::endl;
-*/
-		/* update v coordinate */
-		/*
-		sum_pic = 0;
-		sum_flip = 0;
-		weight = 0;
-
-		sum_pic += kernel(x - (i + 0.5) * DX, y - j * DY) * GRID_V[i][j].val;
-		sum_pic += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY) * GRID_V[i][j + 1].val;
-
-		sum_flip += kernel(x - (i + 0.5) * DX, y - j * DY) * (GRID_V[i][j].val - GRID_V[i][j].oldVal);
-		sum_flip += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY) * (GRID_V[i][j + 1].val - GRID_V[i][j + 1].oldVal);
-
-		weight += kernel(x - (i + 0.5) * DX, y - j * DY);
-		weight += kernel(x - (i + 0.5) * DX, y - (j + 1) * DY);
-
-		PARTICLES[p].v = PIC * (sum_pic / weight) + FLIP * (PARTICLES[p].v + sum_flip / weight);
-		*/
-		//PARTICLES[p].v = sum_pic / weight;
-		//  std::cout << "sum_flip" << sum_flip << std::endl;
+/*
+ *             j + 1  _______________
+ *                    |             |
+ *                    |  .          |
+ *      j + 0.5 * DY  |.   i,j      |
+ *                    |             |
+ *                    |    .        |
+ *              j     ---------------
+ *                   i *dx         (i + 1)*dx
+ */
+	vector3d flip_component = PARTICLES[p].vel + evaluateVelocityAtPosition(PARTICLES[p].pos, 'f');
+	PARTICLES[p].vel = evaluateVelocityAtPosition(PARTICLES[p].pos, 'p') * PIC
+	+ ( flip_component * FLIP);
 	}
 }
 
@@ -286,19 +232,18 @@ uint32_t Physician::init_particules(uint32_t ox, uint32_t oy, uint32_t width, ui
 		return 0;
 	}
 	std::srand(std::time(0));
-	unsigned long int i = PARTICLES.size();
-	PARTICLES.resize(i + nb_particles);
-	for (; i < PARTICLES.size(); i++) {
+	size_t offset = PARTICLES.size();
+	PARTICLES.resize(PARTICLES.size() + nb_particles);
+	for (unsigned long int i = 0; i < nb_particles; i++) {
 		double a = ox;
 		double b = oy;
 		if (randomize) {
 			a += (double)std::rand() / RAND_MAX * DX / DENSITY_RACINE;
 			b += (double)std::rand() / RAND_MAX * DY / DENSITY_RACINE;
 		}
-		PARTICLES[i].x = (a + ((double)(i % (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DX;
-		PARTICLES[i].y = (b + ((double)(i / (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DY;
-		PARTICLES[i].v = 0;
-		PARTICLES[i].u = 0;
+		PARTICLES[offset + i].pos.x = (a + ((double)(i % (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DX;
+		PARTICLES[offset + i].pos.y = (b + ((double)(i / (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DY;
+		//PARTICLES[i].vel = 0;
 	}
 	return nb_particles;
 }
@@ -306,8 +251,10 @@ uint32_t Physician::init_particules(uint32_t ox, uint32_t oy, uint32_t width, ui
 void Physician::advect() {
 
 	for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
-		PARTICLES[p].x += PARTICLES[p].u * DT;
-		PARTICLES[p].y += PARTICLES[p].v * DT;
+		//vector3d deplacement = PARTICLES[p].vel * DT; // TODO: why this doest work ?
+		//PARTICLES[p].pos += deplacement;
+		PARTICLES[p].pos.x += (PARTICLES[p].vel.x * DT);
+		PARTICLES[p].pos.y += (PARTICLES[p].vel.y * DT);
 	}
 
 	/* hack pour que les particules ne rentre pas dans le mur */

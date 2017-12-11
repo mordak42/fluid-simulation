@@ -40,6 +40,45 @@ const double frame_height = FRAME_HEIGHT;
 
 namespace mod1
 {
+struct vector3d
+{
+    double x, y, z;
+ 
+    inline vector3d( void ) {}
+    inline vector3d( const double X, const double Y, const double Z )
+    { x = X; y = Y; z = Z; }
+
+    inline vector3d operator + (const vector3d& A) const
+    { return vector3d( x + A.x, y + A.y, z + A.z ); }
+
+   // inline std::string operator << (const vector3d& A) const
+   // { return "x: " + std::to_string(A.x) + "\ny: " + std::to_string(A.y) + "\n";}
+
+    inline vector3d operator += (const vector3d& A) const
+    { return vector3d( x + A.x, y + A.y, z + A.z ); }
+
+    inline vector3d operator -= (const vector3d& A) const
+    { return vector3d( x - A.x, y - A.y, z - A.z ); }
+
+    inline vector3d operator - (const vector3d& A) const
+    { return vector3d( x - A.x, y - A.y, z - A.z ); }
+
+    inline vector3d operator + (const double A) const
+    { return vector3d( x + A, y + A, z + A ); }
+
+    inline vector3d operator * (const double A) const
+    { return vector3d( x * A, y * A, z * A ); }
+
+    inline vector3d operator / (const double A) const
+    { return vector3d( x / A, y / A, z / A ); }
+
+    inline vector3d operator - ( const double A ) const
+    { return vector3d( x - A, y - A, z - A ); }
+
+    inline double Dot(const vector3d& A) const
+    { return A.x*x + A.y*y + A.z*z; }
+};
+
 struct velocity_field
 {
     double  weight;
@@ -57,10 +96,8 @@ enum material_type
 
 struct particle
 {
-    double u;
-    double v;
-    double x;
-    double y;
+	vector3d vel;
+	vector3d pos;
 };
 
 struct cell
