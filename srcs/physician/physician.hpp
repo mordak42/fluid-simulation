@@ -8,8 +8,8 @@
 #include "physicLaw.hpp"
 #include "graviter.hpp"
 #include "physicItems.hpp"
-
-#define PIC 0.52
+/
+#define PIC 0.50
 #define FLIP (1.0 - PIC)
 
 /*
@@ -31,6 +31,8 @@ public:
 	void advect();
 
 private:
+    void evaluateGridVelocityForParticle(vector3d position, vector3d velocity);
+    void evaluateGridComponentVelocity(vector3d position, vector3d velocity, vector3d gridOffset, char field);
 	double kernel(double x, double y);
 	double hat(double r);
 	double b_spline(double r);
