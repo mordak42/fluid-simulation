@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/18 22:40:01 by bmickael          #+#    #+#              #
-#    Updated: 2017/12/03 04:14:44 by bmickael         ###   ########.fr        #
+#    Updated: 2017/12/12 21:00:09 by bmickael         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,10 +15,19 @@ CC = g++
 
 ### MAIN FLAGS ###
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -framework OpenCL -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
 else
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -Ofast
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -framework OpenCL -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
+endif
+else
+ifeq ($(DEBUG),yes)
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -lopencl -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
+else
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -lopencl -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
+endif
 endif
 
 ### SOURCES ###

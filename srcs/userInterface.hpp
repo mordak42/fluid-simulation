@@ -37,10 +37,8 @@ private:
     float m_math_height = FRAME_HEIGHT;
     float m_deltaWidth = 1;
     float m_deltaHeight = 1;
-
     void displayNewFrame(RenderedFrame *img, bool oldStack);
     void keepSameFrame();
-
     enum uiState {
         notStarted = 0,
         firstFrameDisplayed,
@@ -57,7 +55,7 @@ private:
         uiEventMax
     };
     void finiteStateMachine(enum uiEvent evt);
-    enum uiState m_uiState;
+    enum uiState m_uiState = notStarted;
 };
 }
 
