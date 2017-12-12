@@ -26,7 +26,7 @@ else
 ifeq ($(DEBUG),yes)
 	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -lopencl -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
 else
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -lopencl -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
+	CFLAGS = -Wall -Wextra -Werror -std=c++11  -lOpenCL -Ofast -Wno-unused-command-line-argument -Wno-unused-variable -Wno-ignored-attributes -Wno-deprecated-declarations
 endif
 endif
 
