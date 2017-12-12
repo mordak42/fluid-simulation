@@ -57,7 +57,7 @@ private:
         uiEventMax
     };
     void finiteStateMachine(enum uiEvent evt);
-    enum uiState m_uiState = m_uiState;
+    enum uiState m_uiState;
 };
 }
 
