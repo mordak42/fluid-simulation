@@ -46,7 +46,8 @@ void Fps::setTimeOrigin() {
         return;
     }
     using namespace std::chrono;
-
+    m_savedFps = -1;
+    m_nbFrames = 0;
     m_originTime = high_resolution_clock::now();
 }
 

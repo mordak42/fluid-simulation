@@ -3,7 +3,7 @@
 
 using namespace lib;
 
-Semaphore::Semaphore(uint32_t initialCount) : m_count(initialCount) {}
+Semaphore::Semaphore(int32_t initialCount) : m_count(initialCount) {}
 
 Semaphore::~Semaphore() {};
 

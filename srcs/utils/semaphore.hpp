@@ -11,7 +11,7 @@ namespace lib
 class Semaphore
 {
 public:
-    Semaphore(uint32_t initialCount);
+    Semaphore(int32_t initialCount);
     ~Semaphore();
 
     void notify();
@@ -21,7 +21,7 @@ public:
 private:
     std::mutex m_mutex;
     std::condition_variable m_condition;
-    uint32_t m_count;
+    int32_t m_count;
 };
 }
 

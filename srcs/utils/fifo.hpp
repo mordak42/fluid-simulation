@@ -20,6 +20,7 @@ public:
 
     bool push(T elem);
     T pop();
+    T getLastPushedElem();
     size_t size();
 
 private:
@@ -76,6 +77,13 @@ template <class T> T Fifo<T>::pop() {
     else
         m_firstElem = tmp;
     return output;
+}
+
+template <class T> T Fifo<T>::getLastPushedElem() {
+    std::lock_guard<std::mutex>lock(m_mutex);
+    if (m_firstElem == nullptr)
+        return nullptr;
+    return m_lastElem->content;
 }
 
 template <class T> size_t Fifo<T>::size() {

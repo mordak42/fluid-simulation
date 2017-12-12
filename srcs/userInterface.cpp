@@ -64,6 +64,137 @@ inline int UserInterface::Rgb_to_int(int r, int g, int b) {
     return (r << 16 | g << 8 | b);
 }
 
+void UserInterface::fillNewsurface() {
+    m_img = m_pool->popRenderedItem();
+    if (m_img == NULL) {
+        std::cerr << "NULL image exception !" << std::endl;
+        return;
+    }
+    setIdleStartPoint();
+    updateFpsCounter();
+    int h = m_width;
+    for (int y = 0; y < m_height; y++) {
+        double j = (int)(m_deltaHeight * y) * m_math_width;
+        for (int i = h - m_width; i < h; i++) {
+            ((int *)m_surface->pixels)[i] = ((int *)m_img->m_map)[(int)(j)];
+            j += m_deltaWidth;
+        }
+        h += m_width;
+    }
+    m_pool->pushOutdatedItem(m_img);
+    updateFamineField();
+    updateFpsField();
+    updateIdleField();
+    SDL_UpdateWindowSurface(m_win);
+    determineIdle();
+}
+
+void UserInterface::keepSameSurface() {
+    setFamine();                    //  TODO SDL_UpdateWindowSurfaceRects
+    updateFamineField();
+    updateFpsField();
+    updateIdleField();
+    SDL_UpdateWindowSurface(m_win);
+}
+
+/*
+enum uiState {
+    notStarted = 0,
+    firstFrameDisplayed,
+    onPause,
+    onResizePaused,
+    onStart,
+    uiStateMax
+};
+
+enum uiEvent {
+    initialization = 0,
+    frameAvailable,
+    frameDisplayed,
+    startedWanted,
+    stoppedWanted,
+    resizeWanted,
+    uiEventMax
+};
+
+cmd {
+    getNewImage();
+    getOldImage();
+    fillNewsurface;
+};
+*/
+
+void UserInterface::finiteStateMachine(enum uiEvent evt) {
+    switch (m_uiState) {
+    case notStarted:
+        switch (evt) {
+        case initialization:
+            m_uiState = firstFrameDisplayed;
+            break;
+        default:
+            std::cerr << "FSM cannot process event while not initialized" << std::endl;
+            break;
+        }
+        break;
+    case firstFrameDisplayed:
+        switch (evt) {
+        case frameAvailable:
+            fillNewsurface();
+            m_uiState = onPause;
+            break;
+        default:
+            break;
+        }
+        break;
+    case onPause:
+        switch (evt) {
+        case startedWanted:
+            setTimeOrigin();
+            m_uiState = onStart;
+            break;
+        case resizeWanted:
+            m_uiState = onResizePaused;
+            break;
+        default:
+            break;
+        }
+        break;
+    case onResizePaused:
+        switch (evt) {
+        case frameAvailable:
+            fillNewsurface();
+            m_uiState = onPause;
+            break;
+        case startedWanted:
+            setTimeOrigin();
+            m_uiState = onStart;
+            break;
+        default:
+            break;
+        }
+        break;
+    case onStart:
+        switch (evt) {
+        case stoppedWanted:
+            m_uiState = onPause;
+            break;
+        case frameAvailable:
+            fillNewsurface();
+            break;
+        case frameDisplayed:
+            break;
+        default:
+            break;
+        }
+        break;
+    default:
+        std::cerr << "unknown state, " << evt << std::endl;
+        break;
+    }
+}
+
+#include <unistd.h>
+
 void UserInterface::start() {
     if (m_ready == false) {
         std::cerr << __func__ << " : SDL2 not initialized" << std::endl;
@@ -71,17 +202,12 @@ void UserInterface::start() {
     }
 
     SDL_Event e;
-    RenderedFrame *img;
-    Uint32 delay = 1000 / NB_FRAMES_PER_SECOND;
-    SDL_TimerID timerId = 0;
 
-    float math_width = FRAME_WIDTH;
-    float math_height = FRAME_HEIGHT;
-    float deltaWidth = math_width / m_width;
-    float deltaHeight = math_height / m_height;
+    m_deltaWidth = m_math_width / m_width;
+    m_deltaHeight = m_math_height / m_height;
+    SDL_TimerID timerId = SDL_AddTimer(1000 / NB_FRAMES_PER_SECOND, customEventCb, NULL);
 
-    setTimeOrigin();
-    timerId = SDL_AddTimer(delay, customEventCb, NULL);
+    finiteStateMachine(initialization);
     while (m_continueLoopHook && SDL_WaitEvent(&e))
     {
         switch (e.type) {
@@ -93,15 +219,11 @@ void UserInterface::start() {
                         break;
                     case SDL_SCANCODE_S:
                         std::cout << "touch start" << std::endl;
-                        if (timerId == 0)
-                            timerId = SDL_AddTimer(delay, customEventCb, NULL);
+                        finiteStateMachine(startedWanted);
                         break;
                     case SDL_SCANCODE_H:
                         std::cout << "touch halt" << std::endl;
-                        if (timerId) {
-                            SDL_RemoveTimer(timerId);
-                            timerId = 0;
-                        }
+                        finiteStateMachine(stoppedWanted);
                         break;
                     default:
                         break;
@@ -111,33 +233,14 @@ void UserInterface::start() {
                 stop();
                 break;
             case SDL_USEREVENT:
-                img = m_pool->popRenderedItem();
-                if (img) {
-                    setIdleStartPoint();
-                    updateFpsCounter();
-                    int h = m_width;
-                    for (int y = 0; y < m_height; y++) {
-                        double j = (int)(deltaHeight * y) * math_width;
-                        for (int i = h - m_width; i < h; i++) {
-                            ((int *)m_surface->pixels)[i] = ((int *)img->m_map)[(int)(j)];
-                            j += deltaWidth;
-                        }
-                        h += m_width;
+                    if (m_uiState == onResizePaused) {
+                        m_img = m_pool->getLastRenderedFrame();
+                        finiteStateMachine(frameAvailable);
                     }
-                    m_pool->pushOutdatedItem(img);
-                    updateFamineField();
-                    updateFpsField();
-                    updateIdleField();
-                    SDL_UpdateWindowSurface(m_win);
-                    determineIdle();
-                }
-                else {
-                    setFamine();                    //  TODO SDL_UpdateWindowSurfaceRects
-                    updateFamineField();
-                    updateFpsField();
-                    updateIdleField();
-                    SDL_UpdateWindowSurface(m_win);
-                }
+                    else if (m_pool->isRenderedItem() == true)
+                        finiteStateMachine(frameAvailable);
+                    else
+                        keepSameSurface();
                 break;
             case SDL_WINDOWEVENT:
                 switch (e.window.event) {
@@ -146,8 +249,9 @@ void UserInterface::start() {
                         m_height = e.window.data2;
                         m_surface = SDL_GetWindowSurface(m_win);
                         std::cout << "new size = " << m_width << " - " << m_height << std::endl;
-                        deltaWidth = math_width / m_width;
-                        deltaHeight = math_height / m_height;
+                        m_deltaWidth = m_math_width / m_width;
+                        m_deltaHeight = m_math_height / m_height;
+                        finiteStateMachine(resizeWanted);
                         break;
                     case SDL_WINDOWEVENT_MOVED:
                         std::cout << "window has moved !" << std::endl;

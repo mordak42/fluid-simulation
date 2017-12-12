@@ -24,6 +24,8 @@ public:
     T *popRenderedItem(void);
     void pushOutdatedItem(T *item);
     void pushRenderedItem(T *item);
+    bool isRenderedItem(void);
+    T *getLastRenderedFrame(void);
     void sendToken();
 
 private:
@@ -37,7 +39,7 @@ private:
 };
 
 template <class T> Pool<T>::Pool(uint32_t nbItems) :
-                            m_availabilitySem(nbItems),
+                            m_availabilitySem((int)nbItems - 1),
                             m_nbItems(nbItems)
 {
         std::cout << "Pool initialization" << std::endl;
@@ -59,6 +61,10 @@ template <class T> Pool<T>::~Pool() {
 template <class T> bool Pool<T>::init() {
     if (m_ready == true) {
         std::cerr << __func__ << " : Pool already initialized" << std::endl;
+        return false;
+    }
+    if (m_nbItems < 2) {
+        std::cerr << "Pool need at least two frames" << std::endl;
         return false;
     }
     try {
@@ -116,6 +122,24 @@ template <class T> void Pool<T>::pushOutdatedItem(T *item) {
     }
     m_inactives.push(item);
     m_availabilitySem.notify();
+}
+
+template <class T> bool Pool<T>::isRenderedItem(void) {
+    if (m_ready == false) {
+        std::cerr << __func__ << " : Pool not initialized" << std::endl;
+        return false;
+    }
+    if (m_actives.size() == 0)
+        return false;
+    return true;
+}
+
+template <class T> T *Pool<T>::getLastRenderedFrame(void) {
+    if (m_ready == false) {
+        std::cerr << __func__ << " : Pool not initialized" << std::endl;
+        return nullptr;
+    }
+    return m_inactives.getLastPushedElem();
 }
 
 /* Exception side, send a artificial token */
