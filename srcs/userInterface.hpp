@@ -20,25 +20,6 @@ namespace mod1
 {
 class UserInterface : public Fps, public Idle, public Famine
 {
-enum uiState {
-    notStarted = 0,
-    firstFrameDisplayed,
-    onPause,
-    onResizePaused,
-    onStart,
-    uiStatusMax
-};
-
-enum uiEvent {
-    initialization = 0,
-    frameAvailable,
-    frameDisplayed,
-    startedWanted,
-    stoppedWanted,
-    resizeWanted,
-    uiEventMax
-};
-
 public:
     UserInterface(const std::shared_ptr<lib::Pool<RenderedFrame>> &pool,
                   int width,
@@ -49,22 +30,34 @@ public:
     void stop();
 
 private:
-    void fillNewsurface();
-    void keepSameSurface();
-
-    int Rgb_to_int(int r, int g, int b);
     const std::shared_ptr<lib::Pool<RenderedFrame>> &m_pool;
     bool m_ready = false;
     bool m_continueLoopHook = true;
     float m_math_width = FRAME_WIDTH;
     float m_math_height = FRAME_HEIGHT;
-    float m_deltaWidth;
-    float m_deltaHeight;
+    float m_deltaWidth = 1;
+    float m_deltaHeight = 1;
 
-    RenderedFrame *m_img = NULL;
+    void displayNewFrame(RenderedFrame *img, bool oldStack);
+    void keepSameFrame();
+
+    enum uiState {
+        notStarted = 0,
+        firstFrameDisplayed,
+        onPause,
+        onStart,
+        uiStatusMax
+    };
+
+    enum uiEvent {
+        initialization = 0,
+        plopEvent,
+        startedWanted,
+        stoppedWanted,
+        uiEventMax
+    };
     void finiteStateMachine(enum uiEvent evt);
     enum uiState m_uiState = notStarted;
-
 };
 }
 
