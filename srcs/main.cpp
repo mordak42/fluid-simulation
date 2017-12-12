@@ -1,6 +1,10 @@
 
-#include <csignal>
+#define CL_HPP_ENABLE_EXCEPTIONS
+#define CL_HPP_TARGET_OPENCL_VERSION 120
+#include "opencl.hpp"
+
 #include <iostream>
+#include <csignal>
 
 #include "mod1.hpp"
 
