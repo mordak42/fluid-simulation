@@ -83,12 +83,12 @@ void FrameProductor::threadHandler() {
     lib::Chronometric timeCounter;
     while (true) {
         if (i % 100 == 0)
-            init_particules(2, 10, 5, 5, true);
+            init_particules(10, 10, 5, 5, false);
         timeCounter.reset();
         put_velocity_on_grid();
         applyGravity();
-  //     solvePressure();
-//		extrapolateVelocity();
+		solvePressure();
+		extrapolateVelocity();
         get_velocity_from_the_grid();
 		//saveVelocity();
         advect();
@@ -98,7 +98,7 @@ void FrameProductor::threadHandler() {
         if (img == NULL)
             continue;
         img->cleanFrame();
-        updateGridLabel();
+     //   updateGridLabel();
         raytrace(img);
         img->solvedTime = timeCounter.getTime();
         m_pool->pushRenderedItem(img);
