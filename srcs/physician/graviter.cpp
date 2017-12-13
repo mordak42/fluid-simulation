@@ -18,7 +18,7 @@ void Graviter::applyGravity() {
     for (int i = 0; i < GRID_WIDTH; i++) {
         for (int j = 0; j < GRID_HEIGHT; j++) {
             if (GRID_V[i][j].weight > 0) {
-                GRID_V[i][j].val = -(G * DT) + GRID_V[i][j].val;
+                GRID_V[i][j].val += -(G * DT);
             }
         }
     }

@@ -25,6 +25,11 @@ void Physician::bzeroVelocity() {
 }
 
 void Physician::saveVelocity() {
+    for (int i = 0; i < GRID_WIDTH; i++)
+        for (int j = 0; j < GRID_HEIGHT; j++) {
+            GRID_U[i][j].oldVal = 0;
+            GRID_V[i][j].oldVal = 0;
+        }
     for (int i = 0; i < GRID_WIDTH; i++) {
         for (int j = 0; j < GRID_HEIGHT; j++) {
             GRID_U[i][j].oldVal = GRID_U[i][j].val;
@@ -32,6 +37,7 @@ void Physician::saveVelocity() {
         }
     }
 }
+
 /*
  *                        GRID_V[i][j+1]
  *                    _______________
@@ -45,13 +51,17 @@ void Physician::saveVelocity() {
  *
  */
 
-void Physician::extrapolateVelocity() {
+void Physician::extrapolateVelocity()
+{
     for (int i = 1; i < GRID_WIDTH - 1; i++) {
         for (int j = 1; j < GRID_HEIGHT - 1; j++) {
             if (GRID[i][j].type == AIR && (GRID[i][j + 1].type == FLUID
-                    || GRID[i + 1][j].type == FLUID
-                    || GRID[i - 1][j].type == FLUID
-                    || GRID[i][j - 1].type == FLUID))
+                        || GRID[i + 1][j].type == FLUID
+                        || GRID[i - 1][j].type == FLUID
+                        || GRID[i][j - 1].type == FLUID))
+            {
+                GRID_U[i][j].weight = 1;
+                GRID_V[i][j].weight = 1;
                 if (GRID_U[i][j].val == 0)
                     GRID_U[i][j].val = GRID_U[i + 1][j].val;
                 if (GRID_U[i + 1][j].val == 0)
@@ -60,6 +70,7 @@ void Physician::extrapolateVelocity() {
                     GRID_V[i][j].val = GRID_V[i][j + 1].val;
                 if (GRID_V[i][j + 1].val == 0)
                     GRID_V[i][j + 1].val = GRID_V[i][j].val;
+            }
         }
     }
 }
@@ -122,6 +133,7 @@ void Physician::evaluateGridComponentVelocity(vector3d position,
     vector3d gpos = vector3d(gi, gj, 0) * DX;
     gpos += gridOffset;
 
+    //std::cout << "grid component gi: " << gi;
     double kernelVal = kernel(position - gpos);
     if (field == 'u') {
         GRID_U[gi][gj].sum        += kernelVal * velocity.x;
@@ -150,6 +162,30 @@ void Physician::evaluateGridVelocityAtPosition(vector3d position,
     evaluateGridComponentVelocity(position, velocity, offset, gi, gj, field);
 }
 
+/*
+ * m_grid[i][j] is the case where the particle is
+ * so the particle velocity contribute to
+ * m_grid_u[i][j] and m_grid_v[i + 1][j]
+ *
+ *             j + 1  _______________
+ *                    |             |
+ *                    |  .          |
+ *      j + 0.5 * DY  |.   i,j      |
+ *                    |             |
+ *                    |    .        |
+ *              j     ---------------
+ *                   i *dx         (i + 1)*dx
+ *
+ *  the distance for the velocity grid :
+ *  grid_u[i][j] = (i * dx , j * dy)
+ *  the distance for the pressure grid :
+ *  grid_p[i][j] = ((i + 0.5) * dx , (j + 0.5) * dy)
+ *
+ *  m_grid_u[i][j] = ∑ (k(xp - i * dx)up / ∑(k(xp - i * dx)
+ *
+ *
+ */
+
 void Physician::put_velocity_on_grid() {
     for (int i = 0; i < GRID_WIDTH; i++) {
         for (int j = 0; j < GRID_HEIGHT; j++) {
@@ -157,8 +193,8 @@ void Physician::put_velocity_on_grid() {
             GRID_V[i][j].sum = 0;
             GRID_U[i][j].weight = 0;
             GRID_V[i][j].weight = 0;
-            GRID_U[i][j].oldVal = 0;
-            GRID_V[i][j].oldVal = 0;
+            //   GRID_U[i][j].oldVal = 0;
+            //   GRID_V[i][j].oldVal = 0;
             GRID_V[i][j].val = 0;
             GRID_U[i][j].val = 0;
             if (GRID[i][j].type == FLUID)
@@ -166,36 +202,6 @@ void Physician::put_velocity_on_grid() {
         }
     }
     for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
-        /*
-         * m_grid[i][j] is the case where the particle is
-         * so the particle velocity contribute to
-         * m_grid_u[i][j] and m_grid_v[i + 1][j]
-         *
-         *             j + 1  _______________
-         *                    |             |
-         *                    |  .          |
-         *      j + 0.5 * DY  |.   i,j      |
-         *                    |             |
-         *                    |    .        |
-         *              j     ---------------
-         *                   i *dx         (i + 1)*dx
-         *
-         *  the distance for the velocity grid :
-         *  grid_u[i][j] = (i * dx , j * dy)
-         *  the distance for the pressure grid :
-         *  grid_p[i][j] = ((i + 0.5) * dx , (j + 0.5) * dy)
-         *
-         *  m_grid_u[i][j] = ∑ (k(xp - i * dx)up / ∑(k(xp - i * dx)
-         *
-         *
-         */
-        /*
-        double x = PARTICLES[p].pos.x;
-        double y = PARTICLES[p].pos.y;
-        double up = PARTICLES[p].vel.x;
-        double vp = PARTICLES[p].vel.y;
-        */
-
         //std::cout << "x"<<x <<"y" << y << "velx"<< up << "vely" << vp <<std::endl;
 
         int gi = PARTICLES[p].pos.x / DX;
@@ -214,34 +220,16 @@ void Physician::put_velocity_on_grid() {
         evaluateGridVelocityAtPosition(pos, vel, gi + 1, gj, 'u');
         evaluateGridVelocityAtPosition(pos, vel, gi, gj, 'v');
         evaluateGridVelocityAtPosition(pos, vel, gi, gj + 1, 'v');
-
-        /*
-           double kernelVal = kernel(x - i * DX, y - (j + 0.5) * DY);
-           GRID_U[i][j].sum        += kernelVal * up;
-           GRID_U[i][j].weight     += kernelVal;
-
-           kernelVal = kernel(x - (i + 1) * DX, y - (j + 0.5) * DY);
-           GRID_U[i + 1][j].sum    += kernelVal * up;
-           GRID_U[i + 1][j].weight += kernelVal;
-
-           kernelVal = kernel(x - (i + 0.5) * DX, y - j * DY);
-           GRID_V[i][j].sum        += kernelVal * vp;
-           GRID_V[i][j].weight     +=  kernelVal;
-
-           kernelVal = kernel(x - (i + 0.5) * DX, y - (j + 1) * DY);
-           GRID_V[i][j + 1].sum    += kernelVal * vp;
-           GRID_V[i][j + 1].weight += kernelVal;
-           */
     }
     for (int i = 0; i < GRID_WIDTH + 1; i++) {
         for (int j = 0; j < GRID_HEIGHT + 1; j++) {
             if (j < GRID_HEIGHT && GRID_U[i][j].weight) {
                 GRID_U[i][j].val = GRID_U[i][j].sum / GRID_U[i][j].weight;
-                GRID_U[i][j].oldVal = GRID_U[i][j].val;
+                //      GRID_U[i][j].oldVal = GRID_U[i][j].val;
             }
             if (i < GRID_WIDTH && GRID_V[i][j].weight) {
                 GRID_V[i][j].val = GRID_V[i][j].sum / GRID_V[i][j].weight;
-                GRID_V[i][j].oldVal = GRID_V[i][j].val;
+                //      GRID_V[i][j].oldVal = GRID_V[i][j].val;
             }
         }
     }
@@ -255,13 +243,28 @@ double Physician::cubicInterpolate(double p[4], double x) {
 
 double Physician::bicubicInterpolate(double p[4][4], double x, double y) {
     double arr[4];
-    arr[0] = cubicInterpolate(p[0], x);
-    arr[1] = cubicInterpolate(p[1], x);
-    arr[2] = cubicInterpolate(p[2], x);
-    arr[3] = cubicInterpolate(p[3], x);
-    return cubicInterpolate(arr, y);
+    arr[0] = cubicInterpolate(p[0], y);
+    arr[1] = cubicInterpolate(p[1], y);
+    arr[2] = cubicInterpolate(p[2], y);
+    arr[3] = cubicInterpolate(p[3], y);
+    return cubicInterpolate(arr, x);
 }
 
+/*
+ *         _________________________________________
+ *         |           |             |             |
+ *         |           |             |             |
+ *         |           |  .          |             |
+ *         |           |             |             |
+ *         |           |             |             |
+ *         _________________________________________
+ *         |           |             |             |
+ *         |           |             |             |
+ *         |           |             |             |
+ *         |           |             |             |
+ *         |           |             |             |
+ *         _________________________________________
+ */
 double Physician::evaluateComponentVelocity(vector3d position,
         vector3d gridOffset,
         char field, char method)
@@ -271,27 +274,29 @@ double Physician::evaluateComponentVelocity(vector3d position,
     double points[4][4];
 
     for (int j = 0; j < 4; j++) {
+        int grid_j = j + gj - 1;
         for (int i = 0; i < 4; i++) {
             int grid_i = i + gi - 1;
-            int grid_j = j + gj - 1;
+            //std::cout << "get grdi_i: " << grid_i << std::endl;
             if (field == 'u')
             {
                 if (method == 'p' && grid_i > 0 && grid_i < GRID_WIDTH + 1) /* PIC */
-                    points[j][i] = GRID_U[grid_i][grid_j].val;
+                    points[i][j] = GRID_U[grid_i][grid_j].val;
                 else              /* FLIP */
-                    points[j][i] = GRID_U[grid_i][grid_j].val - GRID_U[grid_i][grid_j].oldVal;
+                    points[i][j] = GRID_U[grid_i][grid_j].val - GRID_U[grid_i][grid_j].oldVal;
             }
             else
             {
                 if (method == 'p' && grid_i > 0 && grid_i < GRID_WIDTH) 
-                    points[j][i] = GRID_V[grid_i][grid_j].val;
+                    points[i][j] = GRID_V[grid_i][grid_j].val;
                 else
-                    points[j][i] = GRID_V[grid_i][grid_j].val - GRID_V[grid_i][grid_j].oldVal;
+                    points[i][j] = GRID_V[grid_i][grid_j].val - GRID_V[grid_i][grid_j].oldVal;
             }
         }
     }
     vector3d gpos = vector3d(gi, gj, 0) * DX;
     gpos += gridOffset;
+    (void)gridOffset;
     vector3d interp = (position - gpos) / DX;
     return bicubicInterpolate(points, interp.x, interp.y);
 }
@@ -309,16 +314,6 @@ vector3d Physician::evaluateVelocityAtPosition(vector3d position, char method) {
 
 void Physician::get_velocity_from_the_grid() {
     for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
-        /*
-         *             j + 1  _______________
-         *                    |             |
-         *                    |  .          |
-         *      j + 0.5 * DY  |.   i,j      |
-         *                    |             |
-         *                    |    .        |
-         *              j     ---------------
-         *                   i *dx         (i + 1)*dx
-         */
         PARTICLES[p].vel = evaluateVelocityAtPosition(PARTICLES[p].pos, 'p') * PIC
             + ((PARTICLES[p].vel + evaluateVelocityAtPosition(PARTICLES[p].pos, 'f')) * FLIP);
     }
