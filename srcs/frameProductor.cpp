@@ -79,11 +79,11 @@ void FrameProductor::threadHandler() {
             init_particules(110, 100, 20, 20, true);
         timeCounter.reset();
         put_velocity_on_grid();
-        applyGravity();
-        //solvePressure();
 		extrapolateVelocity();
+        applyGravity();
+  //     solvePressure();
         get_velocity_from_the_grid();
-		//saveVelocity();
+//		saveVelocity();
         advect();
         RenderedFrame *img = m_pool->popOutdatedItem();
         if (m_keepGoing == false)

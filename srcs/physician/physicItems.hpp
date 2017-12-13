@@ -13,8 +13,8 @@
 #define GRID_V m_grid_v
 
 /* Grid values for Physician part */
-# define GRID_WIDTH 200
-# define GRID_HEIGHT 200
+# define GRID_WIDTH 20
+# define GRID_HEIGHT 20
 # define GRID_SIZE (GRID_WIDTH) * (GRID_HEIGHT)
 
 # define DENSITY_RACINE 2
