@@ -72,6 +72,7 @@ bool FrameProductor::parseFile() {
 void FrameProductor::threadHandler() {
     std::lock_guard<std::mutex> lock(m_threadProtection);
     int i = 0;
+    bzeroVelocity();
     lib::Chronometric timeCounter;
     while (true) {
         if (i % 100 == 0)
@@ -79,8 +80,10 @@ void FrameProductor::threadHandler() {
         timeCounter.reset();
         put_velocity_on_grid();
         applyGravity();
-        solvePressure();
+        //solvePressure();
+		extrapolateVelocity();
         get_velocity_from_the_grid();
+		//saveVelocity();
         advect();
         RenderedFrame *img = m_pool->popOutdatedItem();
         if (m_keepGoing == false)
