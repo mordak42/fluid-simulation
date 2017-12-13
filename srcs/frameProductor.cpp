@@ -87,10 +87,10 @@ void FrameProductor::threadHandler() {
         timeCounter.reset();
         put_velocity_on_grid();
         applyGravity();
-   //    solvePressure();
-		extrapolateVelocity();
+  //     solvePressure();
+//		extrapolateVelocity();
         get_velocity_from_the_grid();
-		saveVelocity();
+		//saveVelocity();
         advect();
         RenderedFrame *img = m_pool->popOutdatedItem();
         if (m_keepGoing == false)
@@ -98,6 +98,7 @@ void FrameProductor::threadHandler() {
         if (img == NULL)
             continue;
         img->cleanFrame();
+        updateGridLabel();
         raytrace(img);
         img->solvedTime = timeCounter.getTime();
         m_pool->pushRenderedItem(img);
