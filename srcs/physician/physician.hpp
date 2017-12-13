@@ -9,7 +9,7 @@
 #include "graviter.hpp"
 #include "physicItems.hpp"
 
-#define PIC 0.52
+#define PIC 0.05
 #define FLIP (1.0 - PIC)
 
 /*

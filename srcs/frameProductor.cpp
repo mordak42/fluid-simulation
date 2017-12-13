@@ -72,7 +72,7 @@ void FrameProductor::threadHandler() {
     int i = 0;
     while (true) {
         if (i % 100 == 0)
-            init_particules(140, 40, 20, 20, true);
+            init_particules(110, 100, 20, 20, true);
         put_velocity_on_grid();
         applyGravity();
         solvePressure();
