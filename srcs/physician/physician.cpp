@@ -350,5 +350,8 @@ void Physician::advect() {
 
     for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
         PARTICLES[p].pos += PARTICLES[p].vel * DT;
+        if (PARTICLES[p].pos.x / DX > GRID_WIDTH - 1 || PARTICLES[p].pos.x < 1
+            || PARTICLES[p].pos.y / DX > GRID_HEIGHT - 1 || PARTICLES[p].pos.y < 1)
+            PARTICLES.erase(PARTICLES.begin() + p);
     }
 }
