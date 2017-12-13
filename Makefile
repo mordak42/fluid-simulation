@@ -33,7 +33,7 @@ endif
 ### SOURCES ###
 
 SRC_CORE = main mod1 frameProductor renderedFrame renderer physician \
-userInterface semaphore lagrange polynom graviter physicLaw pressurer physicItems fps idle famine sdlContext
+userInterface semaphore lagrange polynom graviter physicLaw pressurer physicItems fps idle famine sdlContext chronometric
 VPATH = srcs
 
 OBJ_DIR = objs
@@ -153,6 +153,10 @@ $(OBJ_DIR)/famine.o: overlay/famine.cpp \
 
 $(OBJ_DIR)/sdlContext.o: overlay/sdlContext.cpp \
 	overlay/sdlContext.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/chronometric.o: utils/chronometric.cpp \
+	utils/chronometric.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 clean:
