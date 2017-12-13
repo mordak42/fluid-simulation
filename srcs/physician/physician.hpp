@@ -53,6 +53,8 @@ private:
 	double cubicInterpolate(double p[4], double x);
 	double	 bicubicInterpolate(double p[4][4], double x, double y);
 	vector3d evaluateVelocityAtPosition(vector3d position, char method);
+	double moyU(int i, int j);
+	double moyV(int i, int j);
 };
 }
 
