@@ -29,10 +29,24 @@ public:
     void put_velocity_on_grid();
     void flip(int i, int j);
 	void advect();
+	void bzeroVelocity();
+	void saveVelocity();
+	void extrapolateVelocity();
 
 private:
-	double kernel(double x, double y);
+	double kernel(vector3d v);
 	double hat(double r);
+	void evaluateGridComponentVelocity(vector3d position,
+			vector3d velocity,
+			vector3d gridOffset,
+			int      gi,
+			int      gj,
+			char field);
+	void evaluateGridVelocityAtPosition(vector3d position,
+			vector3d velocity,
+			int gi,
+			int gj,
+			char field);
 	double b_spline(double r);
 	double evaluateComponentVelocity(vector3d position, vector3d gridOffset, char field, char method);
 	double cubicInterpolate(double p[4], double x);

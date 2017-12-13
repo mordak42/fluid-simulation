@@ -70,13 +70,16 @@ bool FrameProductor::parseFile() {
 void FrameProductor::threadHandler() {
     std::lock_guard<std::mutex> lock(m_threadProtection);
     int i = 0;
+	bzeroVelocity();
     while (true) {
         if (i % 100 == 0)
-            init_particules(140, 40, 20, 20, true);
+            init_particules(140, 140, 20, 20, true);
         put_velocity_on_grid();
         applyGravity();
-        solvePressure();
+        //solvePressure();
+		extrapolateVelocity();
         get_velocity_from_the_grid();
+		//saveVelocity();
         advect();
         RenderedFrame *img = m_pool->popOutdatedItem();
         if (m_keepGoing == false)
