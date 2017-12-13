@@ -24,6 +24,15 @@ void Physician::bzeroVelocity() {
     }
 }
 
+void Physician::updateGridLabel() {
+    for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
+        int gi = PARTICLES[p].pos.x / DX;
+        int gj = PARTICLES[p].pos.y / DY;
+        if (GRID[gi][gj].type == AIR)
+            GRID[gi][gj].type = FLUID;
+    }
+}
+
 void Physician::saveVelocity() {
     for (int i = 0; i < GRID_WIDTH; i++)
         for (int j = 0; j < GRID_HEIGHT; j++) {
@@ -193,8 +202,8 @@ void Physician::put_velocity_on_grid() {
             GRID_V[i][j].sum = 0;
             GRID_U[i][j].weight = 0;
             GRID_V[i][j].weight = 0;
-            //   GRID_U[i][j].oldVal = 0;
-            //   GRID_V[i][j].oldVal = 0;
+               GRID_U[i][j].oldVal = 0;
+               GRID_V[i][j].oldVal = 0;
             GRID_V[i][j].val = 0;
             GRID_U[i][j].val = 0;
             if (GRID[i][j].type == FLUID)
@@ -210,8 +219,19 @@ void Physician::put_velocity_on_grid() {
             continue;
         if (gj < 0 || gj >= GRID_HEIGHT)
             continue;
+      /*  if (GRID[gi - 1][gj].type == AIR)
+            GRID[gi - 1][gj].type = FLUID;
+        if (GRID[gi + 1][gj].type == AIR)
+            GRID[gi + 1][gj].type = FLUID;
+        if (GRID[gi][gj + 1].type == AIR)
+            GRID[gi][gj + 1].type = FLUID;
+            */
         if (GRID[gi][gj].type == AIR)
             GRID[gi][gj].type = FLUID;
+        /*
+        if (GRID[gi][gj - 1].type == AIR)
+            GRID[gi][gj - 1].type = FLUID;
+            */
 
         vector3d pos = PARTICLES[p].pos;
         vector3d vel = PARTICLES[p].vel;
@@ -225,11 +245,11 @@ void Physician::put_velocity_on_grid() {
         for (int j = 0; j < GRID_HEIGHT + 1; j++) {
             if (j < GRID_HEIGHT && GRID_U[i][j].weight) {
                 GRID_U[i][j].val = GRID_U[i][j].sum / GRID_U[i][j].weight;
-                //      GRID_U[i][j].oldVal = GRID_U[i][j].val;
+                      GRID_U[i][j].oldVal = GRID_U[i][j].val;
             }
             if (i < GRID_WIDTH && GRID_V[i][j].weight) {
                 GRID_V[i][j].val = GRID_V[i][j].sum / GRID_V[i][j].weight;
-                //      GRID_V[i][j].oldVal = GRID_V[i][j].val;
+                      GRID_V[i][j].oldVal = GRID_V[i][j].val;
             }
         }
     }

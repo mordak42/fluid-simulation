@@ -83,10 +83,10 @@ void FrameProductor::threadHandler() {
             init_particules(2, 10, 5, 5, true);
         put_velocity_on_grid();
         applyGravity();
-   //    solvePressure();
-		extrapolateVelocity();
+  //     solvePressure();
+//		extrapolateVelocity();
         get_velocity_from_the_grid();
-		saveVelocity();
+		//saveVelocity();
         advect();
         RenderedFrame *img = m_pool->popOutdatedItem();
         if (m_keepGoing == false)
@@ -94,6 +94,7 @@ void FrameProductor::threadHandler() {
         if (img == NULL)
             continue;
         img->cleanFrame();
+        updateGridLabel();
         raytrace(img);
         m_pool->pushRenderedItem(img);
         i++;

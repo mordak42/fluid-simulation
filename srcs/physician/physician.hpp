@@ -9,7 +9,7 @@
 #include "graviter.hpp"
 #include "physicItems.hpp"
 
-#define PIC 0.0
+#define PIC 1.0
 #define FLIP (1.0 - PIC)
 
 /*
@@ -32,6 +32,7 @@ public:
 	void bzeroVelocity();
 	void saveVelocity();
 	void extrapolateVelocity();
+    void updateGridLabel();
 
 private:
 	double kernel(vector3d v);
