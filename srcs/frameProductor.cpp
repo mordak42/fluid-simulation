@@ -82,8 +82,9 @@ void FrameProductor::threadHandler() {
     bzeroVelocity();
     lib::Chronometric timeCounter;
     while (true) {
-        if (i % 100 == 0)
-            init_particules(140, 140, 25, 25, true);
+//      if (i % 100 == 0)
+//          initParticules(140, 140, 20, 20, true);
+        pluieDiluvienne();
         timeCounter.reset();
         put_velocity_on_grid();
 		extrapolateVelocity();

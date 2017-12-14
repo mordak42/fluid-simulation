@@ -1,4 +1,5 @@
 
+#include <random>
 #include "physician.hpp"
 
 #include <ctime>
@@ -418,7 +419,7 @@ void Physician::get_velocity_from_the_grid() {
     }
 }
 
-uint32_t Physician::init_particules(uint32_t ox, uint32_t oy, uint32_t width, uint32_t height, bool randomize) {
+uint32_t Physician::initParticules(uint32_t ox, uint32_t oy, uint32_t width, uint32_t height, bool randomize) {
     if (ox + width >= GRID_WIDTH || oy + height >= GRID_HEIGHT) {
         std::cerr << "Some particles will be outside the grid: " << ox + width << " " << oy + height << " on " << GRID_WIDTH << "*" << GRID_HEIGHT << std::endl;
         return 0;
@@ -428,15 +429,17 @@ uint32_t Physician::init_particules(uint32_t ox, uint32_t oy, uint32_t width, ui
         std::cerr << "There are no particle to fill it" << std::endl;
         return 0;
     }
-    std::srand(std::time(0));
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(0.0, 1.0);
     size_t offset = PARTICLES.size();
     PARTICLES.resize(PARTICLES.size() + nb_particles);
     for (unsigned long int i = 0; i < nb_particles; i++) {
         double a = ox;
         double b = oy;
         if (randomize) {
-            a += (double)std::rand() / RAND_MAX * DX / DENSITY_RACINE;
-            b += (double)std::rand() / RAND_MAX * DY / DENSITY_RACINE;
+            a += dis(gen) * DX / DENSITY_RACINE;
+            b += dis(gen) * DY / DENSITY_RACINE;
         }
         PARTICLES[offset + i].pos.x = (a + ((double)(i % (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DX;
         PARTICLES[offset + i].pos.y = (b + ((double)(i / (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DY;
@@ -447,6 +450,23 @@ uint32_t Physician::init_particules(uint32_t ox, uint32_t oy, uint32_t width, ui
         //   + ((PARTICLES[i].vel + evaluateVelocityAtPosition(PARTICLES[i].pos, 'f')) * FLIP);
     }
     return nb_particles;
+}
+
+void Physician::pluieDiluvienne() {
+    std::srand(std::time(0));
+    size_t offset = PARTICLES.size();
+    PARTICLES.resize(PARTICLES.size() + 1);
+    double a = 0;
+    double b = GRID_HEIGHT - 4;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(0.0, 1.0);
+    a += dis(gen) * (GRID_WIDTH - 4);
+    std::cout << '\n';
+    std::cout << std::rand() << std::endl;
+    std::cout << a << std::endl;
+    PARTICLES[offset].pos.x = 2 + a * DX;
+    PARTICLES[offset].pos.y = b * DY;
 }
 
 void Physician::advect() {
