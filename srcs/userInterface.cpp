@@ -61,6 +61,7 @@ static Uint32 customEventCb(Uint32 interval, void *param)
 }
 
 void UserInterface::displayNewFrame(RenderedFrame *img, bool oldStack) {
+    std::cout << "resolutionTime for this frame = " << (int)(img->solvedTime * 1000) << " ms" << std::endl;
     setIdleStartPoint();
     updateFpsCounter();
     int h = m_width;
@@ -131,6 +132,13 @@ void UserInterface::finiteStateMachine(enum uiEvent evt) {
             else
                 keepSameFrame();
             break;
+        case nextFrameWanted:
+            img = m_pool->popRenderedItem();
+            if (img)
+                displayNewFrame(img, false);
+            else
+                keepSameFrame();
+            break;
         default:
             break;
         }
@@ -183,6 +191,9 @@ void UserInterface::start() {
                         break;
                     case SDL_SCANCODE_H:
                         finiteStateMachine(stoppedWanted);
+                        break;
+                    case SDL_SCANCODE_N:
+                        finiteStateMachine(nextFrameWanted);
                         break;
                     default:
                         break;

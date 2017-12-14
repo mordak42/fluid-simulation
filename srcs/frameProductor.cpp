@@ -1,6 +1,8 @@
 
 #include "frameProductor.hpp"
 
+#include "utils/chronometric.hpp"
+
 #include <thread>
 
 using namespace mod1;
@@ -70,9 +72,11 @@ bool FrameProductor::parseFile() {
 void FrameProductor::threadHandler() {
     std::lock_guard<std::mutex> lock(m_threadProtection);
     int i = 0;
+    lib::Chronometric timeCounter;
     while (true) {
         if (i % 100 == 0)
             init_particules(110, 100, 20, 20, true);
+        timeCounter.reset();
         put_velocity_on_grid();
         applyGravity();
         solvePressure();
@@ -85,6 +89,7 @@ void FrameProductor::threadHandler() {
             continue;
         img->cleanFrame();
         raytrace(img);
+        img->solvedTime = timeCounter.getTime();
         m_pool->pushRenderedItem(img);
         i++;
     }

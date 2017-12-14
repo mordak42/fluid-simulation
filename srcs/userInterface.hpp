@@ -52,6 +52,7 @@ private:
         plopEvent,
         startedWanted,
         stoppedWanted,
+        nextFrameWanted,
         uiEventMax
     };
     void finiteStateMachine(enum uiEvent evt);

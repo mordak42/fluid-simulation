@@ -29,6 +29,7 @@ public:
         uint8_t b;
     };
     t_pix m_map[FRAME_SIZE];
+    double solvedTime = 0;
 };
 }
 

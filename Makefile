@@ -83,7 +83,8 @@ $(OBJ_DIR)/frameProductor.o: frameProductor.cpp \
 	physician/physician.hpp \
 	renderer/renderer.hpp \
 	renderer/renderedFrame.hpp \
-	physician/physicItems.hpp
+	physician/physicItems.hpp \
+	utils/chronometric.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 $(OBJ_DIR)/physician.o: physician/physician.cpp \
