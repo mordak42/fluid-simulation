@@ -18,15 +18,15 @@ CC = g++
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -framework OpenCL -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
 else
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -framework OpenCL -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
 endif
 else
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -lopencl -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
 else
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -lopencl -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
 endif
 endif
 
