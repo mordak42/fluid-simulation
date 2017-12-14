@@ -84,7 +84,8 @@ void FrameProductor::threadHandler() {
     while (true) {
 //      if (i % 100 == 0)
 //          initParticules(140, 140, 20, 20, true);
-        pluieDiluvienne();
+//        pluieDiluvienne();
+        femmeFontaine(150, 25, 15);
         timeCounter.reset();
         put_velocity_on_grid();
 		extrapolateVelocity();

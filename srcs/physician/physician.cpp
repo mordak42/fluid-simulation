@@ -452,6 +452,25 @@ uint32_t Physician::initParticules(uint32_t ox, uint32_t oy, uint32_t width, uin
     return nb_particles;
 }
 
+void Physician::femmeFontaine(uint32_t ox, uint32_t oy, double vel) {
+    size_t nb_particles = 4;
+    size_t offset = PARTICLES.size();
+    PARTICLES.resize(PARTICLES.size() + nb_particles);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(0.0, 1.0);
+    for (unsigned long int i = 0; i < nb_particles; i++) {
+        double a = ox;
+        double b = oy;
+        a += dis(gen) * DX / DENSITY_RACINE;
+        b += dis(gen) * DY / DENSITY_RACINE;
+        PARTICLES[offset + i].pos.x = a * DX;
+        PARTICLES[offset + i].pos.y = b * DY;
+        PARTICLES[offset + i].vel.x = 0;
+        PARTICLES[offset + i].vel.y = vel;
+    }
+}
+
 void Physician::pluieDiluvienne() {
     std::srand(std::time(0));
     size_t offset = PARTICLES.size();
@@ -462,9 +481,9 @@ void Physician::pluieDiluvienne() {
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
     a += dis(gen) * (GRID_WIDTH - 4);
-    std::cout << '\n';
-    std::cout << std::rand() << std::endl;
-    std::cout << a << std::endl;
+    //std::cout << '\n';
+    //std::cout << std::rand() << std::endl;
+    //std::cout << a << std::endl;
     PARTICLES[offset].pos.x = 2 + a * DX;
     PARTICLES[offset].pos.y = b * DY;
 }

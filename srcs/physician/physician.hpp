@@ -34,6 +34,7 @@ public:
 	void extrapolateVelocity();
     void updateGridLabel();
     void pluieDiluvienne();
+    void femmeFontaine(uint32_t ox, uint32_t oy, double vel);
 
 private:
 	double kernel(vector3d v);
