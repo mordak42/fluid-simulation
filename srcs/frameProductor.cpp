@@ -79,8 +79,10 @@ void FrameProductor::threadHandler() {
     int i = 0;
 	bzeroVelocity();
     while (true) {
-        if (i % 100 == 0)
-            init_particules(140, 140, 25, 25, true);
+//        if (i % 100 == 0)
+ //           initParticules(140, 140, 20, 20, true);
+        
+        pluieDiluvienne();
         put_velocity_on_grid();
 		extrapolateVelocity();
         saveVelocity();
