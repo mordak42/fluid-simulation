@@ -48,7 +48,6 @@ static void    debug_poly(Polynom poly)
 
 //bool FrameProductor::parseFile(const char &buff) {
 bool FrameProductor::parseFile() {
-	/*
     struct point p[SIZE_EXEMPLE];
     p[0].x = 0;
     p[0].y = 0;
@@ -65,11 +64,12 @@ bool FrameProductor::parseFile() {
             GRID[i][j + GRID_HEIGHT / 2].type = m_groundLevel.eval(i * DX) - j *DY > 0 ? SOLID : AIR;
         }
     //return m_physician->init_particules(100, 140, 80, 40, true) > 0 ? true : false;
-	*/
+    /*
 	for (int i = 0; i < GRID_WIDTH; i++)
 		for (int j = 0; j < GRID_HEIGHT; j++) {
 			GRID[i][j].type = (i == 0 || i == GRID_WIDTH -1 || j == 0 || j == GRID_HEIGHT -1) ? SOLID : AIR;
 		}
+        */
 	(void)debug_poly;
     return true;
 }
@@ -80,13 +80,13 @@ void FrameProductor::threadHandler() {
 	bzeroVelocity();
     while (true) {
         if (i % 100 == 0)
-            init_particules(10, 10, 5, 5, false);
+            init_particules(140, 140, 25, 25, true);
         put_velocity_on_grid();
+		extrapolateVelocity();
+        saveVelocity();
         applyGravity();
 		solvePressure();
-		extrapolateVelocity();
         get_velocity_from_the_grid();
-		//saveVelocity();
         advect();
         RenderedFrame *img = m_pool->popOutdatedItem();
         if (m_keepGoing == false)
