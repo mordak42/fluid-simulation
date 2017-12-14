@@ -168,7 +168,7 @@ void Pressurer::applyPrecon(double (&r)[GRID_WIDTH][GRID_HEIGHT], double (&res)[
         for(int j = GRID_HEIGHT - 1; j >= 0; j--) {
             if (GRID[i][j].type == FLUID) {
                 t = q[i][j] - A[i][j].plusi * precon[i][j]*res[i+1][j] // WARNING depasse grid_size
-                    - A[i][j-1].plusj * precon[i][j]*res[i][j+1];
+                    - A[i][j].plusj * precon[i][j]*res[i][j+1];
                 res[i][j] = t * precon[i][j];
             }
         }
@@ -295,7 +295,7 @@ void::Pressurer::PCG(void) {
         sigma = sigma_new;
     }
     if (i == 200) {
-     //   std::cout << "Warning nb max iteration occur in PCG" << std::endl;
+        std::cout << "Warning nb max iteration occur in PCG" << std::endl;
     }
 }
 
