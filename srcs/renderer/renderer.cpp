@@ -25,6 +25,8 @@ void Renderer::raytrace(RenderedFrame *img) {
                 ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x00ffffff;
 			else if (GRID[grid_coord_i][grid_coord_j].type == FLUID)
                 ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x000000ff;
+			else if (GRID[grid_coord_i][grid_coord_j].type == SURROUND)
+                ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x0000ffff;
 
         }
     }
@@ -42,6 +44,7 @@ void Renderer::raytrace(RenderedFrame *img) {
     }
  	prop_x =  frame_width / grid_width;
 	prop_y =  frame_height / grid_height;
+    /*
     for (int y = 0 ; y < GRID_HEIGHT; y++) {
         for (int x = 0 ; x < FRAME_WIDTH; x++)
 		{
@@ -55,4 +58,5 @@ void Renderer::raytrace(RenderedFrame *img) {
 			((int *)img->m_map)[y * FRAME_WIDTH + (int)(x * prop_x)] = 0x00ff0000;
 		}
 	}
+    */
 }
