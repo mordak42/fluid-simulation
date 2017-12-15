@@ -83,14 +83,14 @@ void FrameProductor::threadHandler() {
     lib::Chronometric timeCounter;
     while (true) {
       if (i % 100 == 0)
-          initParticules(140, 140, 40, 40, true);
+          initParticules(80, 140, 40, 40, true);
         pluieDiluvienne();
         femmeFontaine(150, 25, 15);
         timeCounter.reset();
         put_velocity_on_grid();
 		extrapolateVelocity();
         saveVelocity();
-        applyGravity();
+        applyGravity();;
 		solvePressure();
         get_velocity_from_the_grid();
         advect();

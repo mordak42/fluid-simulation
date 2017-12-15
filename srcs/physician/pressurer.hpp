@@ -48,8 +48,6 @@ private:
     double         p[GRID_WIDTH][GRID_HEIGHT];
     double         r[GRID_WIDTH][GRID_HEIGHT];
 
-    /* for intermediate calculus */
-    double         tmp[GRID_WIDTH][GRID_HEIGHT];
     /* for the applyPrecon */
     double         q[GRID_WIDTH][GRID_HEIGHT];
 };

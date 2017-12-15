@@ -35,11 +35,6 @@ void Physician::updateGridLabel() {
 }
 
 void Physician::saveVelocity() {
-    for (int i = 0; i < GRID_WIDTH; i++)
-        for (int j = 0; j < GRID_HEIGHT; j++) {
-            GRID_U[i][j].oldVal = 0;
-            GRID_V[i][j].oldVal = 0;
-        }
     for (int i = 0; i < GRID_WIDTH; i++) {
         for (int j = 0; j < GRID_HEIGHT; j++) {
             GRID_U[i][j].oldVal = GRID_U[i][j].val;
@@ -487,19 +482,44 @@ void Physician::pluieDiluvienne() {
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
     a += dis(gen) * (GRID_WIDTH - 4);
-    //std::cout << '\n';
-    //std::cout << std::rand() << std::endl;
-    //std::cout << a << std::endl;
     PARTICLES[offset].pos.x = 2 + a * DX;
     PARTICLES[offset].pos.y = b * DY;
 }
 
+
+/* This advection formula is better in a close space, with huge walls around the screen. */
+
+/*
+* void Physician::advect() {
+*
+*    for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
+*        PARTICLES[p].pos += PARTICLES[p].vel * DT;
+*        if (PARTICLES[p].pos.x / DX > GRID_WIDTH - 1 || PARTICLES[p].pos.x < 1
+*                || PARTICLES[p].pos.y / DX > GRID_HEIGHT - 1 || PARTICLES[p].pos.y < 1)
+*            PARTICLES.erase(PARTICLES.begin() + p);
+*    }
+* }
+*/
+
+/* This advection formula is better in a open space, when mass particles left from the screen. */
 void Physician::advect() {
 
+    size_t cn = 0;
+
     for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
+        /* set the new positions of particles */
         PARTICLES[p].pos += PARTICLES[p].vel * DT;
-        if (PARTICLES[p].pos.x / DX > GRID_WIDTH - 1 || PARTICLES[p].pos.x < 1
-                || PARTICLES[p].pos.y / DX > GRID_HEIGHT - 1 || PARTICLES[p].pos.y < 1)
-            PARTICLES.erase(PARTICLES.begin() + p);
+
+        /* for the particles which left the grid, delete it */
+        if (PARTICLES[p].pos.x / DX <= GRID_WIDTH - 1
+                && PARTICLES[p].pos.x / DX >= 1
+                && PARTICLES[p].pos.y / DY <= GRID_HEIGHT - 1
+                && PARTICLES[p].pos.y / DY >= 1)
+        {
+            PARTICLES[cn++] = PARTICLES[p];
+        }
     }
+    PARTICLES.resize(cn);
 }
+
+
