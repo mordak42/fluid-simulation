@@ -15,10 +15,11 @@
 #include "overlay/fps.hpp"
 #include "overlay/famine.hpp"
 #include "overlay/idle.hpp"
+#include "overlay/displayer.hpp"
 
 namespace mod1
 {
-class UserInterface : public Fps, public Idle, public Famine
+class UserInterface : public Fps, public Idle, public Famine, public Displayer
 {
 public:
     UserInterface(const std::shared_ptr<lib::Pool<RenderedFrame>> &pool,

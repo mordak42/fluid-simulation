@@ -10,6 +10,7 @@ UserInterface::UserInterface(const std::shared_ptr<lib::Pool<RenderedFrame>> &po
                                 Fps(),
                                 Idle(NB_FRAMES_PER_SECOND),
                                 Famine(),
+                                Displayer(),
                                 m_pool(pool)
 {
     /* Debug test */
@@ -33,6 +34,8 @@ bool UserInterface::init() {
         std::cerr << "Cannot initialize FPS meter" << std::endl;
     if (IdleMeterInit() == false)
         std::cerr << "Cannot initialize Idle meter" << std::endl;
+    if (initFont("srcs/fonts/Chalkduster.ttf", 25) == false)
+        std::cerr << "Cannot initialize Displayer" << std::endl;
 
     /* Debug test */
     std::cout << "Actual parent refCount is " << getRefCount() << "/4" << std::endl;
@@ -61,7 +64,7 @@ static Uint32 customEventCb(Uint32 interval, void *param)
 }
 
 void UserInterface::displayNewFrame(RenderedFrame *img, bool oldStack) {
-    std::cout << "resolutionTime for this frame = " << (int)(img->solvedTime * 1000) << " ms" << std::endl;
+ //   std::cout << "resolutionTime for this frame = " << (int)(img->solvedTime * 1000) << " ms" << std::endl;
     setIdleStartPoint();
     updateFpsCounter();
     int h = m_width;
@@ -78,6 +81,7 @@ void UserInterface::displayNewFrame(RenderedFrame *img, bool oldStack) {
     updateFamineField();
     updateFpsField();
     updateIdleField();
+    displayMsg(0, 9999, 0x00FFFF00, "%i ms", (int)(img->solvedTime * 1000));
     SDL_UpdateWindowSurface(m_win);
     determineIdle();
 }
