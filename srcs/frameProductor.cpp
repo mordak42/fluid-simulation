@@ -83,7 +83,7 @@ void FrameProductor::threadHandler() {
     lib::Chronometric timeCounter;
     while (true) {
       if (i % 100 == 0)
-          initParticules(40, 140, 120, 40, true);
+          initParticules(140, 140, 40, 40, true);
         pluieDiluvienne();
         femmeFontaine(150, 25, 15);
         timeCounter.reset();

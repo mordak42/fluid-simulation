@@ -23,10 +23,10 @@ void Renderer::raytrace(RenderedFrame *img) {
             int grid_coord_j = (GRID_HEIGHT - (double)y * prop_y);
             if (GRID[grid_coord_i][grid_coord_j].type == SOLID)
                 ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x00ffffff;
-			else if (GRID[grid_coord_i][grid_coord_j].type == FLUID)
+/*			else if (GRID[grid_coord_i][grid_coord_j].type == FLUID)
                 ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x000000ff;
 			else if (GRID[grid_coord_i][grid_coord_j].type == SURROUND)
-                ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x0000ffff;
+                ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x0000ffff; */
 
         }
     }

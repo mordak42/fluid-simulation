@@ -370,6 +370,7 @@ double Physician::evaluateComponentVelocity(vector3d position,
         vector3d gridOffset,
         char field, char method)
 {
+    position -= gridOffset;
     int gi = position.x / DX;
     int gj = position.y / DX;
     double points[4][4];
@@ -381,22 +382,27 @@ double Physician::evaluateComponentVelocity(vector3d position,
             //std::cout << "get grdi_i: " << grid_i << std::endl;
             if (field == 'u')
             {
-                if (method == 'p' && grid_i > 0 && grid_i < GRID_WIDTH + 1) /* PIC */
-                    points[i][j] = GRID_U[grid_i][grid_j].val;
-                else              /* FLIP */
-                    points[i][j] = GRID_U[grid_i][grid_j].val - GRID_U[grid_i][grid_j].oldVal;
+                if (grid_i >= 0 && grid_i < GRID_WIDTH + 1 && grid_j >= 0 && grid_j < GRID_HEIGHT)
+                {
+                    if (method == 'p') /* PIC */
+                        points[i][j] = GRID_U[grid_i][grid_j].val;
+                    else              /* FLIP */
+                        points[i][j] = GRID_U[grid_i][grid_j].val - GRID_U[grid_i][grid_j].oldVal;
+                }
             }
             else
             {
-                if (method == 'p' && grid_i > 0 && grid_i < GRID_WIDTH) 
-                    points[i][j] = GRID_V[grid_i][grid_j].val;
-                else
-                    points[i][j] = GRID_V[grid_i][grid_j].val - GRID_V[grid_i][grid_j].oldVal;
+                if (grid_i >= 0 && grid_i < GRID_WIDTH && grid_j >= 0 && grid_j < GRID_HEIGHT + 1)
+                {
+                    if (method == 'p') 
+                        points[i][j] = GRID_V[grid_i][grid_j].val;
+                    else
+                        points[i][j] = GRID_V[grid_i][grid_j].val - GRID_V[grid_i][grid_j].oldVal;
+                }
             }
         }
     }
     vector3d gpos = vector3d(gi, gj, 0) * DX;
-    gpos += gridOffset;
     vector3d interp = (position - gpos) / DX;
     return bicubicInterpolate(points, interp.x, interp.y);
 }

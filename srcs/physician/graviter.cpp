@@ -6,7 +6,7 @@ namespace mod1
 
 Graviter::Graviter() {};
     
-#define G 9.81
+#define G (1 * 9.81)
 
 /*
                 g = (Vx - GRID_V[i][j]) / DT;
