@@ -114,7 +114,8 @@ namespace mod1
             struct cell m_grid[GRID_WIDTH][GRID_HEIGHT];
             struct velocity_field m_grid_u[GRID_WIDTH + 1][GRID_HEIGHT];
             struct velocity_field m_grid_v[GRID_WIDTH][GRID_HEIGHT + 1];
-            std::vector<struct particle> m_particles;
+            struct particle m_particles[1000000];
+            int m_nb_particles = 0;
     };
 }
 

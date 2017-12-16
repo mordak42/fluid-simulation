@@ -48,7 +48,7 @@ void Renderer::raytrace(RenderedFrame *img) {
     prop_y = frame_height / real_height;
 
     /* Draw particles */
-    for (unsigned long int p = 0; p < PARTICLES.size(); p++)
+    for (int p = 0; p < m_nb_particles; p++)
     {
 #ifndef BORDER
         int x = PARTICLES[p].pos.x * prop_x;

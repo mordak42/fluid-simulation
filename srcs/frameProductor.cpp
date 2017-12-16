@@ -116,7 +116,7 @@ void FrameProductor::threadHandler() {
      //   updateGridLabel();
         raytrace(img);
         img->solvedTime = timeCounter.getTime();
-        img->nbParticles = PARTICLES.size();
+        img->nbParticles = m_nb_particles;
         m_pool->pushRenderedItem(img);
         i++;
     }

@@ -26,7 +26,7 @@ void Physician::bzeroVelocity() {
 }
 
 void Physician::updateGridLabel() {
-    for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
+    for (int p = 0; p < m_nb_particles; p++) {
         int gi = PARTICLES[p].pos.x / DX;
         int gj = PARTICLES[p].pos.y / DY;
         if (GRID[gi][gj].type == AIR)
@@ -261,7 +261,7 @@ void Physician::put_velocity_on_grid() {
 		}
 	}
 
-	for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
+	for (int p = 0; p < m_nb_particles; p++) {
 		//std::cout << "x"<<x <<"y" << y << "velx"<< up << "vely" << vp <<std::endl;
 
 		int i = PARTICLES[p].pos.x / DX;
@@ -393,7 +393,7 @@ vector3d Physician::evaluateVelocityAtPosition(vector3d position, char method) {
 }
 
 void Physician::get_velocity_from_the_grid() {
-    for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
+    for (int p = 0; p < m_nb_particles; p++) {
         PARTICLES[p].vel = evaluateVelocityAtPosition(PARTICLES[p].pos, 'p') * PIC
             + ((PARTICLES[p].vel + evaluateVelocityAtPosition(PARTICLES[p].pos, 'f')) * FLIP);
     }
@@ -404,7 +404,7 @@ uint32_t Physician::initParticules(uint32_t ox, uint32_t oy, uint32_t width, uin
         std::cerr << "Some particles will be outside the grid: " << ox + width << " " << oy + height << " on " << GRID_WIDTH << "*" << GRID_HEIGHT << std::endl;
         return 0;
     }
-    uint32_t nb_particles = width * height * DENSITY_RACINE * DENSITY_RACINE;
+    int nb_particles = width * height * DENSITY_RACINE * DENSITY_RACINE;
     if (nb_particles == 0) {
         std::cerr << "There are no particle to fill it" << std::endl;
         return 0;
@@ -412,9 +412,9 @@ uint32_t Physician::initParticules(uint32_t ox, uint32_t oy, uint32_t width, uin
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
-    size_t offset = PARTICLES.size();
-    PARTICLES.resize(PARTICLES.size() + nb_particles);
-    for (unsigned long int i = 0; i < nb_particles; i++) {
+    size_t offset = m_nb_particles;
+    m_nb_particles += nb_particles;
+    for (int i = 0; i < nb_particles; i++) {
         double a = ox;
         double b = oy;
         if (randomize) {
@@ -428,13 +428,13 @@ uint32_t Physician::initParticules(uint32_t ox, uint32_t oy, uint32_t width, uin
 }
 
 void Physician::femmeFontaine(uint32_t ox, uint32_t oy, double vel) {
-    size_t nb_particles = 4;
-    size_t offset = PARTICLES.size();
-    PARTICLES.resize(PARTICLES.size() + nb_particles);
+    int nb_particles = 4;
+    size_t offset = m_nb_particles;
+    m_nb_particles += nb_particles;
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
-    for (unsigned long int i = 0; i < nb_particles; i++) {
+    for (int i = 0; i < nb_particles; i++) {
         double a = ox;
         double b = oy;
         a += dis(gen) * DX / DENSITY_RACINE;
@@ -448,8 +448,9 @@ void Physician::femmeFontaine(uint32_t ox, uint32_t oy, double vel) {
 
 void Physician::pluieDiluvienne() {
     std::srand(std::time(0));
-    size_t offset = PARTICLES.size();
-    PARTICLES.resize(PARTICLES.size() + 1);
+    size_t offset = m_nb_particles;
+    m_nb_particles += 1;
+
     double a = 0;
     double b = GRID_HEIGHT - 4;
     std::random_device rd;
@@ -465,7 +466,7 @@ void Physician::pluieDiluvienne() {
 /*
 * void Physician::advect() {
 *
-*    for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
+*    for (unsigned long int p = 0; p < m_nb_particles; p++) {
 *        PARTICLES[p].pos += PARTICLES[p].vel * DT;
 *        if (PARTICLES[p].pos.x / DX > GRID_WIDTH - 1 || PARTICLES[p].pos.x < 1
 *                || PARTICLES[p].pos.y / DX > GRID_HEIGHT - 1 || PARTICLES[p].pos.y < 1)
@@ -479,7 +480,7 @@ void Physician::advect() {
 
     size_t cn = 0;
 
-    for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
+    for (int p = 0; p < m_nb_particles; p++) {
         /* set the new positions of particles */
         PARTICLES[p].pos += PARTICLES[p].vel * DT;
 
@@ -498,5 +499,5 @@ void Physician::advect() {
             PARTICLES[cn++] = PARTICLES[p];
         }
     }
-    PARTICLES.resize(cn);
+    m_nb_particles = cn;
 }
