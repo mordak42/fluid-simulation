@@ -6,13 +6,7 @@ namespace mod1
 
 Graviter::Graviter() {};
     
-#define G (1 * 9.81)
-
-/*
-                g = (Vx - GRID_V[i][j]) / DT;
-                Vx - GRID_V[i][j] = g * DT;
-                Vx = (g * DT) + GRID_V[i][j];
-*/
+#define G (GRAVITY_FACTOR * 9.81)
 
 void Graviter::applyGravity() {
     for (int i = 0; i < GRID_WIDTH; i++) {

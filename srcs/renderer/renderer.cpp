@@ -3,15 +3,11 @@
 
 using namespace mod1;
 
-Renderer::Renderer()
-{
-}
+Renderer::Renderer() {}
 
 Renderer::~Renderer() {}
 
 void Renderer::raytrace(RenderedFrame *img) {
-
-
     double prop_x;
     double prop_y;
     prop_x =  grid_width / frame_width;
@@ -23,11 +19,10 @@ void Renderer::raytrace(RenderedFrame *img) {
             int grid_coord_j = (GRID_HEIGHT - (double)y * prop_y);
             if (GRID[grid_coord_i][grid_coord_j].type == SOLID)
                 ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x00ffffff;
-/*			else if (GRID[grid_coord_i][grid_coord_j].type == FLUID)
+			else if (GRID[grid_coord_i][grid_coord_j].type == FLUID)
                 ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x000000ff;
 			else if (GRID[grid_coord_i][grid_coord_j].type == SURROUND)
-                ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x0000ffff; */
-
+                ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x0000ffff;
         }
     }
     prop_x = frame_width / real_width;
@@ -42,21 +37,4 @@ void Renderer::raytrace(RenderedFrame *img) {
             continue ;
         ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x5ecabb;
     }
- 	prop_x =  frame_width / grid_width;
-	prop_y =  frame_height / grid_height;
-    /*
-    for (int y = 0 ; y < GRID_HEIGHT; y++) {
-        for (int x = 0 ; x < FRAME_WIDTH; x++)
-		{
-			int img_y = y * prop_y;
-			((int *)img->m_map)[img_y * FRAME_WIDTH + x] = 0x00ff0000;
-		}
-	}
-    for (int x = 0 ; x < GRID_WIDTH; x++) {
-        for (int y = 0 ; y < FRAME_HEIGHT; y++)
-		{
-			((int *)img->m_map)[y * FRAME_WIDTH + (int)(x * prop_x)] = 0x00ff0000;
-		}
-	}
-    */
 }

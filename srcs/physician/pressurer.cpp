@@ -87,7 +87,7 @@ void Pressurer::updateVelocity(void) {
     }
 }
 
-/* Initialise A, A etant la matrice du systeme lineaire. */
+/* initialize A, A is the matrix of linear system. */
 void Pressurer::calcA()
 {
     double scale = DT / (DX * DX); // DENSITY = 1 ?
@@ -180,7 +180,6 @@ void Pressurer::applyPrecon(double (&r)[GRID_WIDTH][GRID_HEIGHT], double (&res)[
 }
 
 /* perform A * s */
-
 void Pressurer::applyA(double (&s)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_WIDTH][GRID_HEIGHT])
 {
     double t;
@@ -264,12 +263,11 @@ void::Pressurer::PCG(void) {
     double	beta;
 
     bzeroVect(p);
-    cpyVect(b, r);//r = b;
-    //std::cout << normeVect(r) << std::endl;
+    cpyVect(b, r); /*r = b */
     if (normeVect(r) == 0)
         return ;
     applyPrecon(r, z);
-    cpyVect(z, s);//s = z;
+    cpyVect(z, s); /* s = z; */
     sigma = dotProduct(z, r);
     for (i = 0; i < 200; i++)
     {

@@ -107,20 +107,6 @@ double Physician::moyV(int i, int j)
  */
 void Physician::extrapolateVelocity()
 {
-	/*
-	double val;
-	for (int i = 1; i < GRID_WIDTH - 1; i++)
-		for (int j = 1; j < GRID_HEIGHT - 1; j++)
-			if (GRID[i][j].type == FLUID)
-			{
-				val = GRID_V[i][j].val;
-
-				for (int i = 1; i < GRID_WIDTH - 1; i++)
-					for (int j = 1; j < GRID_HEIGHT - 1; j++)
-						GRID_V[i][j].val = val;
-				return ;
-			}
-			*/
 	for (int i = 1; i < GRID_WIDTH - 1; i++) {
 		for (int j = 1; j < GRID_HEIGHT - 1; j++) {
 			if (GRID[i][j].type == AIR && (GRID[i][j + 1].type == FLUID
@@ -128,11 +114,6 @@ void Physician::extrapolateVelocity()
 						|| GRID[i - 1][j].type == FLUID
 						|| GRID[i][j - 1].type == FLUID))
 			{
-				/*  if (GRID_U[i][j].val == 0)
-					GRID_U[i][j].val = moyU(i, j);
-					if (GRID_U[i + 1][j].val == 0)
-					GRID_U[i + 1][j].val = moyU(i + 1, j); */
-				//
 				if (GRID_V[i][j].val == 0)
 				{
 					GRID_V[i][j].val = moyV(i, j);
@@ -279,6 +260,7 @@ void Physician::put_velocity_on_grid() {
 				GRID[i][j].type = AIR;
 		}
 	}
+
 	for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
 		//std::cout << "x"<<x <<"y" << y << "velx"<< up << "vely" << vp <<std::endl;
 
@@ -297,10 +279,6 @@ void Physician::put_velocity_on_grid() {
 			*/
 		if (GRID[i][j].type == AIR)
 			GRID[i][j].type = FLUID;
-		/*
-		   if (GRID[i][j - 1].type == AIR)
-		   GRID[i][j - 1].type = FLUID;
-		   */
 
 		vector3d pos = PARTICLES[p].pos;
 		vector3d vel = PARTICLES[p].vel;
@@ -310,6 +288,7 @@ void Physician::put_velocity_on_grid() {
 		evaluateGridVelocityAtPosition(pos, vel, i, j, 'v');
 		evaluateGridVelocityAtPosition(pos, vel, i, j + 1, 'v');
 	}
+
 	for (int i = 0; i < GRID_WIDTH + 1; i++) {
 		for (int j = 0; j < GRID_HEIGHT + 1; j++) {
 			if (j < GRID_HEIGHT && GRID_U[i][j].weight) {
@@ -325,10 +304,6 @@ void Physician::put_velocity_on_grid() {
 }
 
 double Physician::cubicInterpolate(double p[4], double s) {
-    /*
-    return p[1] + 0.5 * s*(p[2] - p[0] + 
-            s*(2.0*p[0] - 5.0*p[1] + 4.0*p[2] - p[3] + 
-                s*(3.0*(p[1] - p[2]) + p[3] - p[0]))); */
     /* Bridson interpolation */
      return (-0.3 * s + 0.5 * s * s - 0.16 * s * s * s) * p[0]
        + (1 - s * s + 0.5 * (s * s * s - s)) * p[1]
@@ -406,7 +381,7 @@ vector3d Physician::evaluateVelocityAtPosition(vector3d position, char method) {
     double hdx = 0.5 * DX;
     vector3d offsetU(0.0, hdx, 0);
     vector3d offsetV(hdx, 0.0, 0);
-    //vector3d offsetW(hdx, hdx, 0.0);
+    /* 3D model -> vector3d offsetW(hdx, hdx, 0.0); */
 
     double vx = evaluateComponentVelocity(position, offsetU, 'u', method);
     double vy = evaluateComponentVelocity(position, offsetV, 'v', method);
@@ -444,11 +419,6 @@ uint32_t Physician::initParticules(uint32_t ox, uint32_t oy, uint32_t width, uin
         }
         PARTICLES[offset + i].pos.x = (a + ((double)(i % (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DX;
         PARTICLES[offset + i].pos.y = (b + ((double)(i / (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DY;
-        //int gi = PARTICLES[i].pos.x / DX;
-        //int gj = PARTICLES[i].pos.y / DY;
-        //if (GRID[gi][gj].type == FLUID)
-        //	PARTICLES[i].vel = evaluateVelocityAtPosition(PARTICLES[i].pos, 'p') * PIC
-        //   + ((PARTICLES[i].vel + evaluateVelocityAtPosition(PARTICLES[i].pos, 'f')) * FLIP);
     }
     return nb_particles;
 }
@@ -488,7 +458,6 @@ void Physician::pluieDiluvienne() {
 
 
 /* This advection formula is better in a close space, with huge walls around the screen. */
-
 /*
 * void Physician::advect() {
 *
@@ -511,15 +480,19 @@ void Physician::advect() {
         PARTICLES[p].pos += PARTICLES[p].vel * DT;
 
         /* for the particles which left the grid, delete it */
-        if (PARTICLES[p].pos.x / DX <= GRID_WIDTH - 1
-                && PARTICLES[p].pos.x / DX >= 1
-                && PARTICLES[p].pos.y / DY <= GRID_HEIGHT - 1
-                && PARTICLES[p].pos.y / DY >= 1)
+        double posX = PARTICLES[p].pos.x / DX;
+        double posY = PARTICLES[p].pos.y / DY;
+
+        if (posX <= GRID_WIDTH - 1
+                && posX >= 1
+                && posY <= GRID_HEIGHT - 1
+                && posY >= 1
+                /* With this condition, the particles in the SOLID case are just deleted ! */
+                && GRID[(int)posX][(int)posY].type != SOLID)
         {
             PARTICLES[cn++] = PARTICLES[p];
         }
+
     }
     PARTICLES.resize(cn);
 }
-
-

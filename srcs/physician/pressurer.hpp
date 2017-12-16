@@ -8,13 +8,6 @@
 #include "physicItems.hpp"
 #include "physicLaw.hpp"
 
-struct Acell {
-    double diag;
-    double plusi;
-    double plusj;
-};
-
-
 namespace mod1
 {
 class Pressurer : public virtual PhysicLaw, public virtual PhysicItems
@@ -24,6 +17,12 @@ public:
     ~Pressurer();
     void solvePressure(void);
 private:
+    struct Acell {
+        double diag;
+        double plusi;
+        double plusj;
+    };
+
     void updateVelocity(void);
     void calcNegativeDivergence(void);
     void calcA();

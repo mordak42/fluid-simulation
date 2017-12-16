@@ -13,10 +13,9 @@ Displayer::~Displayer() {
 }
 
 bool Displayer::initFont(const char *pathname, int fontSize) {
-    if (m_ready == true) {
-        std::cerr << "Displayer overlay already initialized" << std::endl;
-        return false;
-    }
+    if (m_ready == true)
+        TTF_CloseFont(m_font);
+
     if (!TTF_WasInit()) {
         std::cerr << "Cannot initialize Displayer, TTF interface not provided" << std::endl;
         return false;

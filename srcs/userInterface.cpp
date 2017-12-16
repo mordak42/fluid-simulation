@@ -38,7 +38,7 @@ bool UserInterface::init() {
         std::cerr << "Cannot initialize Displayer" << std::endl;
 
     /* Debug test */
-    std::cout << "Actual parent refCount is " << getRefCount() << "/4" << std::endl;
+    std::cout << "Actual parent refCount is " << getRefCount() << "/5" << std::endl;
     return true;
 }
 static Uint32 customEventCb(Uint32 interval, void *param)

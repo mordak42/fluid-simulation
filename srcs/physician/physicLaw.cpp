@@ -10,6 +10,5 @@ PhysicLaw::PhysicLaw() {
     std::cout << "PhysicLaw constructor" << std::endl;
 }
 
-PhysicLaw::~PhysicLaw() {
-}
+PhysicLaw::~PhysicLaw() {}
 }

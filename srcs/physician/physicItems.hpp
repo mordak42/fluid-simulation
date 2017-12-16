@@ -51,8 +51,8 @@ namespace mod1
         inline vector3d operator + (const vector3d& A) const
         { return vector3d( x + A.x, y + A.y, z + A.z ); }
 
-        // inline std::string operator << (const vector3d& A) const
-        // { return "x: " + std::to_string(A.x) + "\ny: " + std::to_string(A.y) + "\n";}
+        inline std::string operator << (const vector3d& A) const
+        { return "x: " + std::to_string(A.x) + "\ny: " + std::to_string(A.y) + "\n";}
 
         void operator+=(const vector3d& A)
         { x += A.x; y += A.y; z += A.z; }
