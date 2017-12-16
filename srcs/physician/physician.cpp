@@ -452,7 +452,7 @@ void Physician::pluieDiluvienne() {
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
     a += dis(gen) * (GRID_WIDTH - 4);
-    PARTICLES[offset].pos.x = 2 + a * DX;
+    PARTICLES[offset].pos.x = 0 + a * DX;
     PARTICLES[offset].pos.y = b * DY;
 }
 

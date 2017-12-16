@@ -2,6 +2,14 @@
 #ifndef __RENDERER_HPP__
 # define __RENDERER_HPP__
 
+//#define LITTLE_RAIN
+#define HUGE_RAIN
+#define HUGE_BLOCK
+#define FEMME_FONTAINE
+
+#define BORDER
+#define BORDER_LENGTH 4.
+
 #include <memory>
 
 #include "renderer/renderedFrame.hpp"

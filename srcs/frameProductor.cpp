@@ -66,10 +66,14 @@ bool FrameProductor::parseFile() {
             GRID[i][j + GRID_HEIGHT / 2].type = m_groundLevel.eval(i * DX) - j *DY > 0 ? SOLID : AIR;
         }
 	(void)debug_poly;
+#ifdef BORDER
 	for (int i = 0; i < GRID_HEIGHT; i++) {
 	    GRID[GRID_WIDTH - 1][i].type = SOLID;
         GRID[GRID_WIDTH - 2][i].type = SOLID;
+        GRID[0][i].type = SOLID;
+        GRID[1][i].type = SOLID;
 	}
+#endif
     return true;
 }
 
@@ -79,10 +83,22 @@ void FrameProductor::threadHandler() {
     bzeroVelocity();
     lib::Chronometric timeCounter;
     while (true) {
+#ifdef HUGE_BLOCK
       if (i % 100 == 0)
           initParticules(80, 155, 40, 40, true);
+#endif
+#if defined (LITTLE_RAIN) || defined (HUGE_RAIN)
         pluieDiluvienne();
+#endif
+#ifdef HUGE_RAIN
+        pluieDiluvienne();
+        pluieDiluvienne();
+        pluieDiluvienne();
+        pluieDiluvienne();
+#endif
+#ifdef FEMME_FONTAINE
         femmeFontaine(150, 25, 15);
+#endif
         timeCounter.reset();
         put_velocity_on_grid();
 		extrapolateVelocity();
