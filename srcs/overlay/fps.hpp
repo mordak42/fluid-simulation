@@ -3,7 +3,8 @@
 # define __FPS_HPP__
 
 #define MAX_FPS_NUMBER 100
-#define PADDING_FPS 10
+#define PADDING_FPS_W 30
+#define PADDING_FPS_H 10
 
 #include <iostream>
 

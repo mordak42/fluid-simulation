@@ -66,6 +66,10 @@ bool FrameProductor::parseFile() {
             GRID[i][j + GRID_HEIGHT / 2].type = m_groundLevel.eval(i * DX) - j *DY > 0 ? SOLID : AIR;
         }
 	(void)debug_poly;
+	for (int i = 0; i < GRID_HEIGHT; i++) {
+	    GRID[GRID_WIDTH - 1][i].type = SOLID;
+        GRID[GRID_WIDTH - 2][i].type = SOLID;
+	}
     return true;
 }
 
@@ -76,7 +80,7 @@ void FrameProductor::threadHandler() {
     lib::Chronometric timeCounter;
     while (true) {
       if (i % 100 == 0)
-          initParticules(80, 140, 40, 40, true);
+          initParticules(80, 155, 40, 40, true);
         pluieDiluvienne();
         femmeFontaine(150, 25, 15);
         timeCounter.reset();

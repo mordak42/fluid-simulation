@@ -74,6 +74,6 @@ void Fps::updateFpsField() {
     }
     if (m_savedFps < 0)
         return;
-    struct SDL_Rect area = {m_width - m_font_surface[m_savedFps]->w - PADDING_FPS, PADDING_FPS, m_font_surface[m_savedFps]->w, m_font_surface[m_savedFps]->h};
+    struct SDL_Rect area = {m_width - m_font_surface[m_savedFps]->w - PADDING_FPS_W, PADDING_FPS_H, m_font_surface[m_savedFps]->w, m_font_surface[m_savedFps]->h};
     SDL_BlitSurface(m_font_surface[m_savedFps], NULL, m_surface, &area);
 }

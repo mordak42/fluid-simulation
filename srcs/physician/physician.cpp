@@ -489,10 +489,10 @@ void Physician::advect() {
                 && posY >= 1
                 /* With this condition, the particles in the SOLID case are just deleted ! */
                 && GRID[(int)posX][(int)posY].type != SOLID)
+
         {
             PARTICLES[cn++] = PARTICLES[p];
         }
-
     }
     PARTICLES.resize(cn);
 }
