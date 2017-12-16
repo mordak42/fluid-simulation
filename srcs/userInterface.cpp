@@ -1,6 +1,8 @@
 
 #include "userInterface.hpp"
 
+#include <sys/time.h>
+
 using namespace mod1;
 
 UserInterface::UserInterface(const std::shared_ptr<lib::Pool<RenderedFrame>> &pool,
@@ -11,6 +13,7 @@ UserInterface::UserInterface(const std::shared_ptr<lib::Pool<RenderedFrame>> &po
                                 Idle(NB_FRAMES_PER_SECOND),
                                 Famine(),
                                 Displayer(),
+                                Bmp(),
                                 m_pool(pool)
 {
     /* Debug test */
@@ -97,6 +100,7 @@ void UserInterface::keepSameFrame() {
 
 void UserInterface::finiteStateMachine(enum uiEvent evt) {
     RenderedFrame *img;
+    struct timeval tp;
 
     switch (m_uiState) {
     case notStarted:
@@ -144,6 +148,10 @@ void UserInterface::finiteStateMachine(enum uiEvent evt) {
             else
                 keepSameFrame();
             break;
+        case takePicture:
+            gettimeofday(&tp, NULL);
+            saveImage((std::to_string(tp.tv_sec * 1000 + tp.tv_usec / 1000)));
+            break;
         default:
             break;
         }
@@ -159,6 +167,10 @@ void UserInterface::finiteStateMachine(enum uiEvent evt) {
                 displayNewFrame(img, false);
             else
                 keepSameFrame();
+            break;
+        case takePicture:
+            gettimeofday(&tp, NULL);
+            saveImage((std::to_string(tp.tv_sec * 1000 + tp.tv_usec / 1000)));
             break;
         default:
             break;
@@ -196,6 +208,9 @@ void UserInterface::start() {
                         break;
                     case SDL_SCANCODE_N:
                         finiteStateMachine(nextFrameWanted);
+                        break;
+                    case SDL_SCANCODE_P:
+                        finiteStateMachine(takePicture);
                         break;
                     default:
                         break;

@@ -16,10 +16,11 @@
 #include "overlay/famine.hpp"
 #include "overlay/idle.hpp"
 #include "overlay/displayer.hpp"
+#include "overlay/bmp.hpp"
 
 namespace mod1
 {
-class UserInterface : public Fps, public Idle, public Famine, public Displayer
+class UserInterface : public Fps, public Idle, public Famine, public Displayer, public Bmp
 {
 public:
     UserInterface(const std::shared_ptr<lib::Pool<RenderedFrame>> &pool,
@@ -53,6 +54,7 @@ private:
         plopEvent,
         switchWanted,
         nextFrameWanted,
+        takePicture,
         uiEventMax
     };
     void finiteStateMachine(enum uiEvent evt);
