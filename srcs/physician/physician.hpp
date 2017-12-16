@@ -9,7 +9,7 @@
 #include "graviter.hpp"
 #include "physicItems.hpp"
 
-#define PIC 0.05
+#define PIC 1.0
 #define FLIP (1.0 - PIC)
 
 /*
@@ -25,7 +25,8 @@ public:
     Physician();
     ~Physician();
     uint32_t initParticules(uint32_t ox, uint32_t oy, uint32_t width, uint32_t height, bool randomize);
-    void get_velocity_from_the_grid();
+    vector3d get_velocity_from_the_grid(vector3d pos);
+vector3d getVelocityFromTheGridPicFlip(vector3d pos, vector3d vel);
     void put_velocity_on_grid();
     void flip(int i, int j);
 	void advect();

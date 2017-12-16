@@ -388,12 +388,17 @@ vector3d Physician::evaluateVelocityAtPosition(vector3d position, char method) {
     return vector3d(vx, vy, 0);
 }
 
-void Physician::get_velocity_from_the_grid() {
-    for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
-        PARTICLES[p].vel = evaluateVelocityAtPosition(PARTICLES[p].pos, 'p') * PIC
-            + ((PARTICLES[p].vel + evaluateVelocityAtPosition(PARTICLES[p].pos, 'f')) * FLIP);
-    }
+vector3d Physician::getVelocityFromTheGridPicFlip(vector3d pos, vector3d vel) {
+        return evaluateVelocityAtPosition(pos, 'p') * PIC
+            + ((vel + evaluateVelocityAtPosition(pos, 'f')) * FLIP);
 }
+/*
+* k1 = u(xn),
+* k 2 = u(xn) + 1/2 * ∆t * k1 ) ,
+* 2
+* k 3 = u ( x n + 3 ∆ t k 2 ) , 4
+* xn+1 = ⃗xn + 2∆t⃗k1 + 3∆t⃗k2 + 4∆t⃗k3
+*/
 
 uint32_t Physician::initParticules(uint32_t ox, uint32_t oy, uint32_t width, uint32_t height, bool randomize) {
     if (ox + width >= GRID_WIDTH || oy + height >= GRID_HEIGHT) {
@@ -474,11 +479,17 @@ void Physician::pluieDiluvienne() {
 void Physician::advect() {
 
     size_t cn = 0;
+    vector3d k1;
+    vector3d k2;
+    vector3d k3;
 
     for (unsigned long int p = 0; p < PARTICLES.size(); p++) {
         /* set the new positions of particles */
-        PARTICLES[p].pos += PARTICLES[p].vel * DT;
-
+        k1 = getVelocityFromTheGridPicFlip(PARTICLES[p].pos, PARTICLES[p].vel);
+        k2 = getVelocityFromTheGridPicFlip(PARTICLES[p].pos + k1 * 0.5 * DT, k1);
+        k3 = getVelocityFromTheGridPicFlip(PARTICLES[p].pos + k2 * 0.75 * DT, k2);
+        PARTICLES[p].pos += k1 * 2.0 / 9 * DT + k2 * 3.0 / 9 * DT + k3 * 4.0 / 9 * DT;
+        PARTICLES[p].vel = getVelocityFromTheGridPicFlip(PARTICLES[p].pos + k2 * 0.75 * DT, k2);
         /* for the particles which left the grid, delete it */
         double posX = PARTICLES[p].pos.x / DX;
         double posY = PARTICLES[p].pos.y / DY;

@@ -89,7 +89,7 @@ void FrameProductor::threadHandler() {
         saveVelocity();
         applyGravity();;
 		solvePressure();
-        get_velocity_from_the_grid();
+       // get_velocity_from_the_grid();
         advect();
         RenderedFrame *img = m_pool->popOutdatedItem();
         if (m_keepGoing == false)
