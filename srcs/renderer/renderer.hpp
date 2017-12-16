@@ -10,6 +10,8 @@
 #define BORDER
 #define BORDER_LENGTH 4.
 
+#define GRID_DEBUG
+
 #include <memory>
 
 #include "renderer/renderedFrame.hpp"

@@ -30,6 +30,7 @@ public:
     };
     t_pix m_map[FRAME_SIZE];
     double solvedTime = 0;
+    int nbParticles = 0;
 };
 }
 

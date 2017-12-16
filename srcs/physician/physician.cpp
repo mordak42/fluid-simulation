@@ -359,6 +359,8 @@ double Physician::evaluateComponentVelocity(vector3d position,
                     else              /* FLIP */
                         points[i][j] = GRID_U[grid_i][grid_j].val - GRID_U[grid_i][grid_j].oldVal;
                 }
+                else
+                    points[i][j] = 0;
             }
             else
             {
@@ -369,6 +371,8 @@ double Physician::evaluateComponentVelocity(vector3d position,
                     else
                         points[i][j] = GRID_V[grid_i][grid_j].val - GRID_V[grid_i][grid_j].oldVal;
                 }
+                else
+                    points[i][j] = 0;
             }
         }
     }

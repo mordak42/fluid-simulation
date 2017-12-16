@@ -81,7 +81,8 @@ void UserInterface::displayNewFrame(RenderedFrame *img, bool oldStack) {
     updateFamineField();
     updateFpsField();
     updateIdleField();
-    displayMsg(0, 9999, 0x00FFFF00, "%i ms", (int)(img->solvedTime * 1000));
+    displayMsg(0, 9999, 0xFF000000, "%i ms", (int)(img->solvedTime * 1000));
+    displayMsg(9999, 9999, 0xFF000000, "%i particles", img->nbParticles);
     SDL_UpdateWindowSurface(m_win);
     determineIdle();
 }

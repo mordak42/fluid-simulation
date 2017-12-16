@@ -32,10 +32,12 @@ void Renderer::raytrace(RenderedFrame *img) {
 
             if (GRID[grid_coord_i][grid_coord_j].type == SOLID)
                 ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x00ffffff;
+#ifdef GRID_DEBUG
 			else if (GRID[grid_coord_i][grid_coord_j].type == FLUID)
                 ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x000000ff;
 			else if (GRID[grid_coord_i][grid_coord_j].type == SURROUND)
                 ((int *)img->m_map)[y * FRAME_WIDTH + x] = 0x0000ffff;
+#endif
         }
     }
 #ifndef BORDER

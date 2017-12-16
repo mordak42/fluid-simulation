@@ -24,7 +24,7 @@ else
 endif
 else
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -Wno-unused-command-line-argument -Wno-error-unused-variable
 else
 	CFLAGS = -Wall -Wextra -Werror -std=c++11 -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
 endif
@@ -40,7 +40,7 @@ OBJ_DIR = objs
 TMP = $(basename $(notdir $(SRC_CORE)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 
-IFLAGS = -I./srcs
+IFLAGS = -I./srcs -I./externLibrairy
 LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lSDL2 -lpthread -L $(HOME)/.brew/Cellar/sdl2_ttf/2.0.14/lib -lSDL2_ttf
 
 .PHONY: all clean fclean re help
