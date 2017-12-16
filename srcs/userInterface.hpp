@@ -51,8 +51,7 @@ private:
     enum uiEvent {
         initialization = 0,
         plopEvent,
-        startedWanted,
-        stoppedWanted,
+        switchWanted,
         nextFrameWanted,
         uiEventMax
     };

@@ -125,7 +125,7 @@ void UserInterface::finiteStateMachine(enum uiEvent evt) {
         break;
     case onPause:
         switch (evt) {
-        case startedWanted:
+        case switchWanted:
             setTimeOrigin();
             m_uiState = onStart;
             break;
@@ -149,7 +149,7 @@ void UserInterface::finiteStateMachine(enum uiEvent evt) {
         break;
     case onStart:
         switch (evt) {
-        case stoppedWanted:
+        case switchWanted:
             m_uiState = onPause;
             break;
         case plopEvent:
@@ -190,11 +190,8 @@ void UserInterface::start() {
                     case SDL_SCANCODE_ESCAPE:
                         m_continueLoopHook = false;
                         break;
-                    case SDL_SCANCODE_S:
-                        finiteStateMachine(startedWanted);
-                        break;
-                    case SDL_SCANCODE_H:
-                        finiteStateMachine(stoppedWanted);
+                    case SDL_SCANCODE_SPACE:
+                        finiteStateMachine(switchWanted);
                         break;
                     case SDL_SCANCODE_N:
                         finiteStateMachine(nextFrameWanted);

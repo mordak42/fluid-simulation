@@ -6,7 +6,7 @@
 #    By: bmickael <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/18 22:40:01 by bmickael          #+#    #+#              #
-#    Updated: 2017/12/12 21:00:09 by bmickael         ###   ########.fr        #
+#    Updated: 2017/12/16 02:59:00 by bmickael         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CC = g++
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -Wno-unused-command-line-argument -Wno-error-unused-variable
 else
 	CFLAGS = -Wall -Wextra -Werror -std=c++11 -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
 endif
