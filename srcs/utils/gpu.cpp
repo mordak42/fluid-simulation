@@ -18,7 +18,7 @@ void Gpu::mainTest() {
         std::cerr << "No platforms found. Check OpenCL installation !" << std::endl;
         return;
     }
-    cl::Platform default_platform = all_platforms[1];
+    cl::Platform default_platform = all_platforms[0];
     std::cout << "Using platform: "<< default_platform.getInfo<CL_PLATFORM_NAME>() << std::endl;
 
     /* get default device of the default platform */
@@ -46,7 +46,7 @@ void Gpu::mainTest() {
             "}";
 
     /* Creation of context */
-    cl::Context context({default_device}, NULL, NULL, NULL);
+    cl::Context context({default_device}, NULL, NULL, NULL, NULL);
 
     /* Introduce program */
     cl::Program::Sources sources;

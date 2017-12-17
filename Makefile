@@ -24,9 +24,9 @@ else
 endif
 else
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -Wno-unused-command-line-argument -Wno-error-unused-variable -lOpenCl
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -Wno-ignored-attributes -Wno-deprecated-declarations -lOpenCL
 else
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable -lOpenCL
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -Ofast -Wno-ignored-attributes -Wno-deprecated-declarations -lOpenCL
 endif
 endif
 
