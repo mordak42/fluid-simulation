@@ -18,23 +18,24 @@ CC = g++
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -Wno-unused-command-line-argument -Wno-error-unused-variable
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -Wno-unused-command-line-argument -Wno-error-unused-variable -framework opencl
 else
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable -framework opencl
 endif
 else
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -Wno-unused-command-line-argument -Wno-error-unused-variable
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -Wno-unused-command-line-argument -Wno-error-unused-variable -lOpenCl
 else
 	CFLAGS = -Wall -Wextra -Werror -std=c++11 -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable -lOpenCL
+endif
+endif
+
 #CFLAGS = -Wall -Wextra -Werror -std=c++11  -lOpenCL -Ofast -Wno-unused-command-line-argument -Wno-unused-variable -Wno-ignored-attributes -Wno-deprecated-declarations
-endif
-endif
 
 ### SOURCES ###
 
 SRC_CORE = main mod1 frameProductor renderedFrame renderer physician \
-userInterface semaphore lagrange polynom graviter physicLaw pressurer physicItems fps idle famine sdlContext chronometric displayer bmp
+userInterface semaphore lagrange polynom graviter physicLaw pressurer physicItems fps idle famine sdlContext chronometric displayer bmp gpu
 VPATH = srcs
 
 OBJ_DIR = objs
@@ -63,6 +64,7 @@ $(OBJ_DIR)/mod1.o: mod1.cpp \
 	overlay/idle.hpp \
 	overlay/famine.hpp \
 	overlay/sdlContext.hpp \
+	utils/gpu.hpp \
 	mod1.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
@@ -168,6 +170,10 @@ $(OBJ_DIR)/displayer.o: overlay/displayer.cpp \
 
 $(OBJ_DIR)/bmp.o: overlay/bmp.cpp \
 	overlay/bmp.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/gpu.o: utils/gpu.cpp \
+	utils/gpu.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 clean:

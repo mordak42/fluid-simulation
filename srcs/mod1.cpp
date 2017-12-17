@@ -51,7 +51,12 @@ Mod1Implementation::Mod1Implementation() {
 Mod1Implementation::~Mod1Implementation() {
 }
 
+#include "utils/gpu.hpp"
+
 void Mod1Implementation::run(void) {
+    lib::Gpu experiment;
+    experiment.mainTest();
+
     m_pool = std::make_shared<lib::Pool<RenderedFrame>>(NB_BUFFERED_FRAMES);
 
     m_pool->init();
