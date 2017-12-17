@@ -46,7 +46,7 @@ void Gpu::mainTest() {
             "}";
 
     /* Creation of context */
-    cl::Context context({default_device});
+    cl::Context context({default_device}, NULL, NULL, NULL);
 
     /* Introduce program */
     cl::Program::Sources sources;
