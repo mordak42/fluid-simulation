@@ -8,6 +8,8 @@
 #include "physicItems.hpp"
 #include "physicLaw.hpp"
 
+#define PCG_MAX_IT 200
+
 namespace mod1
 {
 class Pressurer : public virtual PhysicLaw, public virtual PhysicItems

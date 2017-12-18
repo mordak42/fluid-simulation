@@ -269,7 +269,7 @@ void::Pressurer::PCG(void) {
     applyPrecon(r, z);
     cpyVect(z, s); /* s = z; */
     sigma = dotProduct(z, r);
-    for (i = 0; i < 200; i++)
+    for (i = 0; i < PCG_MAX_IT; i++)
     {
         applyA(s, z);
         alpha = sigma / dotProduct(z, s);
@@ -298,7 +298,7 @@ void::Pressurer::PCG(void) {
         }
         sigma = sigma_new;
     }
-    if (i == 200)
+    if (i == PCG_MAX_IT)
         std::cout << "Warning nb max iteration occur in PCG" << std::endl;
 }
 
