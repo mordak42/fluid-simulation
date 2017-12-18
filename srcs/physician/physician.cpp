@@ -245,6 +245,15 @@ void Physician::evaluateGridVelocityAtPosition(vector3d position,
  *
  */
 
+
+/*
+ * function kernel(x,y,z) = hat(x/DX)*hat(y/DY)*hat(z/DZ)
+ */
+
+inline double Physician::kernel(double x, double y) {
+    return (b_spline(x / DX) * b_spline(y / DY));
+}
+
 void Physician::put_velocity_on_grid() {
 	for (int i = 0; i < GRID_WIDTH; i++) {
 		for (int j = 0; j < GRID_HEIGHT; j++) {
@@ -261,33 +270,61 @@ void Physician::put_velocity_on_grid() {
 		}
 	}
 
-	for (int p = 0; p < m_nb_particles; p++) {
-		//std::cout << "x"<<x <<"y" << y << "velx"<< up << "vely" << vp <<std::endl;
+    for (int p = 0; p < m_nb_particles; p++) {
+        /*
+         * m_grid[i][j] is the case where the particle is
+         * so the particle velocity contribute to
+         * m_grid_u[i][j] and m_grid_v[i + 1][j]
+         *
+         *             j + 1  _______________
+         *                    |             |
+         *                    |  .          |
+         *      j + 0.5 * DY  |.   i,j      |
+         *                    |             |
+         *                    |    .        |
+         *              j     ---------------
+         *                   i *dx         (i + 1)*dx
+         *
+         *  the distance for the velocity grid :
+         *  grid_u[i][j] = (i * dx , j * dy)
+         *  the distance for the pressure grid :
+         *  grid_p[i][j] = ((i + 0.5) * dx , (j + 0.5) * dy)
+         *
+         *  m_grid_u[i][j] = ∑ (k(xp - i * dx)up / ∑(k(xp - i * dx)
+         *
+         *
+         */
+        double x = PARTICLES[p].pos.x;
+        double y = PARTICLES[p].pos.y;
+        double up = PARTICLES[p].vel.x;
+        double vp = PARTICLES[p].vel.y;
 
-		int i = PARTICLES[p].pos.x / DX;
-		int j = PARTICLES[p].pos.y / DY;
-		if (i < 0 || i >= GRID_WIDTH)
-			continue;
-		if (j < 0 || j >= GRID_HEIGHT)
-			continue;
-		/*  if (GRID[i - 1][j].type == AIR)
-			GRID[i - 1][j].type = FLUID;
-			if (GRID[i + 1][j].type == AIR)
-			GRID[i + 1][j].type = FLUID;
-			if (GRID[i][j + 1].type == AIR)
-			GRID[i][j + 1].type = FLUID;
-			*/
-		if (GRID[i][j].type == AIR)
-			GRID[i][j].type = FLUID;
+        //std::cout << "x"<<x <<"y" << y << "velx"<< up << "vely" << vp <<std::endl;
+        int i = x / DX;
+        int j = y / DY;
+        if (i < 0 || i >= GRID_WIDTH)
+            continue;
+        if (j < 0 || j >= GRID_HEIGHT)
+            continue;
+        if (GRID[i][j].type == AIR)
+            GRID[i][j].type = FLUID;
 
-		vector3d pos = PARTICLES[p].pos;
-		vector3d vel = PARTICLES[p].vel;
+        double kernelVal = kernel(x - i * DX, y - (j + 0.5) * DY);
+        GRID_U[i][j].sum        += kernelVal * up;
+        GRID_U[i][j].weight     += kernelVal;
 
-		evaluateGridVelocityAtPosition(pos, vel, i, j, 'u');
-		evaluateGridVelocityAtPosition(pos, vel, i + 1, j, 'u');
-		evaluateGridVelocityAtPosition(pos, vel, i, j, 'v');
-		evaluateGridVelocityAtPosition(pos, vel, i, j + 1, 'v');
-	}
+        kernelVal = kernel(x - (i + 1) * DX, y - (j + 0.5) * DY);
+        GRID_U[i + 1][j].sum    += kernelVal * up;
+        GRID_U[i + 1][j].weight += kernelVal;
+
+        kernelVal = kernel(x - (i + 0.5) * DX, y - j * DY);
+        GRID_V[i][j].sum        += kernelVal * vp;
+        GRID_V[i][j].weight     +=  kernelVal;
+
+        kernelVal = kernel(x - (i + 0.5) * DX, y - (j + 1) * DY);
+        GRID_V[i][j + 1].sum    += kernelVal * vp;
+        GRID_V[i][j + 1].weight += kernelVal;
+    }
 
 	for (int i = 0; i < GRID_WIDTH + 1; i++) {
 		for (int j = 0; j < GRID_HEIGHT + 1; j++) {

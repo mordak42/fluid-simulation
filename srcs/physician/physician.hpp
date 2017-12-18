@@ -36,6 +36,8 @@ public:
     void pluieDiluvienne();
     void femmeFontaine(uint32_t ox, uint32_t oy, double vel);
 
+    double kernel(double x, double y);
+
 private:
 	double kernel(vector3d v);
 	double hat(double r);
