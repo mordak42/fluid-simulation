@@ -34,11 +34,11 @@ public:
 	void extrapolateVelocity();
     void updateGridLabel();
     void pluieDiluvienne();
-    void femmeFontaine(uint32_t ox, uint32_t oy, double vel);
+    void femmeFontaine(uint32_t ox, uint32_t oy, float vel);
 
 private:
-	double kernel(vector3d v);
-	double hat(double r);
+	float kernel(vector3d v);
+	float hat(float r);
 	void evaluateGridComponentVelocity(vector3d position,
 			vector3d velocity,
 			vector3d gridOffset,
@@ -50,13 +50,13 @@ private:
 			int gi,
 			int gj,
 			char field);
-	double b_spline(double r);
-	double evaluateComponentVelocity(vector3d position, vector3d gridOffset, char field, char method);
-	double cubicInterpolate(double p[4], double x);
-	double	 bicubicInterpolate(double p[4][4], double x, double y);
+	float b_spline(float r);
+	float evaluateComponentVelocity(vector3d position, vector3d gridOffset, char field, char method);
+	float cubicInterpolate(float p[4], float x);
+	float	 bicubicInterpolate(float p[4][4], float x, float y);
 	vector3d evaluateVelocityAtPosition(vector3d position, char method);
-	double moyU(int i, int j);
-	double moyV(int i, int j);
+	float moyU(int i, int j);
+	float moyV(int i, int j);
 };
 }
 

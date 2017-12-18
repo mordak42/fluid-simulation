@@ -10,7 +10,7 @@
 #define BORDER
 #define BORDER_LENGTH 4.
 
-#define GRID_DEBUG
+//#define GRID_DEBUG
 
 #include <memory>
 

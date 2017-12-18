@@ -23,14 +23,14 @@
 # define REAL_WIDTH 20
 # define REAL_HEIGHT 20
 
-const double grid_width = GRID_WIDTH;
-const double grid_height = GRID_HEIGHT;
-const double grid_size = (grid_width) * (grid_height);
+const float grid_width = GRID_WIDTH;
+const float grid_height = GRID_HEIGHT;
+const float grid_size = (grid_width) * (grid_height);
 
-const double real_width = REAL_WIDTH;
-const double real_height = REAL_HEIGHT;
-const double frame_width = FRAME_WIDTH;
-const double frame_height = FRAME_HEIGHT;
+const float real_width = REAL_WIDTH;
+const float real_height = REAL_HEIGHT;
+const float frame_width = FRAME_WIDTH;
+const float frame_height = FRAME_HEIGHT;
 
 # define DX (real_width / grid_width)
 # define DY (DX)
@@ -42,10 +42,10 @@ namespace mod1
 {
     struct vector3d
     {
-        double x, y, z;
+        float x, y, z;
 
         inline vector3d( void ) {}
-        inline vector3d( const double X, const double Y, const double Z )
+        inline vector3d( const float X, const float Y, const float Z )
         { x = X; y = Y; z = Z; }
 
         inline vector3d operator + (const vector3d& A) const
@@ -63,28 +63,28 @@ namespace mod1
         inline vector3d operator - (const vector3d& A) const
         { return vector3d( x - A.x, y - A.y, z - A.z ); }
 
-        inline vector3d operator + (const double A) const
+        inline vector3d operator + (const float A) const
         { return vector3d( x + A, y + A, z + A ); }
 
-        inline vector3d operator * (const double A) const
+        inline vector3d operator * (const float A) const
         { return vector3d( x * A, y * A, z * A ); }
 
-        inline vector3d operator / (const double A) const
+        inline vector3d operator / (const float A) const
         { return vector3d( x / A, y / A, z / A ); }
 
-        inline vector3d operator - ( const double A ) const
+        inline vector3d operator - ( const float A ) const
         { return vector3d( x - A, y - A, z - A ); }
 
-        inline double Dot(const vector3d& A) const
+        inline float Dot(const vector3d& A) const
         { return A.x*x + A.y*y + A.z*z; }
     };
 
     struct velocity_field
     {
-        double  weight;
-        double  sum;
-        double  val;
-        double  oldVal;
+        float  weight;
+        float  sum;
+        float  val;
+        float  oldVal;
     };
 
     enum material_type

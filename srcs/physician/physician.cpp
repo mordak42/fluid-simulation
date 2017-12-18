@@ -43,10 +43,10 @@ void Physician::saveVelocity() {
     }
 }
 
-double Physician::moyU(int i, int j)
+float Physician::moyU(int i, int j)
 {
-	double sum = 0;
-	double weight = 0;
+	float sum = 0;
+	float weight = 0;
 
 	if (GRID[i - 1][j].type == FLUID) {
 		sum += GRID_U[i - 1][j].val;
@@ -67,10 +67,10 @@ double Physician::moyU(int i, int j)
 	return (sum / weight);
 }
 
-double Physician::moyV(int i, int j)
+float Physician::moyV(int i, int j)
 {
-	double sum = 0;
-	double weight = 0;
+	float sum = 0;
+	float weight = 0;
 
 	if (GRID_V[i - 1][j].val != 0) {
 		sum += GRID_V[i - 1][j].val;
@@ -141,7 +141,7 @@ void Physician::extrapolateVelocity()
  *                  0 else
  */
 
-double Physician::hat(double r) {
+float Physician::hat(float r) {
 	if (0 <= r && r <= 1)
 		return (1 - r);
 	else if (-1 <= r && r <= 0)
@@ -161,7 +161,7 @@ double Physician::hat(double r) {
  *      0                     else
  */
 
-double Physician::b_spline(double r) {
+float Physician::b_spline(float r) {
 	if (-1.5 <= r && r <= -0.5)
 		return (0.5 * (r + 1.5) * (r + 1.5));
 	else if (-0.5 <= r && r <= 0.5)
@@ -179,7 +179,7 @@ double Physician::b_spline(double r) {
  * function kernel(x,y,z) = hat(x/DX)*hat(y/DY)*hat(z/DZ)
  */
 
-double Physician::kernel(vector3d v) {
+float Physician::kernel(vector3d v) {
 	return (b_spline(v.x / DX) * b_spline(v.y / DY));
 }
 
@@ -193,7 +193,7 @@ void Physician::evaluateGridComponentVelocity(vector3d position,
 	vector3d gpos = vector3d(gi, gj, 0) * DX;
 	gpos += gridOffset;
 
-	double kernelVal = kernel(position - gpos);
+	float kernelVal = kernel(position - gpos);
 	if (field == 'u') {
 		GRID_U[gi][gj].sum        += kernelVal * velocity.x;
 		GRID_U[gi][gj].weight     += kernelVal;
@@ -210,7 +210,7 @@ void Physician::evaluateGridVelocityAtPosition(vector3d position,
 		int gj,
 		char field)
 {
-	double hdx = 0.5 * DX;
+	float hdx = 0.5 * DX;
 	vector3d offset;
 	if (field == 'u')
 		offset = vector3d(0.0, hdx, 0);
@@ -303,7 +303,7 @@ void Physician::put_velocity_on_grid() {
 	}
 }
 
-double Physician::cubicInterpolate(double p[4], double s) {
+float Physician::cubicInterpolate(float p[4], float s) {
     /* Bridson interpolation */
      return (-0.3 * s + 0.5 * s * s - 0.16 * s * s * s) * p[0]
        + (1 - s * s + 0.5 * (s * s * s - s)) * p[1]
@@ -312,8 +312,8 @@ double Physician::cubicInterpolate(double p[4], double s) {
 
 }
 
-double Physician::bicubicInterpolate(double p[4][4], double x, double y) {
-    double arr[4];
+float Physician::bicubicInterpolate(float p[4][4], float x, float y) {
+    float arr[4];
     arr[0] = cubicInterpolate(p[0], y);
     arr[1] = cubicInterpolate(p[1], y);
     arr[2] = cubicInterpolate(p[2], y);
@@ -336,14 +336,14 @@ double Physician::bicubicInterpolate(double p[4][4], double x, double y) {
  *         |           |             |             |
  *         _________________________________________
  */
-double Physician::evaluateComponentVelocity(vector3d position,
+float Physician::evaluateComponentVelocity(vector3d position,
         vector3d gridOffset,
         char field, char method)
 {
     position -= gridOffset;
     int gi = position.x / DX;
     int gj = position.y / DX;
-    double points[4][4];
+    float points[4][4];
 
     for (int j = 0; j < 4; j++) {
         int grid_j = j + gj - 1;
@@ -382,13 +382,13 @@ double Physician::evaluateComponentVelocity(vector3d position,
 }
 
 vector3d Physician::evaluateVelocityAtPosition(vector3d position, char method) {
-    double hdx = 0.5 * DX;
+    float hdx = 0.5 * DX;
     vector3d offsetU(0.0, hdx, 0);
     vector3d offsetV(hdx, 0.0, 0);
     /* 3D model -> vector3d offsetW(hdx, hdx, 0.0); */
 
-    double vx = evaluateComponentVelocity(position, offsetU, 'u', method);
-    double vy = evaluateComponentVelocity(position, offsetV, 'v', method);
+    float vx = evaluateComponentVelocity(position, offsetU, 'u', method);
+    float vy = evaluateComponentVelocity(position, offsetV, 'v', method);
     return vector3d(vx, vy, 0);
 }
 
@@ -415,19 +415,19 @@ uint32_t Physician::initParticules(uint32_t ox, uint32_t oy, uint32_t width, uin
     size_t offset = m_nb_particles;
     m_nb_particles += nb_particles;
     for (int i = 0; i < nb_particles; i++) {
-        double a = ox;
-        double b = oy;
+        float a = ox;
+        float b = oy;
         if (randomize) {
             a += dis(gen) * DX / DENSITY_RACINE;
             b += dis(gen) * DY / DENSITY_RACINE;
         }
-        PARTICLES[offset + i].pos.x = (a + ((double)(i % (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DX;
-        PARTICLES[offset + i].pos.y = (b + ((double)(i / (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DY;
+        PARTICLES[offset + i].pos.x = (a + ((float)(i % (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DX;
+        PARTICLES[offset + i].pos.y = (b + ((float)(i / (width * DENSITY_RACINE)) / DENSITY_RACINE)) * DY;
     }
     return nb_particles;
 }
 
-void Physician::femmeFontaine(uint32_t ox, uint32_t oy, double vel) {
+void Physician::femmeFontaine(uint32_t ox, uint32_t oy, float vel) {
     int nb_particles = 4;
     size_t offset = m_nb_particles;
     m_nb_particles += nb_particles;
@@ -435,8 +435,8 @@ void Physician::femmeFontaine(uint32_t ox, uint32_t oy, double vel) {
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
     for (int i = 0; i < nb_particles; i++) {
-        double a = ox;
-        double b = oy;
+        float a = ox;
+        float b = oy;
         a += dis(gen) * DX / DENSITY_RACINE;
         b += dis(gen) * DY / DENSITY_RACINE;
         PARTICLES[offset + i].pos.x = a * DX;
@@ -451,8 +451,8 @@ void Physician::pluieDiluvienne() {
     size_t offset = m_nb_particles;
     m_nb_particles += 1;
 
-    double a = 0;
-    double b = GRID_HEIGHT - 4;
+    float a = 0;
+    float b = GRID_HEIGHT - 4;
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
@@ -485,8 +485,8 @@ void Physician::advect() {
         PARTICLES[p].pos += PARTICLES[p].vel * DT;
 
         /* for the particles which left the grid, delete it */
-        double posX = PARTICLES[p].pos.x / DX;
-        double posY = PARTICLES[p].pos.y / DY;
+        float posX = PARTICLES[p].pos.x / DX;
+        float posY = PARTICLES[p].pos.y / DY;
 
         if (posX <= GRID_WIDTH - 1
                 && posX >= 1

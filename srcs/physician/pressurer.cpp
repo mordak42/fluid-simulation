@@ -7,7 +7,7 @@ Pressurer::Pressurer() {}
 
 Pressurer::~Pressurer() {}
 
-void Pressurer::bzeroVect(double (&vect)[GRID_WIDTH][GRID_HEIGHT]) {
+void Pressurer::bzeroVect(float (&vect)[GRID_WIDTH][GRID_HEIGHT]) {
     for (int i = 0 ; i < GRID_WIDTH; i++) {
         for (int j = 0 ; j < GRID_HEIGHT; j++) {
             vect[i][j] = 0;
@@ -16,8 +16,8 @@ void Pressurer::bzeroVect(double (&vect)[GRID_WIDTH][GRID_HEIGHT]) {
 }
 
 /* return the norm max(abs(vect[i][j])) */
-double Pressurer::normeVect(double (&vect)[GRID_WIDTH][GRID_HEIGHT]) {
-    double normeMax = 0;
+float Pressurer::normeVect(float (&vect)[GRID_WIDTH][GRID_HEIGHT]) {
+    float normeMax = 0;
     for (int i = 0 ; i < GRID_WIDTH; i++) {
         for (int j = 0 ; j < GRID_HEIGHT; j++) {
             normeMax = fmax(fabs(vect[i][j]), normeMax);
@@ -28,7 +28,7 @@ double Pressurer::normeVect(double (&vect)[GRID_WIDTH][GRID_HEIGHT]) {
 
 /* Perform res = coef * vect
  * not utilized for the moment */
-void Pressurer::multScalVect(double coef, double (&vect)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_WIDTH][GRID_HEIGHT]) {
+void Pressurer::multScalVect(float coef, float (&vect)[GRID_WIDTH][GRID_HEIGHT], float (&res)[GRID_WIDTH][GRID_HEIGHT]) {
     for (int i = 0 ; i < GRID_WIDTH; i++) {
         for (int j = 0 ; j < GRID_HEIGHT; j++) {
             res[i][j] = coef * vect[i][j];
@@ -36,8 +36,8 @@ void Pressurer::multScalVect(double coef, double (&vect)[GRID_WIDTH][GRID_HEIGHT
     }
 }
 
-double Pressurer::dotProduct(double (&a)[GRID_WIDTH][GRID_HEIGHT], double (&b)[GRID_WIDTH][GRID_HEIGHT]) {
-    double res = 0;
+float Pressurer::dotProduct(float (&a)[GRID_WIDTH][GRID_HEIGHT], float (&b)[GRID_WIDTH][GRID_HEIGHT]) {
+    float res = 0;
     for (int i = 0 ; i < GRID_WIDTH; i++) {
         for (int j = 0 ; j < GRID_HEIGHT; j++) {
             res += a[i][j] * b[i][j];
@@ -46,7 +46,7 @@ double Pressurer::dotProduct(double (&a)[GRID_WIDTH][GRID_HEIGHT], double (&b)[G
     return res;
 }
 
-void Pressurer::cpyVect(double (&original)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_WIDTH][GRID_HEIGHT]) {
+void Pressurer::cpyVect(float (&original)[GRID_WIDTH][GRID_HEIGHT], float (&res)[GRID_WIDTH][GRID_HEIGHT]) {
     for (int i = 0 ; i < GRID_WIDTH; i++) {
         for (int j = 0 ; j < GRID_HEIGHT; j++) {
             res[i][j] = original[i][j];
@@ -56,7 +56,7 @@ void Pressurer::cpyVect(double (&original)[GRID_WIDTH][GRID_HEIGHT], double (&re
 
 /* Perform res = a + b
  * not utilized for the moment */
-void Pressurer::addVect(double (&a)[GRID_WIDTH][GRID_HEIGHT], double (&b)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_WIDTH][GRID_HEIGHT]) {
+void Pressurer::addVect(float (&a)[GRID_WIDTH][GRID_HEIGHT], float (&b)[GRID_WIDTH][GRID_HEIGHT], float (&res)[GRID_WIDTH][GRID_HEIGHT]) {
     for (int i = 0 ; i < GRID_WIDTH; i++) {
         for (int j = 0 ; j < GRID_HEIGHT; j++) {
             res[i][j] = a[i][j] + b[i][j];
@@ -65,7 +65,7 @@ void Pressurer::addVect(double (&a)[GRID_WIDTH][GRID_HEIGHT], double (&b)[GRID_W
 }
 /* Last step: One time we know pressure, we can update velocity for each cell of grid. */
 void Pressurer::updateVelocity(void) {
-    double scale = DT / DX;
+    float scale = DT / DX;
 
     for (int i = 0 ; i < GRID_WIDTH; i++) {
         for (int j = 0 ; j < GRID_HEIGHT; j++) {
@@ -90,7 +90,7 @@ void Pressurer::updateVelocity(void) {
 /* initialize A, A is the matrix of linear system. */
 void Pressurer::calcA()
 {
-    double scale = DT / (DX * DX); // DENSITY = 1 ?
+    float scale = DT / (DX * DX); // DENSITY = 1 ?
     for (int i = 0 ; i < GRID_WIDTH; i++) {
         for (int j = 0 ; j < GRID_HEIGHT; j++) {
             A[i][j].diag = 0;
@@ -124,9 +124,9 @@ void Pressurer::calcA()
 
 void::Pressurer::calcPrecon()
 {
-    double e;
-    double tau = 0.97;
-    double sigma = 0.25;
+    float e;
+    float tau = 0.97;
+    float sigma = 0.25;
 
     precon[0][0] = 0;
     precon[1][0] = 0;
@@ -148,9 +148,9 @@ void::Pressurer::calcPrecon()
     }
 }
 
-void Pressurer::applyPrecon(double (&r)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_WIDTH][GRID_HEIGHT])
+void Pressurer::applyPrecon(float (&r)[GRID_WIDTH][GRID_HEIGHT], float (&res)[GRID_WIDTH][GRID_HEIGHT])
 {
-    double t;
+    float t;
 
     q[0][0] = 0;
     q[0][1] = 0;
@@ -180,9 +180,9 @@ void Pressurer::applyPrecon(double (&r)[GRID_WIDTH][GRID_HEIGHT], double (&res)[
 }
 
 /* perform A * s */
-void Pressurer::applyA(double (&s)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_WIDTH][GRID_HEIGHT])
+void Pressurer::applyA(float (&s)[GRID_WIDTH][GRID_HEIGHT], float (&res)[GRID_WIDTH][GRID_HEIGHT])
 {
-    double t;
+    float t;
     bzeroVect(res);
     for (int i = 1 ; i < GRID_WIDTH - 1; i++) { // TODO: ATTENTION les case sur les bords sont a 0
         for (int j = 1 ; j < GRID_HEIGHT - 1; j++) {
@@ -201,10 +201,10 @@ void Pressurer::applyA(double (&s)[GRID_WIDTH][GRID_HEIGHT], double (&res)[GRID_
 
 /* calc b the right hand side of Ap = b */
 void Pressurer::calcNegativeDivergence(void) {
-    double scale = 1.0 / DX;
+    float scale = 1.0 / DX;
 
-    double uSolid = 0;
-    double vSolid = 0;
+    float uSolid = 0;
+    float vSolid = 0;
     for (int i = 0 ; i < GRID_WIDTH; i++) {
         for (int j = 0 ; j < GRID_HEIGHT; j++) {
 
@@ -255,12 +255,12 @@ void Pressurer::calcNegativeDivergence(void) {
  */
 
 void::Pressurer::PCG(void) {
-    double  tol = 0.000001 * normeVect(b);
-    double	sigma;
-    double	sigma_new;
+    float  tol = 0.000001 * normeVect(b);
+    float	sigma;
+    float	sigma_new;
     int		i;
-    double	alpha;
-    double	beta;
+    float	alpha;
+    float	beta;
 
     bzeroVect(p);
     cpyVect(b, r); /*r = b */
@@ -303,9 +303,9 @@ void::Pressurer::PCG(void) {
 }
 
 void Pressurer::solvePressure(void) {
-    calcA();
-    calcNegativeDivergence();
-    calcPrecon();
+    calcA();                            // May be parallelize: A depend of GRID
+    calcNegativeDivergence();           // May be parallelize: b depend of GRID_U AND GRID_V
+    calcPrecon();                       // May be parallelize: precon depend of A and precon[i - 1]|j - 1]
     PCG();
-    updateVelocity();
+    updateVelocity();                   // May be parallelize: GRID_U AND GRID_V depend of p and scale
 }

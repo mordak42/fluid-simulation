@@ -33,8 +33,9 @@ void Gpu::mainTest() {
 
     /* kernel calculates for each element C=A+B */
     std::string kernel_code =
-            "void kernel simple_add(global const int* A, global const int* B, global int* C) {"
+            "void kernel simple_add(global int* A, global const int* B, global int* C) {"
             "   C[get_global_id(0)] = A[get_global_id(0)] + B[get_global_id(0)];"
+            "   A[get_global_id(0)] += 10;"
             "}";
 
 
@@ -70,7 +71,7 @@ void Gpu::mainTest() {
  //   cl::Buffer buffer_B(context, CL_MEM_READ_WRITE, sizeof(int)*10);
 
 
-    cl::Buffer buffer_C(context, CL_MEM_READ_WRITE, sizeof(int) * 64);
+    cl::Buffer buffer_C(context, CL_MEM_READ_WRITE, sizeof(cl_double3) * 64);
     cl::Buffer buffer_D(context, CL_MEM_READ_WRITE, sizeof(int) * 64);
 
     int N = 64;
@@ -155,12 +156,15 @@ void Gpu::mainTest() {
     for(int i = 0; i < 64; i++)
         std::cout << C[i] << " ";
     std::cout << std::endl;
+    queue.enqueueNDRangeKernel(simple_mul, cl::NullRange, cl::NDRange(4, 4, 4), cl::NDRange(4, 4, 1));
 
+    /*
     queue.enqueueNDRangeKernel(
             simple_mul,
             cl::NullRange,
             cl::NDRange(64),
             cl::NullRange);
+    */
 
     //read result C from the device to array C
     queue.enqueueReadBuffer(buffer_C, CL_TRUE, 0 ,sizeof(int) * 64, C);
