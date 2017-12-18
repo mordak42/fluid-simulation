@@ -2,7 +2,7 @@
 #ifndef __GRAVITER_HPP__
 # define __GRAVITER_HPP__
 
-#define GRAVITY_FACTOR 2
+#define GRAVITY_FACTOR 1
 
 #include <iostream>
 #include <memory>
