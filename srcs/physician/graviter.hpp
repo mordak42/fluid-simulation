@@ -21,6 +21,7 @@ public:
     void update_velocity(void);
     void applyGravity();
 private:
+    struct velocity_field m_toto[GRID_WIDTH * (GRID_HEIGHT + 1)];
 };
 }
 
