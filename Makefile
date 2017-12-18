@@ -18,9 +18,9 @@ CC = g++
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 ifeq ($(DEBUG),yes)
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -g -O0 -fsanitize=address -Wno-unused-command-line-argument -Wno-error-unused-variable -framework opencl
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -fmax-errors=20 -g -O0 -fsanitize=address -Wno-unused-command-line-argument -Wno-error-unused-variable -framework opencl
 else
-	CFLAGS = -Wall -Wextra -Werror -std=c++11 -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable -framework opencl
+	CFLAGS = -Wall -Wextra -Werror -std=c++11 -fmax-errors=20 -Ofast -Wno-unused-command-line-argument -Wno-error-unused-variable -framework opencl
 endif
 else
 ifeq ($(DEBUG),yes)
