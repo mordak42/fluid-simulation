@@ -81,10 +81,10 @@ namespace mod1
 
     struct velocity_field
     {
-        double  weight;
-        double  sum;
-        double  val;
-        double  oldVal;
+        float  weight;
+        float  sum;
+        float  val;
+        float  oldVal;
     };
 
     enum material_type

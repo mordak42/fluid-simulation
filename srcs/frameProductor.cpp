@@ -99,20 +99,24 @@ void FrameProductor::threadHandler() {
 #ifdef FEMME_FONTAINE
         femmeFontaine(200, 25, 45);
 #endif
+
+        RenderedFrame *img = m_pool->popOutdatedItem();
         put_velocity_on_grid();
 		extrapolateVelocity();
         saveVelocity();
-        RenderedFrame *img = m_pool->popOutdatedItem();
-        timeCounter.reset();
         applyGravity();
-        img->solvedTime = timeCounter.getTime();
+
+        timeCounter.reset();
 		solvePressure();
+        img->solvedTime = timeCounter.getTime();
+
         get_velocity_from_the_grid();
         advect();
         if (m_keepGoing == false)
             break;
         if (img == NULL)
             continue;
+
         img->cleanFrame();
      //   updateGridLabel();
         raytrace(img);;
