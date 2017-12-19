@@ -115,6 +115,15 @@ namespace mod1
             struct velocity_field m_grid_u[GRID_WIDTH + 1][GRID_HEIGHT];
             struct velocity_field m_grid_v[GRID_WIDTH][GRID_HEIGHT + 1];
             std::vector<struct particle> m_particles;
+
+        protected:
+            std::string parseClFile(const char *filename);
+            void serializeGridV(
+                    struct velocity_field (&dst)[GRID_WIDTH * (GRID_HEIGHT + 1)],
+                    struct velocity_field (&grid_v)[GRID_WIDTH][GRID_HEIGHT + 1]);
+            void unserializeGridV(
+                    struct velocity_field (&grid_v)[GRID_WIDTH][GRID_HEIGHT + 1],
+                    struct velocity_field (&src)[GRID_WIDTH * (GRID_HEIGHT + 1)]);
     };
 }
 
