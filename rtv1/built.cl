@@ -163,7 +163,6 @@ float	scalar_product(float3 u, float3 v);
 float3	NORMALIZE(float3 v);
 float3	mult_vect( float3 v, float t);
 float3	div_vect(float3 v, float t);
-float3	add_vect(float3 u, float3 v);
 float3	sub_vect(float3 u, float3 v);
 float3	vectorial_product(float3 u, float3 v);
 float3 rot(float3 v, float teta);
@@ -261,10 +260,10 @@ __kernel void	calc(__global int *output, __global t_obj *objs, __global t_light 
 	ray = NORMALIZE(ray);
 	coef = (((float)pix_vert - ((float)height / 2)) / ((float)height / 2)) * 0.3; //varie entre -0.66 et +0.66
 //	printf("coef %f\n", coef);
-	ray = add_vect(mult_vect(norm_vert, -coef), ray);
+	ray = norm_vert * -coef + ray;
 	coef = (((float)pix_hor - ((float)width / 2)) / ((float)width / 2)) * 0.3 * width_per_height; //varie entre -0.66 et +0.66
 //	printf("coef %f\n", coef);
-	ray = add_vect(mult_vect(norm_hor, -coef), ray);
+	ray = norm_hor * -coef + ray;
 	ray = NORMALIZE(ray);
 //	printf("ray %f, %f, %f\n", ray.x, ray.y, ray.z);
 	output[i] = calc_rayon(objs, lights, scene, ray);
@@ -427,7 +426,7 @@ float	calc_dist(float t, float3 ray, t_obj *obj)
 	float	dist;
 
 	(void)obj;
-	cam_to_obj = mult_vect(ray, t);
+	cam_to_obj = ray * t;
 	dist = norme_carre(cam_to_obj);
 	
 /*
@@ -439,8 +438,8 @@ float	calc_dist(float t, float3 ray, t_obj *obj)
 
 void	assign_intersect_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
 {
-	output->intersect = mult_vect(ray, output->t);
-	output->intersect = add_vect(output->intersect, pos);
+	output->intersect = ray * output->t;
+	output->intersect = output->intersect + pos;
 }
 
 void	assign_norm_vect(t_obj obj, float t, float3 pos, float3 ray, struct s_result_hit *output)
@@ -509,13 +508,13 @@ int		hit(__global t_obj *objs, int objs_number, float3 cam_pos, float3 ray,  str
 				if (obj.type != PLAN && obj.type != SPHERE)
 				{
 					result_hit->intersect = mat_mult_vect(matrix, result_hit->intersect);
-					result_hit->intersect = add_vect(result_hit->intersect, obj.pos);
+					result_hit->intersect = result_hit->intersect + obj.pos;
 					result_hit->norm = mat_mult_vect(matrix, result_hit->norm);
 					result_hit->ray = mat_mult_vect(matrix, ray_transformed);
 				}
 				else
 				{
-					result_hit->intersect = add_vect(result_hit->intersect, obj.pos);
+					result_hit->intersect = result_hit->intersect + obj.pos;
 					result_hit->ray = ray;
 				}
 			}
@@ -703,16 +702,6 @@ float3	div_vect(float3 v, float t)
 	res.x = v.x / t;
 	res.y = v.y / t;
 	res.z = v.z / t;
-	return (res);
-}
-
-float3	add_vect(float3 u, float3 v)
-{
-	float3	res;
-
-	res.x = u.x + v.x;
-	res.y = u.y + v.y;
-	res.z = u.z + v.z;
 	return (res);
 }
 
