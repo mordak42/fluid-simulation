@@ -355,24 +355,24 @@ double Physician::evaluateComponentVelocity(vector3d position,
                 if (grid_i >= 0 && grid_i < GRID_WIDTH + 1 && grid_j >= 0 && grid_j < GRID_HEIGHT)
                 {
                     if (method == 'p') /* PIC */
-                        points[i][j] = GRID_U[grid_i][grid_j].val;
+                        points[j][i] = GRID_U[grid_i][grid_j].val;
                     else              /* FLIP */
-                        points[i][j] = GRID_U[grid_i][grid_j].val - GRID_U[grid_i][grid_j].oldVal;
+                        points[j][i] = GRID_U[grid_i][grid_j].val - GRID_U[grid_i][grid_j].oldVal;
                 }
                 else
-                    points[i][j] = 0;
+                    points[j][i] = 0;
             }
             else
             {
                 if (grid_i >= 0 && grid_i < GRID_WIDTH && grid_j >= 0 && grid_j < GRID_HEIGHT + 1)
                 {
                     if (method == 'p') 
-                        points[i][j] = GRID_V[grid_i][grid_j].val;
+                        points[j][i] = GRID_V[grid_i][grid_j].val;
                     else
-                        points[i][j] = GRID_V[grid_i][grid_j].val - GRID_V[grid_i][grid_j].oldVal;
+                        points[j][i] = GRID_V[grid_i][grid_j].val - GRID_V[grid_i][grid_j].oldVal;
                 }
                 else
-                    points[i][j] = 0;
+                    points[j][i] = 0;
             }
         }
     }
