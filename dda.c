@@ -1,8 +1,12 @@
 #include "dda.h"
 
-#define DIM_LSET_X 100
-#define DIM_LSET_Y 100
-#define DIM_LSET_Z 100
+float level_set[20][20][20];
+
+#define DIM_LSET_X 20
+#define DIM_LSET_Y 20
+#define DIM_LSET_Z 20
+
+#define RED 0xFF0000
 
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MIN3(X,Y,Z) (MIN(MIN(X,Y), MIN(Y,Z)))
@@ -35,7 +39,6 @@ double tricubicInterpolate(double p[4][4][4], double x, double y, double z) {
     return cubicInterpolate(arr, z);
 }
 
-float level_set[20][20][20];
 
 double evaluateLevelSet(float3 position)
 {
@@ -59,7 +62,13 @@ double evaluateLevelSet(float3 position)
     return tricubicInterpolate(points, interp.x, interp.y, interp.z);
 }
 
-int3	DDA (float3 pos, float3 dir)
+int outOfRange(float3 pos) {
+    if (!(pos.x >= 0 && pos.x < DIM_LSET_X + 1 && pos.y >= 0 && pos.y < DIM_LSET_Y && pos.z >= 0 && pos.z < DIM_LSET_Z))
+        return 0;
+}
+/* for now, retourne la couleur du mur */
+
+int 	DDA (float3 pos, float3 dir)
 {
     float	    sideDist_x;
     float	    sideDist_y;
@@ -74,11 +83,7 @@ int3	DDA (float3 pos, float3 dir)
     float3	    deltaDist_y_vect;
     float3	    deltaDist_z_vect;
     int3		step = {0, 0, 0};
-    int3		wall;
 
-    wall.x = (int)pos.x; //TODO: if outside the cube
-    wall.y = (int)pos.y;
-    wall.y = (int)pos.z;
     deltaDist_x_vect = dir / dir.x;
     deltaDist_x = norm_vect(deltaDistx_vect);
     deltaDist_y_vect = dir / dir.y;
@@ -123,36 +128,54 @@ int3	DDA (float3 pos, float3 dir)
     double min;
     while (42)
     {
-        if (!(wall.x >= 0 && wall.x < DIM_LSET_X + 1 && wall.y >= 0 && wall.y < DIM_LSET_Y && wall.z >= 0 && wall.z < DIM_LSET_Z))
-            return 0;
         min = MIN3(sideDist_x, sideDist_y, sideDist_z); 
 
         if (sideDist_x == min) {
-            float a = evaluateLevelSet(wall);
-            wall.x += step.x;
-            float b = evaluateLevelSet(wall);
+            if (outOfRange(sideDist_x_vect))
+                return 0;
+            float a = evaluateLevelSet(sideDist_x_vect);
+            sideDist_x_vect += deltaDist_x_vect;
+            float b = evaluateLevelSet(sideDist_x_vect);
             if (a < 0 || b < 0)
-                break ;
-            sideDist_x += deltaDist_x;
+                return RED;
+            sideDist_x += step.x * deltaDist_x;
         }
         else if (sideDist_y == min) {
-            float a = evaluateLevelSet(wall);
-            wall.y += step.y;
-            float b = evaluateLevelSet(wall);
+            if (outOfRange(sideDist_y_vect))
+                return 0;
+            float a = evaluateLevelSet(sideDist_y_vect);
+            sideDist_y_vect += deltaDist_y_vect;
+            float b = evaluateLevelSet(sideDist_y_vect);
             if (a < 0 || b < 0)
-                break ;
-            sideDist_y += deltaDist_y;
+                return RED;
+            sideDist_y += step.y * deltaDist_y;
         }
         else {
-            float a = evaluateLevelSet(wall);
-            wall.z += step.z;
-            float b = evaluateLevelSet(wall);
+            if (outOfRange(sideDist_z_vect))
+                return 0;
+            float a = evaluateLevelSet(sideDist_z_vect);
+            sideDist_z_vect += deltaDist_z_vect;
+            float b = evaluateLevelSet(sideDist_z_vect);
             if (a < 0 || b < 0)
-                break ;
-            sideDist_z += deltaDist_z;
+                return RED;
+            sideDist_z += step.z * deltaDist_z;
         }
     }
-    return wall;
+    return 0;
+}
+
+void    boule_level_set() {
+    float3 centre = {DIM_LSET_X / 2, DIM_LSET_Y / 2, DIM_LSET_Z / 2};
+    float rayon = 3;
+
+    for (int z = 0; z < DIM_LSET_Z; z++) {
+        for (int y = 0; y < DIM_LSET_Y; y++) {
+            for (int x = 0; x < DIM_LSET_X; x++) {
+                float3 point = {x, y, z};
+                level_set[z][y][x] = normeVect(point - centre) - RAYON;
+            }
+        }
+    }
 }
 
 /*
