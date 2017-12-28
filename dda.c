@@ -1,6 +1,7 @@
 #include "dda.h"
-#include "libft.h"
 
+#define LEVEL_SET_WIDTH 100
+#define LEVEL_SET_HEIGHT 100
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MIN3(X,Y,Z) (MIN(MIN(X,Y), MIN(Y,Z)))
 
@@ -12,7 +13,6 @@ double cubicInterpolate(double p[4], double s) {
        + (1 - s * s + 0.5 * (s * s * s - s)) * p[1]
        + (s + 0.5 * (s * s - s * s * s)) *p[2]
        + (0.16 * (s * s * s - s)) * p[3];
-
 }
 
 double bicubicInterpolate(double p[4][4], double x, double y) {
@@ -33,16 +33,19 @@ double tricubicInterpolate(double p[4][4][4], double x, double y, double z) {
     return cubicInterpolate(arr, z);
 }
 
-double evaluate_level_set(vector3d position)
+float level_set[20][20][20];
+
+double evaluateLevelSet(float3 position)
 {
     double points[4][4][4];
+    int3 g = {position.x, position.y, position.z};
 
     for (int k = 0; k < 4; k++) {
-        int grid_k = k + gk - 1;
+        int grid_k = k + g.z - 1;
         for (int j = 0; j < 4; j++) {
-            int grid_j = j + gj - 1;
+            int grid_j = j + g.y - 1;
             for (int i = 0; i < 4; i++) {
-                int grid_i = i + gi - 1;
+                int grid_i = i + g.x - 1;
                 if (grid_i >= 0 && grid_i < LEVEL_SET_WIDTH + 1 && grid_j >= 0 && grid_j < LEVEL_SET_HEIGHT)
                     points[k][j][i] = level_set[grid_k][grid_j][grid_i];
                 else
@@ -50,17 +53,19 @@ double evaluate_level_set(vector3d position)
             }
         }
     }
-    vector3d gpos = vector3d(gi, gj, 0) * DX;
-    vector3d interp = (position - gpos) / DX;
-    return tricubicInterpolate(points, interp.x, interp.y);
+    float3 interp = (position - g);
+    return tricubicInterpolate(points, interp.x, interp.y, interp.z);
 }
 
 double	DDA (float3 pos, float3 dir)
 {
-    float3	    side_dist;
-    float3	    delta_dist;
-    int3		step;
+    float3	    sideDist;
+    float3	    deltaDist;
+    int3		stepx = {0, 0, 0};
+    int3		stepy = {0, 0, 0};
+    int3		stepz = {0, 0, 0};
     int3		wall;
+    int         side;
 
     wall.x = (int)pos.x; //TODO: if outside the cube
     wall.y = (int)pos.y;
@@ -69,66 +74,65 @@ double	DDA (float3 pos, float3 dir)
     deltaDist.y = norm_vect(dir / dir.y);
     deltaDist.z = norm_vect(dir / dir.z);
 
-    if (rayDir.x < 0) {
+    if (dir.x < 0) {
         sideDist.x = (pos.x - (int)pos.x) * deltaDist.x;
-        step.x = -1;
+        stepx.x = -1;
     }
     else {
         sideDist.x = ((int)pos.x + 1.0 - pos.x) * deltaDist.x;
-        step.x = 1;
+        stepx.x = 1;
     }
-    if (rayDir.y < 0) {
-        step.y = -1;
+    if (dir.y < 0) {
+        stepy.y = -1;
         sideDist.y = (pos.y - (int)pos.y) * deltaDist.y;
     }
     else {
-        step.y = 1;
+        stepy.y = 1;
         sideDist.y = ((int)pos.y + 1.0 - pos.y) * deltaDist.y;
     }
-    if (rayDir.z < 0) {
-        step.z = -1;
+    if (dir.z < 0) {
+        stepz.z = -1;
         sideDist.z = (pos.z - (int)pos.z) * deltaDist.z;
     }
     else {
-        step.z = 1;
+        stepz.z = 1;
         sideDist.z = ((int)pos.z + 1.0 - pos.z) * deltaDist.z;
     }
 
     double min;
     while (42)
     {
-        min = MIN_3(sideDist.x, sideDist.y, sideDist.z); 
+        min = MIN3(sideDist.x, sideDist.y, sideDist.z); 
 
-        if (side_dist.x > 700 && side_dist.y > 700)
+        if (sideDist.x > 700 && sideDist.y > 700)
             break ;
         if (sideDist.x == min) {
             side = 0;
-            if (map[wall.x + step.x][wall.y] > 0)
+            if (evaluateLevelSet(wall + stepx))
                 break ;
             sideDist.x += deltaDist.x;
-            wall.x += step.x;
+            wall.x += stepx.x;
         }
         else if (sideDist.y == min) {
             side = 1;
-            if (map[wall.x + step.x][wall.y] > 0)
+            if (evaluateLevelSet(wall + stepy))
                 break ;
             sideDist.y += deltaDist.y;
-            wall.y += step.y;
-            side = 1;
+            wall.y += stepy.y;
         }
         else {
-            if (map[wall.x + step.x][wall.y] > 0)
+            side = 2;
+            if (evaluateLevelSet(wall + stepz))
                 break ;
             sideDist.z += deltaDist.z;
-            wall.z += step.z;
-            side = 1;
+            wall.z += stepz.z;
         }
     }
     return (side == 0) ? sideDist.x : sideDist.y;
 }
 
 /*
-   void	ft_wolf(void)
+   void	wolf(void)
    {
    int				x;
    double			dist_wall;
