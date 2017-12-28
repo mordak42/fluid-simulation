@@ -41,7 +41,7 @@ TMP = $(basename $(notdir $(SRC_CORE)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 
 IFLAGS = -I./srcs -I./externLibrairy
-LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/ -lSDL2 -lpthread -L $(HOME)/.brew/Cellar/sdl2_ttf/2.0.14/lib -lSDL2_ttf
+LDFLAGS = -L $(HOME)/.brew/Cellar/sdl2/2.0.7/lib/  -lSDL2 -L /usr/local/Cellar/sdl2/2.0.7/lib/ -lSDL2 -lpthread -L $(HOME)/.brew/Cellar/sdl2_ttf/2.0.14/lib -lSDL2_ttf -L /usr/local/Cellar/sdl2_ttf/2.0.14/lib -lSDL2_ttf
 
 .PHONY: all clean fclean re help
 
