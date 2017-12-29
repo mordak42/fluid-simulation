@@ -51,7 +51,7 @@ double evaluateLevelSet(float3 position)
             int grid_y = y + g.y - 1;
             for (int x = 0; x < 4; x++) {
                 int grid_x = x + g.x - 1;
-                if (grid_x >= 0 && grid_x < DIM_LSET_X + 1 && grid_y >= 0 && grid_y < DIM_LSET_Y && grid_z >= 0 && grid_z < DIM_LSET_Z)
+                if (grid_x >= 0 && grid_x < DIM_LSET_X && grid_y >= 0 && grid_y < DIM_LSET_Y && grid_z >= 0 && grid_z < DIM_LSET_Z)
                     points[z][y][x] = level_set[grid_z][grid_y][grid_x];
                 else
                     points[z][y][x] = 0;
@@ -63,23 +63,23 @@ double evaluateLevelSet(float3 position)
 }
 
 int outOfRange(float3 pos) {
-    if (!(pos.x >= 0 && pos.x < DIM_LSET_X + 1 && pos.y >= 0 && pos.y < DIM_LSET_Y && pos.z >= 0 && pos.z < DIM_LSET_Z))
+    if (!(pos.x >= 0 && pos.x < DIM_LSET_X && pos.y >= 0 && pos.y < DIM_LSET_Y && pos.z >= 0 && pos.z < DIM_LSET_Z))
         return 0;
 }
 /* for now, retourne la couleur du mur */
 
 int 	DDA (float3 pos, float3 dir)
 {
-    float	    sideDist_x;
+    float	    sideDist_x; // longueur accumule sur les intersection avec x=k
     float	    sideDist_y;
     float	    sideDist_z;
-    float3	    sideDist_x_vect;
+    float3	    sideDist_x_vect; // vecteur acummule sur les intersection avec x=k
     float3	    sideDist_y_vect;
     float3	    sideDist_z_vect;
-    float	    deltaDist_x;
+    float	    deltaDist_x; // longueur entre 2 intersection avec x=k et x=k+1
     float	    deltaDist_y;
     float	    deltaDist_z;
-    float3	    deltaDist_x_vect;
+    float3	    deltaDist_x_vect; // vecteur entre 2 intersection avec x=k et x=k+1
     float3	    deltaDist_y_vect;
     float3	    deltaDist_z_vect;
     int3		step = {0, 0, 0};
@@ -138,7 +138,7 @@ int 	DDA (float3 pos, float3 dir)
             float b = evaluateLevelSet(sideDist_x_vect);
             if (a < 0 || b < 0)
                 return RED;
-            sideDist_x += step.x * deltaDist_x;
+            sideDist_x += deltaDist_x;
         }
         else if (sideDist_y == min) {
             if (outOfRange(sideDist_y_vect))
@@ -148,7 +148,7 @@ int 	DDA (float3 pos, float3 dir)
             float b = evaluateLevelSet(sideDist_y_vect);
             if (a < 0 || b < 0)
                 return RED;
-            sideDist_y += step.y * deltaDist_y;
+            sideDist_y += deltaDist_y;
         }
         else {
             if (outOfRange(sideDist_z_vect))
@@ -158,7 +158,7 @@ int 	DDA (float3 pos, float3 dir)
             float b = evaluateLevelSet(sideDist_z_vect);
             if (a < 0 || b < 0)
                 return RED;
-            sideDist_z += step.z * deltaDist_z;
+            sideDist_z += deltaDist_z;
         }
     }
     return 0;
@@ -166,7 +166,7 @@ int 	DDA (float3 pos, float3 dir)
 
 void    boule_level_set() {
     float3 centre = {DIM_LSET_X / 2, DIM_LSET_Y / 2, DIM_LSET_Z / 2};
-    float rayon = 3;
+    float RAYON = 3;
 
     for (int z = 0; z < DIM_LSET_Z; z++) {
         for (int y = 0; y < DIM_LSET_Y; y++) {

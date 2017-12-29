@@ -51,7 +51,7 @@ int		calc_scene(struct s_cl *cl, struct s_cl_args *cl_args, t_env *env)
 
 	cl->data_size = env->width * env->height * sizeof(int);
 	cl_init(cl);
-	file_to_str("./built.cl", &source_str);
+	file_to_str("./built.c", &source_str);
 	cl_load_program_from_source(cl, &source_str, &program);
 	free(source_str);
 	cl_create_kernel_from_program(program, "calc", &cl->kernel);
@@ -132,6 +132,8 @@ int		main(int ac, char **av)
 	recalc_img(env->scene);
 	init_norm_cam_dir(&scene.norm_vert, &scene.norm_hor, scene.cam.dir);
 	calc_scene(&cl, &cl_args, env);
+    getchar();
+    exit (1);
 	mlx(env);
 	return (0);
 }

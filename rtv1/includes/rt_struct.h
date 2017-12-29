@@ -15,9 +15,9 @@
 
 typedef struct			s_point
 {
-	double				x;
-	double				y;
-	double				z;
+	float				x;
+	float				y;
+	float				z;
 }						t_point;
 
 typedef struct			s_cam
@@ -34,8 +34,8 @@ typedef struct			s_obj
 	cl_float3			diry;
 	cl_float3			dirz;
 	size_t				color;
-	double				alpha;
-	double				rayon;
+	float				alpha;
+	float				rayon;
 }						t_obj;
 
 typedef struct			s_light
