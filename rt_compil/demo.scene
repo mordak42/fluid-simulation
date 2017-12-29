@@ -1,0 +1,43 @@
+scene:
+	name: demo_2 					#nom de fenetre
+	camera:
+		origin: 7 0 0
+		vecteur: -1 0 0
+	windows_size: 1280 800
+	object:
+		sphere:
+			origin: -2 -2 -1
+			colorRGB: 0XF0C430
+			rayon: 1
+		sphere:
+			origin: 0 0  0
+			colorRGB: 0X29BB9D 
+			rayon: 1
+		plan:
+			origin: -3 -3  0
+			vecteur: 1 0 0 
+			colorRGB: 0XE64D43
+		plan:
+			origin: 0 0 -3
+			vecteur:  0 0 1
+			colorRGB: 0X995CB3
+		plan:
+			origin: 0 -5 0
+			vecteur:  0 1 0
+			colorRGB: 0XECF0F1
+		plan:
+			origin: 0 5 0
+			vecteur:  0 -1 0
+			colorRGB: 0X93A5A5
+		cylindre:
+			origin: 0 2 0
+			vecteur:  0 0 1
+			colorRGB: 0X3498DB
+			rayon: 0.5
+		cone:
+			origin: 1 -3 -1
+			vecteur: 0 0 1
+			alpha: 0.3
+			colorRGB: 0XD35400
+	light:
+		origin: 4.5 4.5 0

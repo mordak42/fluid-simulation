@@ -1,0 +1,14 @@
+scene:
+	name: demo_2 					#nom de fenetre
+	camera:
+		origin: 7 0 0
+		vecteur: -1 0 0
+	windows_size: 1280 800
+	object:
+		cylindre:
+			origin: 0 0 0
+			vecteur: 0 0 1
+			colorRGB: 0X3498DB
+			rayon: 0.5
+	light:
+		origin: 4.5 4.5 0
