@@ -1,0 +1,14 @@
+scene:
+	name: lala
+	windows_size: 1280 800
+	camera:
+		origin: 7 0 0
+		vecteur: -1 0 0
+	object:
+		cone:
+			origin: 1 -2 0
+			alpha: 0.5
+			colorRGB: 0XD35400
+			vecteur: 0 0 1
+	light:
+		origin: 4 4 0
