@@ -230,6 +230,7 @@ void    boule_level_set(float level_set[DIM][DIM][DIM]);
 int 	DDA (float3 pos, float3 dir, float level_set[DIM][DIM][DIM]);
 
 float cubicInterpolate(float p[4], float s) {
+/*    return p[1] + 0.5 * s*(p[2] - p[0] + s*(2.0*p[0] - 5.0*p[1] + 4.0*p[2] - p[3] + s*(3.0*(p[1] - p[2]) + p[3] - p[0]))); */
     /* Bridson interpolation */
      return (-0.3 * s + 0.5 * s * s - 0.16 * s * s * s) * p[0]
        + (1 - s * s + 0.5 * (s * s * s - s)) * p[1]
@@ -270,7 +271,7 @@ float evaluateLevelSet(float3 pos, float level_set[DIM][DIM][DIM])
                 if (grid_x >= 0 && grid_x < DIM_LSET_X && grid_y >= 0 && grid_y < DIM_LSET_Y && grid_z >= 0 && grid_z < DIM_LSET_Z)
                     points[z][y][x] = level_set[grid_z][grid_y][grid_x];
                 else
-                    points[z][y][x] = 0;
+                    points[z][y][x] = 10;
             }
         }
     }
