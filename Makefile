@@ -33,7 +33,10 @@ endif
 ### SOURCES ###
 
 SRC_CORE = main mod1 frameProductor renderedFrame renderer physician \
-userInterface semaphore lagrange polynom graviter physicLaw pressurer physicItems fps idle famine sdlContext chronometric displayer bmp
+userInterface semaphore lagrange polynom graviter physicLaw pressurer \
+physicItems fps idle famine sdlContext chronometric displayer bmp \
+polynom2d
+
 VPATH = srcs
 
 OBJ_DIR = objs
@@ -167,6 +170,11 @@ $(OBJ_DIR)/displayer.o: overlay/displayer.cpp \
 
 $(OBJ_DIR)/bmp.o: overlay/bmp.cpp \
 	overlay/bmp.hpp
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+
+$(OBJ_DIR)/polynom2d.o: math/polynom2d.cpp \
+	math/polynom2d.hpp \
+	math/polynom.hpp
 	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 clean:

@@ -38,3 +38,20 @@ Polynom lagrange(struct point points[], int nb_point)
     }
     return res;
 }
+
+/*Polynom2d lagrange2d(struct point points[], int nb_point)
+{
+    Polynom res;
+    res.push(0);
+
+    for (int k = 0; k < nb_point; k++)
+    {
+        Polynom pol_x = pi_lagrange(points[k].x, points, nb_point);
+        Polynom pol_y = pi_lagrange(points[k].y, points, nb_point);
+        
+        tmp = tmp * points[k].y;
+        res = res + tmp;
+    }
+    return res;
+}
+*/

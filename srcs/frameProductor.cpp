@@ -85,8 +85,9 @@ void FrameProductor::threadHandler() {
     while (true) {
 #ifdef HUGE_BLOCK
       if (i % 100 == 0)
-          initParticules(80, 155, 40, 40, true);
+          initParticules(140, 155, 40, 40, true);
 #endif
+      /*
 #if defined (LITTLE_RAIN) || defined (HUGE_RAIN)
         pluieDiluvienne();
 #endif
@@ -99,6 +100,7 @@ void FrameProductor::threadHandler() {
 #ifdef FEMME_FONTAINE
         femmeFontaine(150, 25, 15);
 #endif
+*/
         timeCounter.reset();
         put_velocity_on_grid();
 		extrapolateVelocity();
