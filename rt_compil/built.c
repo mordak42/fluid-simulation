@@ -224,7 +224,7 @@ void	debug_scene(t_scene scene, __global t_obj *objs, __global t_light *lights)
 float cubicInterpolate(float p[4], float s);
 float bicubicInterpolate(float p[4][4], float x, float y);
 float tricubicInterpolate(float p[4][4][4], float x, float y, float z);
-float evaluateLevelSet(float3 position, float level_set[DIM][DIM][DIM]);
+float evaluateLevelSetBicubique(float3 pos, float level_set[DIM][DIM][DIM]);
 int outOfRange(float3 pos);
 void    boule_level_set(float level_set[DIM][DIM][DIM]);
 int 	DDA (float3 pos, float3 dir, float level_set[DIM][DIM][DIM]);
@@ -256,7 +256,7 @@ float tricubicInterpolate(float p[4][4][4], float x, float y, float z) {
     return cubicInterpolate(arr, z);
 }
 
-float evaluateLevelSet(float3 pos, float level_set[DIM][DIM][DIM])
+float evaluateLevelSetBicubique(float3 pos, float level_set[DIM][DIM][DIM])
 {
     return (level_set[(int)pos.z][(int)pos.y][(int)pos.x]);
     float points[4][4][4];
@@ -277,6 +277,58 @@ float evaluateLevelSet(float3 pos, float level_set[DIM][DIM][DIM])
     }
     float3 interp = (pos - g);
     return tricubicInterpolate(points, interp.x, interp.y, interp.z);
+}
+
+float linearInterpolate(float p[2], float s);
+float bilinearInterpolate(float p[2][2], float x, float y);
+float trilinearInterpolate(float p[2][2][2], float x, float y, float z);
+float evaluateLevelSetTrilinear(float3 pos, float level_set[DIM][DIM][DIM]);
+
+float linearInterpolate(float p[2], float s) {
+    /*
+        (x - p[0]) / s = p[1] - p[0];
+        x = p[0] + (p[1] - p[0]) * s;
+    */
+    return p[0] + (p[1] - p[0]) * s;
+}
+
+float bilinearInterpolate(float p[2][2], float x, float y) {
+    float arr[2];
+    arr[0] = linearInterpolate(p[0], y);
+    arr[1] = linearInterpolate(p[1], y);
+    return linearInterpolate(arr, x);
+}
+
+float trilinearInterpolate(float p[2][2][2], float x, float y, float z) {
+    float arr[2];
+    arr[0] = bilinearInterpolate(p[0], x, y);
+    arr[1] = bilinearInterpolate(p[1], x, y);
+    return linearInterpolate(arr, z);
+}
+float evaluateLevelSetTrilinear(float3 pos, float level_set[DIM][DIM][DIM])
+{
+    return (level_set[(int)pos.z][(int)pos.y][(int)pos.x]);
+    float points[2][2][2];
+    int3 g = {pos.x, pos.y, pos.z};
+
+    for (int z = 0; z < 2; z++)
+    {
+        int grid_z = z + g.z;
+        for (int y = 0; y < 2; y++)
+        {
+            int grid_y = y + g.y;
+            for (int x = 0; x < 2; x++)
+            {
+                int grid_x = x + g.x;
+                if (grid_x >= 0 && grid_x < DIM_LSET_X && grid_y >= 0 && grid_y < DIM_LSET_Y && grid_z >= 0 && grid_z < DIM_LSET_Z)
+                    points[z][y][x] = level_set[grid_z][grid_y][grid_x];
+                else
+                    points[z][y][x] = 10;
+            }
+        }
+    }
+    float3 interp = (pos - g);
+    return trilinearInterpolate(points, interp.x, interp.y, interp.z);
 }
 
 int outOfRange(float3 pos) {
@@ -338,11 +390,11 @@ int 	DDA (float3 pos, float3 dir, float level_set[DIM][DIM][DIM])
         if (sideDist_x == min) {
             if (outOfRange(sideDist_x_vect))
                 return 0;
-            float a = evaluateLevelSet(sideDist_x_vect, level_set);
+            float a = evaluateLevelSetTrilinear(sideDist_x_vect, level_set);
             sideDist_x_vect += deltaDist_x_vect;
             if (outOfRange(sideDist_x_vect))
                 return 0;
-            float b = evaluateLevelSet(sideDist_x_vect, level_set);
+            float b = evaluateLevelSetTrilinear(sideDist_x_vect, level_set);
             if (a < 0 || b < 0)
                 return 50 * sideDist_x;
             sideDist_x += deltaDist_x;
@@ -350,11 +402,11 @@ int 	DDA (float3 pos, float3 dir, float level_set[DIM][DIM][DIM])
         else if (sideDist_y == min) {
             if (outOfRange(sideDist_y_vect))
                 return 0;
-            float a = evaluateLevelSet(sideDist_y_vect, level_set);
+            float a = evaluateLevelSetTrilinear(sideDist_y_vect, level_set);
             sideDist_y_vect += deltaDist_y_vect;
             if (outOfRange(sideDist_y_vect))
                 return 0;
-            float b = evaluateLevelSet(sideDist_y_vect, level_set);
+            float b = evaluateLevelSetTrilinear(sideDist_y_vect, level_set);
             if (a < 0 || b < 0)
                 return 50 * sideDist_y;
             sideDist_y += deltaDist_y;
@@ -362,11 +414,11 @@ int 	DDA (float3 pos, float3 dir, float level_set[DIM][DIM][DIM])
         else {
             if (outOfRange(sideDist_z_vect))
                 return 0;
-            float a = evaluateLevelSet(sideDist_z_vect, level_set);
+            float a = evaluateLevelSetTrilinear(sideDist_z_vect, level_set);
             sideDist_z_vect += deltaDist_z_vect;
             if (outOfRange(sideDist_z_vect))
                 return 0;
-            float b = evaluateLevelSet(sideDist_z_vect, level_set);
+            float b = evaluateLevelSetTrilinear(sideDist_z_vect, level_set);
             if (a < 0 || b < 0)
                 return 50 * sideDist_z;
             sideDist_z += deltaDist_z;
